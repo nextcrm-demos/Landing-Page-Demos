@@ -153,38 +153,40 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
 
       {/* PANTALLA 1: HERO */}
       <section id="seccion-hero" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col items-center justify-center relative px-4 text-center">
-        <div className="inline-flex items-center gap-2 border border-emerald-500/40 text-emerald-400 text-xs font-bold px-4 py-1.5 rounded-full mb-6 tracking-widest uppercase bg-emerald-500/10 shadow-[0_0_20px_rgba(16,185,129,0.25)]">
-          <Sparkles size={14} className="text-emerald-400 animate-pulse" /> Software Gastronómico Premium + Pedidos por Voz con IA
+        <div className="inline-flex items-center gap-2 border border-emerald-500/30 text-emerald-400 text-[11px] sm:text-xs font-semibold px-4 py-1.5 rounded-full mb-5 tracking-wider uppercase bg-emerald-500/10 backdrop-blur-sm">
+          <Sparkles size={13} className="text-emerald-400" /> Software Gastronómico Premium + Pedidos por Voz con IA
         </div>
-        <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-center mb-6 tracking-tight leading-tight">
-          El caos tiene<br/>
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-300">los días contados.</span>
+
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-center mb-4 tracking-tight leading-tight max-w-4xl text-white">
+          El caos operativo tiene<br/>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-green-400">los días contados.</span>
         </h1>
-        <p className="text-base sm:text-lg md:text-xl text-slate-400 text-center max-w-2xl mb-10 leading-relaxed">
+
+        <p className="text-sm sm:text-base md:text-lg text-slate-400 text-center max-w-2xl mb-8 leading-relaxed font-normal">
           Centraliza mostrador, delivery, mesas, monitor KDS, stock, cierre de caja con desglose de tarjetas e impresión en ticketera preconfigurada.
         </p>
 
-        <div className="flex flex-wrap items-center justify-center gap-4 z-10">
+        <div className="flex flex-wrap items-center justify-center gap-3.5 z-10">
           <button 
             onClick={() => document.getElementById('seccion-voz-ia')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-8 py-4 rounded-full flex items-center gap-3 transition-all shadow-2xl hover:scale-105 cursor-pointer text-base"
+            className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-6 py-3 rounded-full flex items-center gap-2.5 transition-all shadow-lg hover:scale-105 cursor-pointer text-sm"
           >
-            <Mic size={20} /> Ver Pedidos por Voz <ArrowDown size={20} />
+            <Mic size={16} /> Ver Pedidos por Voz <ArrowDown size={15} />
           </button>
 
           <button 
             onClick={() => document.getElementById('seccion-pos')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-slate-800/80 hover:bg-slate-700 text-white font-bold px-6 py-4 rounded-full flex items-center gap-2 border border-slate-700 transition-all hover:scale-105 cursor-pointer text-base"
+            className="bg-slate-800/80 hover:bg-slate-700 text-slate-200 font-semibold px-5 py-3 rounded-full flex items-center gap-2 border border-slate-700 transition-all hover:scale-105 cursor-pointer text-sm"
           >
             Explorar Módulos
           </button>
         </div>
         
         <div 
-           className="absolute bottom-6 animate-bounce cursor-pointer flex justify-center w-full z-10"
+           className="absolute bottom-5 animate-bounce cursor-pointer flex justify-center w-full z-10"
            onClick={() => document.getElementById('seccion-voz-ia')?.scrollIntoView({ behavior: 'smooth' })}
         >
-          <ChevronsDown size={30} className="text-slate-600 hover:text-slate-400 transition-colors" />
+          <ChevronsDown size={24} className="text-slate-600 hover:text-slate-400 transition-colors" />
         </div>
       </section>
 
@@ -820,10 +822,10 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
 
       {/* PANTALLA 8: CTA FINAL */}
       <section id="seccion-final" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col items-center justify-center bg-[#159a49] text-white px-4 text-center relative">
-         <h2 className="text-5xl sm:text-7xl md:text-8xl font-black mb-4 tracking-tight text-center leading-tight">
-            Evoluciona tu pizzería<br/>hoy.
+         <h2 className="text-3xl sm:text-5xl md:text-6xl font-extrabold mb-3 tracking-tight text-center leading-tight">
+            Evoluciona tu pizzería hoy.
          </h2>
-         <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-8 max-w-xl">
+         <p className="text-base sm:text-lg md:text-xl text-white/90 mb-7 max-w-lg font-normal">
             Optimiza tus pedidos por voz, comanda de cocina y controla tu negocio en tiempo real.
          </p>
          

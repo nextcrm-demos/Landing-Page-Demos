@@ -1,0 +1,6 @@
+{
+  "name": "NextCrm Demo Pizzeria",
+  "description": "Sistema de Punto de Venta, KDS de Cocina, Delivery, Stock y Caja para Pizzerías con Asistente de Pedidos por Voz e IA.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

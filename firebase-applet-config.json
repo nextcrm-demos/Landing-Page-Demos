@@ -1,0 +1,12 @@
+{
+  "projectId": "nextcrm-demo-pizzeria",
+  "appId": "1:667477719335:web:a77f425ddb7463bfca5102",
+  "apiKey": "AIzaSyDwA1sXfBD4ChYmtDOoda2FXRg-T0MdxAQ",
+  "authDomain": "nextcrm-demo-pizzeria.firebaseapp.com",
+  "firestoreDatabaseId": "(default)",
+  "storageBucket": "nextcrm-demo-pizzeria.firebasestorage.app",
+  "messagingSenderId": "667477719335",
+  "measurementId": "",
+  "oAuthClientId": "",
+  "recaptchaSiteKey": ""
+}

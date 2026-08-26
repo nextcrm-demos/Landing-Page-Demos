@@ -1,0 +1,44 @@
+{
+  "entities": {
+    "menu_items": {
+      "title": "Menu Items",
+      "description": "Pizzeria menu items and prices",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nombre": { "type": "string" },
+        "categoria": { "type": "string" },
+        "precio": { "type": "number" },
+        "descripcion": { "type": "string" },
+        "popular": { "type": "boolean" }
+      },
+      "required": ["id", "nombre", "categoria", "precio"]
+    },
+    "clients": {
+      "title": "Clients",
+      "description": "Customer contact registry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nombre": { "type": "string" },
+        "telefono": { "type": "string" },
+        "direccion": { "type": "string" }
+      }
+    },
+    "orders": {
+      "title": "Orders",
+      "description": "Active and daily orders",
+      "type": "object"
+    },
+    "historical_turns": {
+      "title": "Historical Turns",
+      "description": "Archived cash register shifts",
+      "type": "object"
+    },
+    "app_settings": {
+      "title": "App Settings",
+      "description": "Register shift state, thresholds, stock",
+      "type": "object"
+    }
+  }
+}

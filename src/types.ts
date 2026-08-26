@@ -175,6 +175,30 @@ export interface FacturandoConfig {
   activo: boolean;
 }
 
+export interface WhatsAppMessage {
+  id: string;
+  chatId: string;
+  senderName: string;
+  senderPhone: string;
+  text: string;
+  timestamp: number;
+  fromMe: boolean;
+  status: 'recibido' | 'leido' | 'convertido_comanda' | 'respondido';
+  parsedOrder?: any;
+}
+
+export interface WhatsAppChat {
+  id: string;
+  contactName: string;
+  phone: string;
+  avatar?: string;
+  lastMessage: string;
+  lastTimestamp: number;
+  unreadCount: number;
+  clientMatched?: Client;
+  messages: WhatsAppMessage[];
+}
+
 
 
 

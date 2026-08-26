@@ -24,7 +24,7 @@ export function Header({
   onOpenAdminPanel
 }: HeaderProps) {
   const tabs = [
-    'Toma de Pedidos', 'Cocina', 'Mostrador', 'Mesas', 'Delivery', 
+    'Toma de Pedidos', 'WhatsApp', 'Cocina', 'Mostrador', 'Mesas', 'Delivery', 
     'Finalizados', 'Clientes', 'Menú', 'Stock', 'Facturación', 'Reportes', 
     'Historial', 'Caja', 'Soporte'
   ];

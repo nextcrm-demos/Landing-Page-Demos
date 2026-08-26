@@ -24,6 +24,7 @@ import { FacturacionModule } from './components/FacturacionModule';
 import { AIOrderModal } from './components/AIOrderModal';
 import { AdminDemoPanelModal } from './components/AdminDemoPanelModal';
 import { ExpiredDemoLockScreen } from './components/ExpiredDemoLockScreen';
+import { WhatsAppInboxModule } from './components/WhatsAppInboxModule';
 import { ParsedOrderResult } from './utils/aiOrderParser';
 
 import {
@@ -753,6 +754,26 @@ export default function App() {
           onOpenAIModal={(mode) => {
             setAiModalMode(mode);
             setIsAIModalOpen(true);
+          }}
+        />
+      )}
+
+      {activeTab === 'WhatsApp' && (
+        <WhatsAppInboxModule
+          menuItems={menuItems}
+          clients={clients}
+          onApplyParsedOrder={(parsed, directConfirm) => {
+            handleApplyAIParsedOrder(parsed, directConfirm);
+            if (directConfirm) {
+              setActiveTab('Cocina');
+            } else {
+              setActiveTab('Toma de Pedidos');
+            }
+          }}
+          onSaveNewClient={(newC) => {
+            const nextClients = [...clients, { id: 'c_' + Date.now(), ...newC }];
+            setClients(nextClients);
+            saveClient({ id: 'c_' + Date.now(), ...newC });
           }}
         />
       )}

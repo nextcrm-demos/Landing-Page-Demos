@@ -191,6 +191,232 @@ REGLAS DE INTERPRETACIÓN:
     }
   });
 
+  // ==========================================
+  // WHATSAPP INBOX & WEBHOOK INTEGRATION
+  // ==========================================
+  let inMemoryWhatsAppChats: any[] = [
+    {
+      id: 'chat_59898128297',
+      contactName: 'ABEL MARTINEZ',
+      phone: '098128297',
+      avatar: '👨‍💼',
+      lastMessage: 'Hola, mandame 1 metro de muzzarella con panceta y 2 fainás a Playa Hermosa',
+      lastTimestamp: Date.now() - 1000 * 60 * 12,
+      unreadCount: 1,
+      messages: [
+        {
+          id: 'msg_1',
+          chatId: 'chat_59898128297',
+          senderName: 'ABEL MARTINEZ',
+          senderPhone: '098128297',
+          text: 'Buenas noches! Tienen abierto el horno?',
+          timestamp: Date.now() - 1000 * 60 * 25,
+          fromMe: false,
+          status: 'leido',
+        },
+        {
+          id: 'msg_2',
+          chatId: 'chat_59898128297',
+          senderName: 'NextCRM Pizzería',
+          senderPhone: '098356320',
+          text: '¡Hola Abel! Sí, estamos tomando pedidos con demora estimada de 30-35 min 🔥',
+          timestamp: Date.now() - 1000 * 60 * 20,
+          fromMe: true,
+          status: 'respondido',
+        },
+        {
+          id: 'msg_3',
+          chatId: 'chat_59898128297',
+          senderName: 'ABEL MARTINEZ',
+          senderPhone: '098128297',
+          text: 'Hola, mandame 1 metro de muzzarella con panceta y 2 fainás a Playa Hermosa',
+          timestamp: Date.now() - 1000 * 60 * 12,
+          fromMe: false,
+          status: 'recibido',
+        }
+      ]
+    },
+    {
+      id: 'chat_59892494927',
+      contactName: 'JOSELIN',
+      phone: '092494927',
+      avatar: '👩',
+      lastMessage: '2 pizzetas napolitanas y 1 coca de litro y medio para retirar por mostrador',
+      lastTimestamp: Date.now() - 1000 * 60 * 4,
+      unreadCount: 1,
+      messages: [
+        {
+          id: 'msg_j1',
+          chatId: 'chat_59892494927',
+          senderName: 'JOSELIN',
+          senderPhone: '092494927',
+          text: '2 pizzetas napolitanas y 1 coca de litro y medio para retirar por mostrador',
+          timestamp: Date.now() - 1000 * 60 * 4,
+          fromMe: false,
+          status: 'recibido',
+        }
+      ]
+    }
+  ];
+
+  // 1. Meta / Evolution Webhook Verification GET
+  app.get('/api/whatsapp/webhook', (req, res) => {
+    const mode = req.query['hub.mode'];
+    const token = req.query['hub.verify_token'];
+    const challenge = req.query['hub.challenge'];
+
+    if (mode && token) {
+      if (mode === 'subscribe' && (token === 'NEXTCRM_WHATSAPP_TOKEN' || token === process.env.WHATSAPP_VERIFY_TOKEN)) {
+        console.log('WhatsApp Webhook Verified Successfully!');
+        return res.status(200).send(challenge);
+      }
+      return res.sendStatus(403);
+    }
+    return res.json({ status: 'ok', endpoint: 'WhatsApp Webhook Listener Ready' });
+  });
+
+  // 2. Incoming Webhook POST (Receives live messages from Meta Cloud API or Evolution API)
+  app.post('/api/whatsapp/webhook', (req, res) => {
+    try {
+      const body = req.body;
+      console.log('Incoming WhatsApp Webhook Payload:', JSON.stringify(body).slice(0, 300));
+
+      let incomingText = '';
+      let senderPhone = '';
+      let senderName = '';
+
+      // Meta Cloud API format
+      if (body.entry && body.entry[0]?.changes && body.entry[0]?.changes[0]?.value?.messages) {
+        const msg = body.entry[0].changes[0].value.messages[0];
+        const contact = body.entry[0].changes[0].value.contacts?.[0];
+        senderPhone = msg.from || '';
+        senderName = contact?.profile?.name || senderPhone;
+        incomingText = msg.text?.body || msg.interactive?.button_reply?.title || '';
+      } 
+      // Evolution API / Baileys format
+      else if (body.data?.message || body.message || body.body) {
+        incomingText = body.data?.message?.conversation || body.message?.text || body.body || body.text || '';
+        senderPhone = body.data?.key?.remoteJid?.replace('@s.whatsapp.net', '') || body.sender || body.from || '';
+        senderName = body.data?.pushName || body.senderName || senderPhone;
+      }
+      // Direct raw JSON format
+      else if (body.text) {
+        incomingText = body.text;
+        senderPhone = body.phone || '099000111';
+        senderName = body.name || 'Cliente WhatsApp';
+      }
+
+      if (incomingText) {
+        const chatId = `chat_${senderPhone.replace(/\D/g, '') || Date.now()}`;
+        const newMsg = {
+          id: `msg_${Date.now()}`,
+          chatId,
+          senderName: senderName || 'Cliente',
+          senderPhone,
+          text: incomingText,
+          timestamp: Date.now(),
+          fromMe: false,
+          status: 'recibido',
+        };
+
+        const existingChatIdx = inMemoryWhatsAppChats.findIndex(c => c.id === chatId || c.phone.replace(/\D/g, '') === senderPhone.replace(/\D/g, ''));
+        if (existingChatIdx >= 0) {
+          inMemoryWhatsAppChats[existingChatIdx].messages.push(newMsg);
+          inMemoryWhatsAppChats[existingChatIdx].lastMessage = incomingText;
+          inMemoryWhatsAppChats[existingChatIdx].lastTimestamp = Date.now();
+          inMemoryWhatsAppChats[existingChatIdx].unreadCount += 1;
+        } else {
+          inMemoryWhatsAppChats.unshift({
+            id: chatId,
+            contactName: senderName || 'Cliente WhatsApp',
+            phone: senderPhone,
+            avatar: '🍕',
+            lastMessage: incomingText,
+            lastTimestamp: Date.now(),
+            unreadCount: 1,
+            messages: [newMsg]
+          });
+        }
+      }
+
+      return res.status(200).json({ status: 'success', received: true });
+    } catch (err: any) {
+      console.error('Error handling WhatsApp webhook:', err);
+      return res.status(500).json({ error: err.message });
+    }
+  });
+
+  // 3. Get all chats
+  app.get('/api/whatsapp/chats', (req, res) => {
+    return res.json({ success: true, chats: inMemoryWhatsAppChats });
+  });
+
+  // 4. Send outbound reply
+  app.post('/api/whatsapp/send', (req, res) => {
+    const { chatId, text } = req.body;
+    if (!chatId || !text) {
+      return res.status(400).json({ error: 'chatId y text son requeridos.' });
+    }
+
+    const chat = inMemoryWhatsAppChats.find(c => c.id === chatId);
+    if (chat) {
+      const replyMsg = {
+        id: `msg_${Date.now()}`,
+        chatId,
+        senderName: 'NextCRM Pizzería',
+        senderPhone: '098356320',
+        text,
+        timestamp: Date.now(),
+        fromMe: true,
+        status: 'respondido',
+      };
+      chat.messages.push(replyMsg);
+      chat.lastMessage = text;
+      chat.lastTimestamp = Date.now();
+      chat.unreadCount = 0;
+    }
+
+    return res.json({ success: true, message: 'Mensaje enviado correctamente' });
+  });
+
+  // 5. Simulate an incoming customer message
+  app.post('/api/whatsapp/simulate', (req, res) => {
+    const { contactName, phone, text, address } = req.body;
+    const senderPhone = phone || '098128297';
+    const chatId = `chat_${senderPhone.replace(/\D/g, '')}`;
+    const newMsg = {
+      id: `msg_${Date.now()}`,
+      chatId,
+      senderName: contactName || 'Cliente Simulado',
+      senderPhone,
+      text: text || 'Hola, quiero pedir 1 metro de muzzarella con panceta',
+      timestamp: Date.now(),
+      fromMe: false,
+      status: 'recibido',
+    };
+
+    const existingChatIdx = inMemoryWhatsAppChats.findIndex(c => c.id === chatId || c.phone.replace(/\D/g, '') === senderPhone.replace(/\D/g, ''));
+    if (existingChatIdx >= 0) {
+      inMemoryWhatsAppChats[existingChatIdx].messages.push(newMsg);
+      inMemoryWhatsAppChats[existingChatIdx].lastMessage = newMsg.text;
+      inMemoryWhatsAppChats[existingChatIdx].lastTimestamp = Date.now();
+      inMemoryWhatsAppChats[existingChatIdx].unreadCount += 1;
+    } else {
+      inMemoryWhatsAppChats.unshift({
+        id: chatId,
+        contactName: contactName || 'Cliente WhatsApp',
+        phone: senderPhone,
+        avatar: '💬',
+        lastMessage: newMsg.text,
+        lastTimestamp: Date.now(),
+        unreadCount: 1,
+        messages: [newMsg]
+      });
+    }
+
+    return res.json({ success: true, chats: inMemoryWhatsAppChats });
+  });
+
   // Vite integration (development vs production)
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({

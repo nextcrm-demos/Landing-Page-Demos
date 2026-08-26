@@ -761,7 +761,7 @@ export default function App() {
       {activeTab === 'WhatsApp' && (
         <WhatsAppInboxModule
           menuItems={menuItems}
-          clients={clients}
+          clients={clientsDB}
           onApplyParsedOrder={(parsed, directConfirm) => {
             handleApplyAIParsedOrder(parsed, directConfirm);
             if (directConfirm) {
@@ -771,8 +771,8 @@ export default function App() {
             }
           }}
           onSaveNewClient={(newC) => {
-            const nextClients = [...clients, { id: 'c_' + Date.now(), ...newC }];
-            setClients(nextClients);
+            const nextClients = [...clientsDB, { id: 'c_' + Date.now(), ...newC }];
+            setClientsDB(nextClients);
             saveClient({ id: 'c_' + Date.now(), ...newC });
           }}
         />
@@ -939,7 +939,7 @@ export default function App() {
         isOpen={isAIModalOpen}
         onClose={() => setIsAIModalOpen(false)}
         menuItems={menuItems}
-        clients={clients}
+        clients={clientsDB}
         onApplyToOrder={handleApplyAIParsedOrder}
         initialMode={aiModalMode}
       />

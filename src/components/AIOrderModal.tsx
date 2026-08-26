@@ -5,16 +5,17 @@ import {
   User, MapPin, Phone, CreditCard, DollarSign, UtensilsCrossed,
   Volume2, VolumeX, ChevronDown, ChevronUp, GripVertical, Check, Plus, Trash2,
   Play, Pause, Square, Radio, MessageSquare, Headphones, Sliders, ShieldAlert,
-  RotateCcw, ArrowUpRight, HelpCircle
+  RotateCcw, ArrowUpRight, HelpCircle, Search, Users
 } from 'lucide-react';
-import { MenuItem, Gusto, CartItem, OrderClient, OrderPayment } from '../types';
+import { MenuItem, Gusto, CartItem, OrderClient, OrderPayment, Client } from '../types';
 import { parseOrderWithAI, parseOrderLocally, ParsedOrderResult } from '../utils/aiOrderParser';
-import { gustosAdicionales } from '../data/defaults';
+import { defaultClients, gustosAdicionales } from '../data/defaults';
 
 interface AIOrderModalProps {
   isOpen: boolean;
   onClose: () => void;
   menuItems: MenuItem[];
+  clients?: Client[];
   onApplyToOrder: (result: ParsedOrderResult, directConfirm?: boolean) => void;
   initialMode?: 'guided_voice' | 'voice' | 'whatsapp';
 }
@@ -31,6 +32,7 @@ export function AIOrderModal({
   isOpen,
   onClose,
   menuItems,
+  clients = defaultClients,
   onApplyToOrder,
 }: AIOrderModalProps) {
   const [activeMode, setActiveMode] = useState<'voice' | 'whatsapp'>('voice');
@@ -41,6 +43,11 @@ export function AIOrderModal({
   const [micPermissionState, setMicPermissionState] = useState<'prompt' | 'granted' | 'denied' | 'unsupported'>('prompt');
   const [speechError, setSpeechError] = useState<string | null>(null);
   const [isMinimized, setIsMinimized] = useState(false);
+
+  // Client Search & Database Autocomplete
+  const [clientSearchQuery, setClientSearchQuery] = useState('');
+  const [isClientDropdownOpen, setIsClientDropdownOpen] = useState(false);
+  const [showClientPickerModal, setShowClientPickerModal] = useState(false);
 
   // Cumulative Order State
   const [cumulativeCart, setCumulativeCart] = useState<CartItem[]>([]);
@@ -56,9 +63,12 @@ export function AIOrderModal({
     cadete: 'Samuel',
   });
 
+  // Direct manual phrase input
+  const [manualPhraseInput, setManualPhraseInput] = useState('');
+
   // Audio Wave & Sound
   const [audioLevel, setAudioLevel] = useState(0);
-  const [autoSpeakConfirm, setAutoSpeakConfirm] = useState(true);
+  const [autoSpeakConfirm, setAutoSpeakConfirm] = useState(false);
   const [isSpeakingTTS, setIsSpeakingTTS] = useState(false);
 
   // Refs
@@ -69,6 +79,7 @@ export function AIOrderModal({
   const animFrameRef = useRef<number | null>(null);
   const audioStreamRef = useRef<MediaStream | null>(null);
   const isListeningRef = useRef<boolean>(false);
+  const clientDropdownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     isListeningRef.current = isListening;
@@ -88,12 +99,47 @@ export function AIOrderModal({
     }
   }, [isOpen]);
 
+  // Close client dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (clientDropdownRef.current && !clientDropdownRef.current.contains(e.target as Node)) {
+        setIsClientDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Filter clients from DB
+  const filteredDbClients = clients.filter(c => {
+    const query = clientSearchQuery.toLowerCase().trim();
+    if (!query) return true;
+    return c.nombre.toLowerCase().includes(query) || 
+           c.telefono.toLowerCase().includes(query) || 
+           c.direccion.toLowerCase().includes(query);
+  });
+
+  const selectClientFromDb = (client: Client) => {
+    setDetectedClient({
+      nombre: client.nombre,
+      telefono: client.telefono,
+      direccion: client.direccion,
+      mesa: '',
+    });
+    if (client.direccion) {
+      setDetectedPayment(prev => ({ ...prev, tipo: 'envio' }));
+    }
+    setClientSearchQuery('');
+    setIsClientDropdownOpen(false);
+    setShowClientPickerModal(false);
+  };
+
   // Request Mic Permission & Initialize
   const checkAndRequestMicrophone = async () => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition && !navigator.mediaDevices?.getUserMedia) {
       setMicPermissionState('unsupported');
-      setSpeechError('Tu navegador no soporta reconocimiento de voz nativo. Puedes usar el modo texto/WhatsApp.');
+      setSpeechError('Tu navegador no soporta reconocimiento de voz nativo. Puedes usar el modo texto.');
       return;
     }
 
@@ -215,7 +261,7 @@ export function AIOrderModal({
       }
 
       const recognition = new SpeechRecognition();
-      recognition.lang = 'es-UY';
+      recognition.lang = 'es-419'; // Robust LatAm Spanish recognition
       recognition.continuous = true;
       recognition.interimResults = true;
       recognition.maxAlternatives = 1;
@@ -245,10 +291,10 @@ export function AIOrderModal({
           // Reset pause timer
           if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current);
 
-          // When speech pauses for 1000ms, process this specific chunk and accumulate
+          // When speech pauses for 800ms, process this specific chunk and accumulate
           pauseTimerRef.current = setTimeout(() => {
             processIncrementalSpeech(speechText);
-          }, 1000);
+          }, 800);
         }
       };
 
@@ -295,86 +341,121 @@ export function AIOrderModal({
   // Toggle Mic Button
   const toggleMic = () => {
     if (isListening) {
-      // If there is speech in progress, process it before pausing
       if (currentSpeechChunk.trim()) {
         processIncrementalSpeech(currentSpeechChunk);
       }
       stopVoiceRecognition();
     } else {
-      checkAndRequestMicrophone();
+      startVoiceRecognition();
     }
   };
 
-  // Process incremental spoken product or metadata
-  const processIncrementalSpeech = async (text: string) => {
-    if (!text || text.trim().length === 0) return;
+  // Process incremental chunk of spoken speech without overwriting previous items
+  const processIncrementalSpeech = async (speechText: string) => {
+    if (!speechText.trim()) return;
+
     setIsProcessing(true);
-
     try {
-      const parsed = await parseOrderWithAI(text, menuItems, gustosAdicionales);
+      const parsed = await parseOrderWithAI(speechText, menuItems);
 
-      // Merge items incrementally into cumulative cart
-      if (parsed.cart.length > 0) {
-        setCumulativeCart(prevCart => {
-          const updated = [...prevCart];
+      // Check if text mentions a known client from database
+      const cleanUpper = speechText.toUpperCase();
+      const matchedDbClient = clients.find(c => 
+        cleanUpper.includes(c.nombre.toUpperCase()) || 
+        (c.telefono && cleanUpper.includes(c.telefono))
+      );
+
+      if (matchedDbClient) {
+        setDetectedClient({
+          nombre: matchedDbClient.nombre,
+          telefono: matchedDbClient.telefono,
+          direccion: matchedDbClient.direccion,
+          mesa: '',
+        });
+        if (matchedDbClient.direccion) {
+          setDetectedPayment(prev => ({ ...prev, tipo: 'envio' }));
+        }
+      } else if (parsed.cliente.nombre || parsed.cliente.telefono || parsed.cliente.direccion || parsed.cliente.mesa) {
+        setDetectedClient(prev => ({
+          nombre: parsed.cliente.nombre || prev.nombre,
+          telefono: parsed.cliente.telefono || prev.telefono,
+          direccion: parsed.cliente.direccion || prev.direccion,
+          mesa: parsed.cliente.mesa || prev.mesa,
+        }));
+      }
+
+      // Merge Payment info if detected
+      if (parsed.pago.tipo && parsed.pago.tipo !== 'local') {
+        setDetectedPayment(prev => ({
+          ...prev,
+          tipo: parsed.pago.tipo || prev.tipo,
+          metodo: parsed.pago.metodo || prev.metodo,
+          abono: parsed.pago.abono || prev.abono,
+        }));
+      }
+
+      // Merge Cart items cumulatively (add to cart without overwriting)
+      if (parsed.cart && parsed.cart.length > 0) {
+        setCumulativeCart(prev => {
+          const next = [...prev];
           parsed.cart.forEach(newItem => {
-            const existingIdx = updated.findIndex(u => u.id === newItem.id && u.notas === newItem.notas);
+            const existingIdx = next.findIndex(item => 
+              item.id === newItem.id && 
+              item.nombre === newItem.nombre &&
+              JSON.stringify(item.gustos || []) === JSON.stringify(newItem.gustos || []) &&
+              (item.notas || '') === (newItem.notas || '')
+            );
             if (existingIdx >= 0) {
-              updated[existingIdx].cantidad += newItem.cantidad;
+              next[existingIdx] = {
+                ...next[existingIdx],
+                cantidad: next[existingIdx].cantidad + newItem.cantidad,
+              };
             } else {
-              updated.push(newItem);
+              next.push(newItem);
             }
           });
-          return updated;
+          return next;
         });
-      }
 
-      // Update client metadata if found
-      if (parsed.cliente.nombre) setDetectedClient(prev => ({ ...prev, nombre: parsed.cliente.nombre }));
-      if (parsed.cliente.mesa) setDetectedClient(prev => ({ ...prev, mesa: parsed.cliente.mesa }));
-      if (parsed.cliente.telefono) setDetectedClient(prev => ({ ...prev, telefono: parsed.cliente.telefono }));
-      if (parsed.cliente.direccion) setDetectedClient(prev => ({ ...prev, direccion: parsed.cliente.direccion }));
+        // Add to transcript log
+        setHistoryTranscript(prev => [...prev, speechText]);
+        setCurrentSpeechChunk('');
 
-      // Update payment metadata if detected
-      if (parsed.pago.tipo && parsed.pago.tipo !== 'local') setDetectedPayment(prev => ({ ...prev, tipo: parsed.pago.tipo }));
-      if (parsed.pago.metodo && parsed.pago.metodo !== 'efectivo') setDetectedPayment(prev => ({ ...prev, metodo: parsed.pago.metodo }));
-      if (parsed.pago.abono) setDetectedPayment(prev => ({ ...prev, abono: parsed.pago.abono }));
-
-      // Add to spoken history
-      setHistoryTranscript(prev => [text, ...prev.slice(0, 4)]);
-      setCurrentSpeechChunk('');
-
-      // Audio confirmation
-      if (autoSpeakConfirm && parsed.cart.length > 0) {
-        const addedItems = parsed.cart.map(c => `${c.cantidad} ${c.nombre}`).join(', ');
-        speakOrderSummary(`Agregado: ${addedItems}`);
+        // Optional TTS confirmation
+        if (autoSpeakConfirm && parsed.cart[0]) {
+          speakOrderSummary(`Agregado: ${parsed.cart.map(i => `${i.cantidad} ${i.nombre}`).join(', ')}`);
+        }
       }
     } catch (err) {
-      console.warn('Error processing incremental chunk:', err);
+      console.warn('Error parsing incremental speech:', err);
     } finally {
       setIsProcessing(false);
     }
   };
 
-  // Modify cumulative item quantity
-  const updateItemQty = (index: number, delta: number) => {
-    setCumulativeCart(prev => {
-      const updated = [...prev];
-      updated[index].cantidad += delta;
-      if (updated[index].cantidad <= 0) {
-        updated.splice(index, 1);
-      }
-      return updated;
-    });
+  const handleManualPhraseSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!manualPhraseInput.trim()) return;
+    processIncrementalSpeech(manualPhraseInput.trim());
+    setManualPhraseInput('');
   };
 
-  // Remove single item
-  const removeItem = (index: number) => {
-    setCumulativeCart(prev => prev.filter((_, i) => i !== index));
+  const totalCalculated = cumulativeCart.reduce((sum, item) => sum + item.precioUnitario * item.cantidad, 0);
+
+  const handleApply = (directConfirm = false) => {
+    const result: ParsedOrderResult = {
+      cart: cumulativeCart,
+      cliente: detectedClient,
+      pago: detectedPayment,
+      resumen: `Pedido por voz con ${cumulativeCart.length} ítems`,
+      source: 'local_smart',
+      rawText: historyTranscript.join(' | '),
+    };
+    onApplyToOrder(result, directConfirm);
+    onClose();
   };
 
-  // Clear all
-  const clearAll = () => {
+  const resetAll = () => {
     setCumulativeCart([]);
     setDetectedClient({ nombre: '', mesa: '', telefono: '', direccion: '' });
     setDetectedPayment({
@@ -387,387 +468,398 @@ export function AIOrderModal({
       propina: '',
       cadete: 'Samuel',
     });
-    setCurrentSpeechChunk('');
     setHistoryTranscript([]);
-  };
-
-  // Total
-  const totalCalculated = cumulativeCart.reduce((sum, item) => sum + (item.precioUnitario * item.cantidad), 0);
-  const totalItemsCount = cumulativeCart.reduce((sum, item) => sum + item.cantidad, 0);
-
-  // Apply to order in POS
-  const handleApplyOrder = () => {
-    if (cumulativeCart.length === 0) return;
-    const finalResult: ParsedOrderResult = {
-      cart: cumulativeCart,
-      cliente: detectedClient,
-      pago: detectedPayment,
-      resumen: `Pedido de ${totalItemsCount} productos (${detectedPayment.tipo.toUpperCase()})`,
-      source: 'gemini',
-      rawText: historyTranscript.join(' | '),
-    };
-    onApplyToOrder(finalResult, false);
-    onClose();
+    setCurrentSpeechChunk('');
   };
 
   if (!isOpen) return null;
 
-  // Minimized Widget
-  if (isMinimized) {
-    return (
-      <div className="fixed bottom-6 right-6 z-[120] animate-bounce">
-        <button
-          onClick={() => setIsMinimized(false)}
-          className="flex items-center gap-3 bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-3.5 rounded-full shadow-[0_0_30px_rgba(16,185,129,0.5)] border border-emerald-400/40 font-bold text-sm tracking-wider cursor-pointer"
-        >
-          <Mic size={18} className="animate-pulse text-emerald-200" />
-          <span>PEDIDO POR VOZ ({totalItemsCount})</span>
-          <ChevronUp size={16} />
-        </button>
-      </div>
-    );
-  }
-
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[120] flex items-center justify-center p-2 sm:p-4 animate-in fade-in duration-200">
-      <div 
-        id="ai-voice-floating-modal"
-        className="w-full max-w-2xl bg-[#040e0a]/98 border border-emerald-500/40 rounded-3xl shadow-[0_0_60px_rgba(5,150,105,0.35)] flex flex-col overflow-hidden text-slate-100 max-h-[94vh] backdrop-blur-2xl"
-      >
-        {/* HEADER */}
-        <div className="bg-[#020705] border-b border-emerald-500/20 px-4 py-3 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
-              <Mic size={16} className={isListening ? 'animate-pulse' : ''} />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="bg-[#0a0f1c] border border-white/15 rounded-3xl w-full max-w-4xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] text-white">
+        
+        {/* MODAL HEADER */}
+        <div className="p-4 bg-black/60 border-b border-white/10 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-blue-600/20 border border-blue-500/40 text-blue-400 flex items-center justify-center shadow-lg">
+              <Mic size={20} className={isListening ? 'animate-pulse' : ''} />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-emerald-400 font-black text-sm tracking-wider">
-                  PEDIDOS POR VOZ & DICTADO DIRECTO
-                </span>
-                <span className="text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full font-mono font-bold">
+                <h3 className="font-extrabold text-base uppercase tracking-wider text-white">
+                  Pedidos por Voz & Dictado Directo
+                </h3>
+                <span className="text-[10px] font-mono font-bold bg-blue-500/20 text-blue-300 border border-blue-500/40 px-2 py-0.5 rounded-full">
                   MULTI-PRODUCTO
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400">Dicta producto por producto pausando el micrófono entre cada uno</p>
+              <p className="text-xs text-slate-400">
+                Dicta producto por producto pausando el micrófono entre cada uno
+              </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             <button
-              onClick={() => {
-                const nextVal = !autoSpeakConfirm;
-                setAutoSpeakConfirm(nextVal);
-                if (!nextVal) stopTTS();
-              }}
-              className={`p-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer ${
-                autoSpeakConfirm 
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' 
-                  : 'bg-slate-800 text-slate-500 border border-slate-700'
+              type="button"
+              onClick={() => setAutoSpeakConfirm(!autoSpeakConfirm)}
+              className={`p-2 rounded-xl text-xs flex items-center gap-1.5 border transition-all cursor-pointer ${
+                autoSpeakConfirm ? 'bg-blue-600/20 border-blue-500/40 text-blue-300' : 'bg-white/5 border-white/10 text-slate-400'
               }`}
-              title={autoSpeakConfirm ? 'Confirmación hablada activada' : 'Confirmación hablada silenciada'}
+              title="Respuesta por voz inteligente"
             >
-              {autoSpeakConfirm ? <Volume2 size={15} className="text-emerald-400" /> : <VolumeX size={15} />}
-              <span className="hidden sm:inline text-[10px]">Voz</span>
+              {autoSpeakConfirm ? <Volume2 size={15} /> : <VolumeX size={15} />}
+              <span className="hidden sm:inline">Voz</span>
             </button>
 
             <button
-              onClick={() => setIsMinimized(true)}
-              className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
-              title="Minimizar"
-            >
-              <ChevronDown size={18} />
-            </button>
-            <button
               onClick={onClose}
-              className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
-              title="Cerrar"
+              className="text-slate-400 hover:text-white p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 cursor-pointer"
             >
               <X size={18} />
             </button>
           </div>
         </div>
 
-        {/* CONTROLES PRINCIPALES DE DICTADO Y MICRÓFONO */}
-        <div className="p-4 bg-[#030a07] border-b border-emerald-500/20 space-y-3">
+        {/* MAIN BODY */}
+        <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 custom-scrollbar">
           
-          {/* Permission Block Banner */}
-          {micPermissionState === 'denied' && (
-            <div className="bg-amber-950/60 border border-amber-500/50 p-3 rounded-2xl flex items-start gap-2.5 text-xs text-amber-200">
-              <ShieldAlert size={18} className="text-amber-400 shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <p className="font-bold text-white">Micrófono no autorizado en el navegador</p>
-                <p className="text-[11px] text-amber-300/90 leading-relaxed">
-                  Para habilitar el micrófono, haz clic en el <strong>icono del candado o cámara</strong> al lado de <code>localhost:3000</code> en la barra superior de tu navegador y activa <strong>"Permitir micrófono"</strong>. Luego haz clic en el botón de reintentar.
-                </p>
-                <button
-                  type="button"
-                  onClick={checkAndRequestMicrophone}
-                  className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-3 py-1 rounded-lg text-xs transition-colors cursor-pointer mt-1 inline-flex items-center gap-1"
-                >
-                  <RotateCcw size={12} /> Reintentar Acceso al Micrófono
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Large Interactive Mic Control & Live Status */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
-            {/* Direct Mic Action Button */}
-            <button
-              type="button"
-              onClick={toggleMic}
-              className={`col-span-1 sm:col-span-2 p-3.5 rounded-2xl flex items-center justify-between gap-3 font-bold text-sm transition-all cursor-pointer border shadow-lg ${
-                isListening
-                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white border-emerald-400 shadow-[0_0_25px_rgba(16,185,129,0.5)]'
-                  : 'bg-slate-900/90 hover:bg-slate-800 text-emerald-400 border-emerald-500/30'
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isListening ? 'bg-white/20 text-white' : 'bg-emerald-500/20 text-emerald-400'}`}>
-                  {isListening ? <Mic size={20} className="animate-pulse" /> : <MicOff size={20} />}
-                </div>
-                <div className="text-left">
-                  <span className="block text-xs uppercase tracking-wider font-mono">
-                    {isListening ? 'ESCUCHANDO EN VIVO...' : 'MICRÓFONO EN PAUSA'}
-                  </span>
-                  <span className="text-[11px] font-normal opacity-80">
-                    {isListening ? 'Toca para pausar entre productos' : 'Toca para hablar o dictar un producto'}
-                  </span>
-                </div>
-              </div>
-
-              {/* Dynamic Live Audio Equalizer Wave */}
-              <div className="flex items-center gap-1 h-6 bg-black/40 px-2 py-1 rounded-lg border border-white/10 shrink-0">
-                {[0.4, 0.9, 1.3, 0.7, 1.1, 0.5, 1.2, 0.8].map((mult, i) => (
-                  <div
-                    key={i}
-                    className={`w-1 rounded-full transition-all duration-75 ${
-                      isListening ? 'bg-emerald-400' : 'bg-slate-700'
-                    }`}
-                    style={{ height: `${isListening ? Math.min(100, Math.max(15, audioLevel * mult)) : 10}%` }}
-                  ></div>
-                ))}
-              </div>
-            </button>
-
-            {/* Quick Actions / Reset */}
-            <div className="flex items-center gap-2">
+          {/* MICROPHONE STATUS & LIVE VU BAR */}
+          <div className={`p-4 rounded-2xl border transition-all flex flex-wrap items-center justify-between gap-4 ${
+            isListening 
+              ? 'bg-blue-950/40 border-blue-500/60 shadow-[0_0_25px_rgba(59,130,246,0.2)]' 
+              : 'bg-black/50 border-white/10'
+          }`}>
+            <div className="flex items-center gap-3">
               <button
                 type="button"
-                onClick={clearAll}
-                disabled={cumulativeCart.length === 0 && !currentSpeechChunk}
-                className="flex-1 p-3.5 rounded-2xl bg-slate-900/80 hover:bg-red-500/20 text-slate-400 hover:text-red-300 border border-slate-800 hover:border-red-500/30 font-bold text-xs flex items-center justify-center gap-1.5 transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-                title="Limpiar comanda actual"
+                onClick={toggleMic}
+                className={`w-14 h-14 rounded-2xl flex items-center justify-center font-bold transition-all shadow-xl cursor-pointer ${
+                  isListening 
+                    ? 'bg-blue-600 hover:bg-blue-500 text-white animate-pulse shadow-blue-500/30' 
+                    : 'bg-white/10 hover:bg-white/20 text-slate-300'
+                }`}
+                title={isListening ? 'Pausar micrófono' : 'Activar micrófono'}
               >
-                <RotateCcw size={14} />
-                <span>Reiniciar</span>
+                {isListening ? <Mic size={26} /> : <MicOff size={26} />}
               </button>
+
+              <div>
+                <span className="text-xs font-mono font-bold uppercase tracking-wider block text-white">
+                  {isListening ? '🎙️ Escuchando en Vivo...' : '⏸️ Micrófono en Pausa'}
+                </span>
+                <span className="text-[11px] text-slate-400">
+                  {isListening ? 'Habla y haz una pausa de 1 seg para agregar el producto' : 'Toca el micrófono para comenzar a dictar'}
+                </span>
+              </div>
             </div>
+
+            {/* LIVE VU METER */}
+            <div className="flex items-center gap-1.5 bg-black/60 px-3 py-2 rounded-xl border border-white/10">
+              {[...Array(8)].map((_, i) => (
+                <div
+                  key={i}
+                  className={`w-1.5 h-6 rounded-full transition-all duration-75 ${
+                    audioLevel > i * 12 
+                      ? i > 5 ? 'bg-cyan-400' : 'bg-blue-500' 
+                      : 'bg-white/10'
+                  }`}
+                />
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={resetAll}
+              className="text-xs text-slate-400 hover:text-white flex items-center gap-1.5 bg-white/5 hover:bg-white/10 px-3 py-2 rounded-xl border border-white/10 cursor-pointer"
+            >
+              <RotateCcw size={13} /> Reiniciar Comanda
+            </button>
           </div>
 
-          {/* Current Spoken Chunk / Live Transcript */}
-          {currentSpeechChunk && (
-            <div className="p-2.5 bg-black/60 rounded-xl border border-emerald-500/30 flex items-center justify-between gap-2 text-xs">
-              <div className="flex items-center gap-2 truncate">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0"></span>
-                <span className="text-emerald-300 italic truncate">"{currentSpeechChunk}"</span>
+          {/* PERMISSION / ERROR BANNER */}
+          {speechError && (
+            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3 flex items-start gap-2.5 text-xs text-red-300">
+              <AlertCircle size={16} className="shrink-0 mt-0.5 text-red-400" />
+              <div className="flex-1">
+                <span>{speechError}</span>
               </div>
-              <span className="text-[10px] text-slate-400 font-mono shrink-0">Pausa para agregar...</span>
             </div>
           )}
-        </div>
 
-        {/* BODY: ACCUMULATED PRODUCTS & METADATA */}
-        <div className="p-4 sm:p-5 overflow-y-auto space-y-4 flex-1 custom-scrollbar">
-          
-          {/* PRODUCTOS ACUMULADOS EN TIEMPO REAL */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-300">
-                <ShoppingBag size={15} className="text-emerald-400" />
-                <span>Comanda Acumulada ({totalItemsCount} productos)</span>
-              </div>
+          {/* MANUAL PHRASE INPUT BAR */}
+          <form onSubmit={handleManualPhraseSubmit} className="flex gap-2">
+            <div className="relative flex-1">
+              <input
+                type="text"
+                value={manualPhraseInput}
+                onChange={e => setManualPhraseInput(e.target.value)}
+                placeholder="Escribe o dicta aquí un producto (ej: '2 fainás con queso') y presiona Enter..."
+                className="w-full bg-black/60 border border-white/15 focus:border-blue-500 rounded-xl px-4 py-2.5 text-xs text-white placeholder:text-slate-500 outline-none transition-colors font-mono"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={!manualPhraseInput.trim()}
+              className="bg-blue-600 hover:bg-blue-500 disabled:opacity-40 text-white font-bold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-all shadow"
+            >
+              + Agregar Ítem
+            </button>
+          </form>
 
-              <div className="text-right">
-                <span className="text-xs text-slate-400 mr-2">Total Acumulado:</span>
-                <span className="text-lg font-black text-emerald-400 font-mono">${totalCalculated}</span>
+          {/* COMANDA ACUMULADA */}
+          <div className="bg-black/60 border border-white/10 rounded-2xl p-4 space-y-3">
+            <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
+              <div className="flex items-center gap-2">
+                <ShoppingBag size={16} className="text-blue-400" />
+                <span className="text-xs font-bold uppercase tracking-wider text-white">
+                  Comanda Acumulada ({cumulativeCart.length} productos)
+                </span>
               </div>
+              <span className="text-sm font-black font-mono text-blue-400">
+                Total: ${totalCalculated}
+              </span>
             </div>
 
-            {cumulativeCart.length > 0 ? (
-              <div className="space-y-2 max-h-52 overflow-y-auto pr-1 custom-scrollbar">
+            {cumulativeCart.length === 0 ? (
+              <div className="py-6 text-center text-slate-500 space-y-1">
+                <Mic size={24} className="mx-auto text-slate-600 mb-2" />
+                <p className="text-xs font-bold text-slate-400">Sin productos cargados aún</p>
+                <p className="text-[11px] text-slate-500 max-w-sm mx-auto">
+                  Habla por el micrófono para dictar el primer producto (ej. "1 metro de muzzarella con panceta"), haz una breve pausa, y luego dicta el siguiente.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-2 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
                 {cumulativeCart.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between bg-black/60 border border-emerald-500/20 hover:border-emerald-500/40 p-3 rounded-2xl transition-colors"
-                  >
-                    <div className="flex items-center gap-3 flex-1 min-w-0 pr-2">
-                      {/* Quantity Stepper */}
-                      <div className="flex items-center bg-slate-900 border border-slate-700 rounded-lg p-0.5 shrink-0">
-                        <button
-                          type="button"
-                          onClick={() => updateItemQty(idx, -1)}
-                          className="w-5 h-5 flex items-center justify-center text-slate-400 hover:text-white rounded hover:bg-slate-800 text-xs font-bold cursor-pointer"
-                        >
-                          -
-                        </button>
-                        <span className="px-2 text-xs font-mono font-bold text-emerald-400">{item.cantidad}</span>
-                        <button
-                          type="button"
-                          onClick={() => updateItemQty(idx, 1)}
-                          className="w-5 h-5 flex items-center justify-center text-slate-400 hover:text-white rounded hover:bg-slate-800 text-xs font-bold cursor-pointer"
-                        >
-                          +
-                        </button>
-                      </div>
-
-                      <div className="truncate">
-                        <p className="font-bold text-sm text-slate-100 truncate">{item.nombre}</p>
-                        {item.notas && (
-                          <p className="text-[11px] text-emerald-400 truncate">{item.notas}</p>
-                        )}
-                      </div>
+                  <div key={idx} className="flex justify-between items-center bg-white/5 border border-white/10 p-2.5 rounded-xl text-xs">
+                    <div className="flex items-center gap-2 truncate">
+                      <span className="text-blue-400 font-black font-mono text-sm">{item.cantidad}x</span>
+                      <span className="font-semibold text-white truncate">{item.nombre}</span>
+                      {item.notas && (
+                        <span className="text-[10px] text-blue-300 bg-blue-950/80 px-2 py-0.5 rounded border border-blue-500/30">
+                          {item.notas}
+                        </span>
+                      )}
                     </div>
-
-                    <div className="flex items-center gap-3 shrink-0">
-                      <span className="font-mono font-bold text-sm text-emerald-300">
-                        ${item.precioUnitario * item.cantidad}
-                      </span>
+                    
+                    <div className="flex items-center gap-3 shrink-0 ml-2">
+                      <span className="font-mono font-bold text-white">${item.precioUnitario * item.cantidad}</span>
                       <button
                         type="button"
-                        onClick={() => removeItem(idx)}
-                        className="p-1.5 text-slate-500 hover:text-red-400 rounded-lg hover:bg-red-500/10 transition-colors cursor-pointer"
-                        title="Eliminar producto"
+                        onClick={() => setCumulativeCart(cumulativeCart.filter((_, i) => i !== idx))}
+                        className="text-slate-500 hover:text-red-400 p-1 cursor-pointer"
                       >
-                        <Trash2 size={15} />
+                        <Trash2 size={13} />
                       </button>
                     </div>
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="py-8 bg-black/40 rounded-2xl border border-dashed border-emerald-500/20 text-center space-y-2 p-4">
-                <Mic size={28} className="mx-auto text-emerald-500/60 animate-pulse" />
-                <p className="text-xs font-bold text-slate-300">Sin productos cargados aún</p>
-                <p className="text-[11px] text-slate-500 max-w-md mx-auto">
-                  Habla por el micrófono para dictar el primer producto (ej. <em>"1 metro de muzzarella con panceta"</em>), haz una breve pausa, y luego dicta el siguiente.
-                </p>
-              </div>
             )}
           </div>
 
-          {/* METADATOS DETECTADOS (DESTINO, PAGO, CLIENTE) */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
-            {/* Destino */}
-            <div className="bg-black/50 p-2.5 rounded-xl border border-emerald-500/20 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono uppercase block">Destino:</span>
-              <div className="flex gap-1">
-                {(['local', 'mesa', 'envio'] as const).map(tipo => (
+          {/* CLIENT DATABASE AUTOCOMPLETE & DESTINATION / PAYMENT ROW */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            
+            {/* DESTINO */}
+            <div className="bg-black/60 border border-white/10 rounded-2xl p-3 space-y-1.5">
+              <label className="text-[10px] font-mono text-slate-400 uppercase font-bold block">
+                Destino:
+              </label>
+              <div className="grid grid-cols-3 gap-1.5">
+                {['local', 'mesa', 'envio'].map(t => (
                   <button
-                    key={tipo}
+                    key={t}
                     type="button"
-                    onClick={() => setDetectedPayment(p => ({ ...p, tipo }))}
-                    className={`flex-1 py-1 rounded-lg text-[10px] font-bold uppercase transition-all cursor-pointer ${
-                      detectedPayment.tipo === tipo
-                        ? 'bg-emerald-600 text-white shadow'
-                        : 'bg-slate-900 text-slate-400 hover:text-white'
+                    onClick={() => setDetectedPayment(prev => ({ ...prev, tipo: t as any }))}
+                    className={`py-1.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
+                      detectedPayment.tipo === t
+                        ? 'bg-blue-600 text-white shadow-md'
+                        : 'bg-white/5 text-slate-400 hover:bg-white/10 border border-white/5'
                     }`}
                   >
-                    {tipo}
+                    {t}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Pago */}
-            <div className="bg-black/50 p-2.5 rounded-xl border border-emerald-500/20 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono uppercase block">Pago:</span>
-              <div className="flex gap-1">
-                {(['efectivo', 'debito', 'credito', 'transferencia'] as const).map(metodo => (
+            {/* PAGO */}
+            <div className="bg-black/60 border border-white/10 rounded-2xl p-3 space-y-1.5">
+              <label className="text-[10px] font-mono text-slate-400 uppercase font-bold block">
+                Pago:
+              </label>
+              <div className="grid grid-cols-4 gap-1">
+                {['efectivo', 'debito', 'credito', 'transferencia'].map(m => (
                   <button
-                    key={metodo}
+                    key={m}
                     type="button"
-                    onClick={() => setDetectedPayment(p => ({ ...p, metodo }))}
-                    className={`flex-1 py-1 rounded-lg text-[10px] font-bold uppercase transition-all cursor-pointer ${
-                      detectedPayment.metodo === metodo
-                        ? 'bg-emerald-600 text-white shadow'
-                        : 'bg-slate-900 text-slate-400 hover:text-white'
+                    onClick={() => setDetectedPayment(prev => ({ ...prev, metodo: m }))}
+                    className={`py-1.5 rounded-xl font-bold text-[10px] uppercase tracking-wider transition-all cursor-pointer ${
+                      detectedPayment.metodo === m
+                        ? 'bg-blue-600 text-white shadow-md'
+                        : 'bg-white/5 text-slate-400 hover:bg-white/10 border border-white/5'
                     }`}
                   >
-                    {metodo === 'transferencia' ? 'Transf' : metodo}
+                    {m.slice(0, 5)}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Cliente o Mesa */}
-            <div className="bg-black/50 p-2.5 rounded-xl border border-emerald-500/20 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono uppercase block">
-                {detectedPayment.tipo === 'mesa' ? 'Mesa:' : detectedPayment.tipo === 'envio' ? 'Dirección:' : 'Cliente:'}
-              </span>
-              <input
-                type="text"
-                value={
-                  detectedPayment.tipo === 'mesa'
-                    ? detectedClient.mesa
-                    : detectedPayment.tipo === 'envio'
-                    ? detectedClient.direccion
-                    : detectedClient.nombre
-                }
-                onChange={e => {
-                  const val = e.target.value;
-                  if (detectedPayment.tipo === 'mesa') setDetectedClient(c => ({ ...c, mesa: val }));
-                  else if (detectedPayment.tipo === 'envio') setDetectedClient(c => ({ ...c, direccion: val }));
-                  else setDetectedClient(c => ({ ...c, nombre: val }));
-                }}
-                placeholder={detectedPayment.tipo === 'mesa' ? 'Nº de Mesa (ej: 4)' : detectedPayment.tipo === 'envio' ? 'Calle y número' : 'Nombre del cliente'}
-                className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-emerald-300 focus:outline-none focus:border-emerald-400 font-mono"
-              />
+            {/* CLIENTE DESDE BASE DE DATOS (AUTOCOMPLETE & SEARCHABLE) */}
+            <div className="bg-black/60 border border-white/10 rounded-2xl p-3 space-y-1.5 relative" ref={clientDropdownRef}>
+              <div className="flex justify-between items-center">
+                <label className="text-[10px] font-mono text-slate-400 uppercase font-bold flex items-center gap-1">
+                  <User size={11} className="text-blue-400" /> Cliente (Base de Datos):
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowClientPickerModal(true)}
+                  className="text-[9px] font-bold text-blue-400 hover:text-blue-300 flex items-center gap-1 cursor-pointer"
+                >
+                  <Users size={10} /> Ver BD ({clients.length})
+                </button>
+              </div>
+
+              <div className="relative">
+                <input
+                  type="text"
+                  value={detectedClient.nombre || clientSearchQuery}
+                  onChange={e => {
+                    setClientSearchQuery(e.target.value);
+                    setDetectedClient(prev => ({ ...prev, nombre: e.target.value }));
+                    setIsClientDropdownOpen(true);
+                  }}
+                  onFocus={() => setIsClientDropdownOpen(true)}
+                  placeholder="Escribe para buscar cliente de la BD..."
+                  className="w-full bg-black/80 border border-white/15 focus:border-blue-500 rounded-xl px-3 py-1.5 text-xs text-white placeholder:text-slate-500 outline-none transition-colors font-mono"
+                />
+
+                {/* Dropdown with matching clients from database */}
+                {isClientDropdownOpen && filteredDbClients.length > 0 && (
+                  <div className="absolute top-full left-0 w-full mt-1 bg-[#0d1628] border border-blue-500/40 rounded-xl shadow-2xl z-30 max-h-40 overflow-y-auto custom-scrollbar p-1">
+                    <div className="text-[9px] font-mono text-blue-400 uppercase px-2 py-1 border-b border-white/10">
+                      Clientes Registrados ({filteredDbClients.length}):
+                    </div>
+                    {filteredDbClients.map(c => (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => selectClientFromDb(c)}
+                        className="w-full text-left p-2 hover:bg-blue-600/30 rounded-lg text-xs transition-colors flex flex-col cursor-pointer"
+                      >
+                        <span className="font-bold text-white">{c.nombre}</span>
+                        <div className="flex gap-2 text-[10px] text-slate-400 font-mono">
+                          {c.telefono && <span>📞 {c.telefono}</span>}
+                          {c.direccion && <span>📍 {c.direccion}</span>}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
+
           </div>
 
-          {/* EJEMPLOS RÁPIDOS PARA AGREGAR PRODUCTOS */}
-          <div className="space-y-1.5 pt-1">
-            <span className="text-[10px] font-mono text-slate-500 uppercase block">
+          {/* QUICK PHRASES HELPER */}
+          <div className="space-y-1.5">
+            <span className="text-[10px] font-mono text-slate-400 uppercase block">
               O toca una frase rápida para agregarla al pedido:
             </span>
             <div className="flex flex-wrap gap-1.5">
-              {QUICK_PHRASES.map((phrase, i) => (
+              {QUICK_PHRASES.map((phrase, idx) => (
                 <button
-                  key={i}
+                  key={idx}
                   type="button"
                   onClick={() => processIncrementalSpeech(phrase)}
-                  className="bg-black/40 hover:bg-emerald-950/60 border border-emerald-500/20 hover:border-emerald-500/40 px-2.5 py-1 rounded-lg text-[11px] text-slate-300 hover:text-emerald-200 transition-all cursor-pointer"
+                  className="text-[10px] font-mono bg-white/5 hover:bg-blue-900/40 text-slate-300 hover:text-blue-200 border border-white/10 hover:border-blue-500/40 px-2.5 py-1 rounded-xl transition-all cursor-pointer"
                 >
                   + {phrase}
                 </button>
               ))}
             </div>
           </div>
+
         </div>
 
-        {/* FOOTER */}
-        <div className="bg-[#020705] border-t border-emerald-500/20 px-4 py-3 flex items-center justify-between gap-3 shrink-0">
+        {/* MODAL FOOTER */}
+        <div className="p-4 bg-black/60 border-t border-white/10 flex justify-between items-center gap-3">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white border border-slate-700 text-xs font-bold tracking-wider uppercase transition-colors cursor-pointer"
+            className="px-5 py-3 rounded-2xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-xs uppercase cursor-pointer border border-white/10"
           >
-            CANCELAR
+            Cancelar
           </button>
 
-          <button
-            type="button"
-            onClick={handleApplyOrder}
-            disabled={cumulativeCart.length === 0}
-            className="flex-1 sm:flex-initial px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-black text-xs tracking-wider uppercase transition-all shadow-[0_0_25px_rgba(16,185,129,0.5)] flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <Sparkles size={16} />
-            <span>CARGAR A LA COMANDA ({totalItemsCount} ÍTEMS - ${totalCalculated})</span>
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              disabled={cumulativeCart.length === 0}
+              onClick={() => handleApply(false)}
+              className="bg-blue-600 hover:bg-blue-500 disabled:opacity-40 text-white font-bold px-6 py-3 rounded-2xl text-xs uppercase tracking-wider shadow-lg transition-all flex items-center gap-2 cursor-pointer"
+            >
+              <Sparkles size={15} />
+              <span>Cargar a la Comanda ({cumulativeCart.length} ítems - ${totalCalculated})</span>
+            </button>
+          </div>
         </div>
+
       </div>
+
+      {/* SUB-MODAL: CLIENT DATABASE FULL PICKER */}
+      {showClientPickerModal && (
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+          <div className="bg-[#0a0f1c] border border-white/15 rounded-3xl w-full max-w-lg shadow-2xl p-5 text-white flex flex-col max-h-[80vh]">
+            <div className="flex justify-between items-center border-b border-white/10 pb-3 mb-3">
+              <h4 className="font-bold text-sm uppercase tracking-wider flex items-center gap-2">
+                <Users size={16} className="text-blue-400" /> Base de Datos de Clientes
+              </h4>
+              <button 
+                onClick={() => setShowClientPickerModal(false)}
+                className="text-slate-400 hover:text-white p-1 rounded-lg bg-white/5 cursor-pointer"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="relative mb-3">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-400" />
+              <input
+                type="text"
+                placeholder="Buscar por nombre, teléfono o dirección..."
+                value={clientSearchQuery}
+                onChange={e => setClientSearchQuery(e.target.value)}
+                className="w-full bg-black border border-white/15 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none focus:border-blue-500"
+                autoFocus
+              />
+            </div>
+
+            <div className="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+              {filteredDbClients.map(c => (
+                <div 
+                  key={c.id}
+                  onClick={() => selectClientFromDb(c)}
+                  className="p-3 bg-white/5 hover:bg-blue-600/20 border border-white/10 hover:border-blue-500/50 rounded-xl cursor-pointer transition-all flex justify-between items-center"
+                >
+                  <div>
+                    <h5 className="font-bold text-xs text-white">{c.nombre}</h5>
+                    <p className="text-[11px] text-slate-400 font-mono">📍 {c.direccion || 'Sin dirección registrada'}</p>
+                    <p className="text-[10px] text-blue-400 font-mono">📞 {c.telefono || 'Sin teléfono'}</p>
+                  </div>
+                  <span className="text-xs font-bold text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-lg border border-blue-500/30">
+                    Seleccionar ✓
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

@@ -918,6 +918,7 @@ export default function App() {
         isOpen={isAIModalOpen}
         onClose={() => setIsAIModalOpen(false)}
         menuItems={menuItems}
+        clients={clients}
         onApplyToOrder={handleApplyAIParsedOrder}
         initialMode={aiModalMode}
       />

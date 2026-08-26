@@ -245,64 +245,66 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
             <p className="text-xs text-blue-400 font-mono">Toca los botones del simulador interactivo →</p>
           </div>
 
-          {/* Floating Voice Simulator Mockup (Dark NextCRM Theme) */}
-          <div className="bg-[#0a0f1c] border border-white/15 rounded-3xl p-6 shadow-2xl flex flex-col space-y-4">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-blue-400 animate-ping"></div>
-                <span className="text-xs font-mono font-bold text-blue-300 uppercase tracking-wider">
-                  ASISTENTE DE VOZ FLOTANTE
-                </span>
-              </div>
-              <button
-                onClick={resetVoiceDemo}
-                className="text-xs text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer bg-white/5 px-2.5 py-1 rounded-lg border border-white/10"
-              >
-                <RotateCcw size={12} /> Reiniciar
-              </button>
-            </div>
-
-            <div className="space-y-1.5">
-              <span className="text-[11px] text-slate-400 font-mono uppercase block">Prueba agregar ítems con pausas:</span>
-              <div className="flex flex-wrap gap-2">
+          {/* Floating Voice Simulator Mockup (Dark NextCRM Theme - Tilted De Costado) */}
+          <div className="[perspective:1200px] w-full">
+            <div className="bg-[#0a0f1c] border border-white/15 rounded-3xl p-6 shadow-[0_30px_70px_rgba(0,0,0,0.85)] [transform:rotateY(-12deg)_rotateX(6deg)_rotateZ(1.5deg)] transition-all hover:[transform:rotateY(0deg)_rotateX(0deg)_rotateZ(0deg)] flex flex-col space-y-4">
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-blue-400 animate-ping"></div>
+                  <span className="text-xs font-mono font-bold text-blue-300 uppercase tracking-wider">
+                    ASISTENTE DE VOZ FLOTANTE
+                  </span>
+                </div>
                 <button
-                  onClick={() => addVoiceDemoChunk('y 2 fainás con queso', 2, 'Fainá con Queso', 'Orilla', 240)}
-                  className="bg-blue-950/80 hover:bg-blue-900 border border-blue-500/30 text-blue-300 px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer transition-all shadow"
+                  onClick={resetVoiceDemo}
+                  className="text-xs text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer bg-white/5 px-2.5 py-1 rounded-lg border border-white/10"
                 >
-                  + Dictar: "2 fainás con queso"
-                </button>
-                <button
-                  onClick={() => addVoiceDemoChunk('y 1 coca de litro y medio para delivery', 1, 'Refresco Coca-Cola 1.5L', 'Fría', 180)}
-                  className="bg-blue-950/80 hover:bg-blue-900 border border-blue-500/30 text-blue-300 px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer transition-all shadow"
-                >
-                  + Dictar: "1 Coca 1.5L"
+                  <RotateCcw size={12} /> Reiniciar
                 </button>
               </div>
-            </div>
 
-            <div className="bg-black border border-white/10 p-3 rounded-xl flex items-center justify-between text-xs sm:text-sm">
-              <div className="flex items-center gap-2 truncate">
-                <Mic size={16} className="text-blue-400 animate-pulse shrink-0" />
-                <span className="text-blue-200 italic truncate">"{demoActiveText}"</span>
+              <div className="space-y-1.5">
+                <span className="text-[11px] text-slate-400 font-mono uppercase block">Prueba agregar ítems con pausas:</span>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => addVoiceDemoChunk('y 2 fainás con queso', 2, 'Fainá con Queso', 'Orilla', 240)}
+                    className="bg-blue-950/80 hover:bg-blue-900 border border-blue-500/30 text-blue-300 px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer transition-all shadow"
+                  >
+                    + Dictar: "2 fainás con queso"
+                  </button>
+                  <button
+                    onClick={() => addVoiceDemoChunk('y 1 coca de litro y medio para delivery', 1, 'Refresco Coca-Cola 1.5L', 'Fría', 180)}
+                    className="bg-blue-950/80 hover:bg-blue-900 border border-blue-500/30 text-blue-300 px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer transition-all shadow"
+                  >
+                    + Dictar: "1 Coca 1.5L"
+                  </button>
+                </div>
               </div>
-              <span className="text-[10px] text-slate-400 font-mono shrink-0 bg-blue-950 px-2 py-0.5 rounded border border-blue-500/30">Pausa detectada ✓</span>
-            </div>
 
-            <div className="bg-black border border-white/10 p-4 rounded-2xl space-y-2.5">
-              <div className="flex items-center justify-between text-xs sm:text-sm font-bold text-white border-b border-white/10 pb-2">
-                <span className="flex items-center gap-2"><Sparkles size={15} className="text-blue-400" /> COMANDA ACUMULADA ({demoVoiceItems.length} ÍTEMS)</span>
-                <span className="text-blue-400 font-black text-base font-mono">${totalDemoPrice}</span>
+              <div className="bg-black border border-white/10 p-3 rounded-xl flex items-center justify-between text-xs sm:text-sm">
+                <div className="flex items-center gap-2 truncate">
+                  <Mic size={16} className="text-blue-400 animate-pulse shrink-0" />
+                  <span className="text-blue-200 italic truncate">"{demoActiveText}"</span>
+                </div>
+                <span className="text-[10px] text-slate-400 font-mono shrink-0 bg-blue-950 px-2 py-0.5 rounded border border-blue-500/30">Pausa detectada ✓</span>
               </div>
 
-              <div className="space-y-2 max-h-36 overflow-y-auto pr-1 custom-scrollbar text-xs sm:text-sm">
-                {demoVoiceItems.map((item, idx) => (
-                  <div key={idx} className="flex justify-between items-center bg-[#070707] px-3 py-2 rounded-xl border border-white/5">
-                    <span className="text-slate-200 truncate">
-                      <strong className="text-blue-400 font-mono text-sm">{item.qty}x</strong> {item.name} {item.notes && <span className="text-xs text-slate-400">({item.notes})</span>}
-                    </span>
-                    <span className="font-mono font-bold text-white ml-2">${item.price * item.qty}</span>
-                  </div>
-                ))}
+              <div className="bg-black border border-white/10 p-4 rounded-2xl space-y-2.5">
+                <div className="flex items-center justify-between text-xs sm:text-sm font-bold text-white border-b border-white/10 pb-2">
+                  <span className="flex items-center gap-2"><Sparkles size={15} className="text-blue-400" /> COMANDA ACUMULADA ({demoVoiceItems.length} ÍTEMS)</span>
+                  <span className="text-blue-400 font-black text-base font-mono">${totalDemoPrice}</span>
+                </div>
+
+                <div className="space-y-2 max-h-36 overflow-y-auto pr-1 custom-scrollbar text-xs sm:text-sm">
+                  {demoVoiceItems.map((item, idx) => (
+                    <div key={idx} className="flex justify-between items-center bg-[#070707] px-3 py-2 rounded-xl border border-white/5">
+                      <span className="text-slate-200 truncate">
+                        <strong className="text-blue-400 font-mono text-sm">{item.qty}x</strong> {item.name} {item.notes && <span className="text-xs text-slate-400">({item.notes})</span>}
+                      </span>
+                      <span className="font-mono font-bold text-white ml-2">${item.price * item.qty}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -316,7 +318,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         </div>
       </section>
 
-      {/* PANTALLA 3: PUNTO DE VENTA & TICKETTERA (DARK NEXTCRM THEME) */}
+      {/* PANTALLA 3: PUNTO DE VENTA & TICKETTERA (DARK NEXTCRM THEME - TILTED DE COSTADO) */}
       <section id="seccion-pos" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-[#050505]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-center w-full">
           <div>
@@ -344,69 +346,81 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
             </div>
           </div>
 
-          {/* POS & Thermal Ticket Preview */}
-          <div className="w-full aspect-[16/10] bg-[#0a0f1c] rounded-2xl border border-white/15 shadow-2xl flex overflow-hidden relative">
-            <div className="flex-1 p-3 grid grid-cols-3 gap-2.5 bg-black text-left select-none">
-                <div className="col-span-2 space-y-2">
-                  <div className="flex items-center justify-between bg-[#0a0a0a] px-3 py-1.5 rounded-xl border border-white/10 text-xs">
-                    <span className="text-slate-300 font-medium">🍕 Catálogo Rápido</span>
-                    <span className="text-[10px] text-blue-400 font-bold">12 Productos</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-1.5">
-                    <div className="bg-[#0a0a0a] p-2 rounded-xl border border-white/10">
-                      <div className="flex justify-between items-start">
-                        <span className="font-bold text-xs text-white">Muzzarella</span>
-                        <span className="text-xs font-extrabold text-blue-400">$480</span>
-                      </div>
-                      <span className="text-[9px] text-slate-400">Porción / Metro</span>
-                    </div>
-                    <div className="bg-[#0a0a0a] p-2 rounded-xl border border-blue-500/60 ring-1 ring-blue-500/30">
-                      <div className="flex justify-between items-start">
-                        <span className="font-bold text-xs text-white">Fugazzeta</span>
-                        <span className="text-xs font-extrabold text-blue-400">$540</span>
-                      </div>
-                      <span className="text-[9px] text-slate-400">Especial cebolla</span>
-                    </div>
-                    <div className="bg-[#0a0a0a] p-2 rounded-xl border border-white/10">
-                      <div className="flex justify-between items-start">
-                        <span className="font-bold text-xs text-white">Calabresa</span>
-                        <span className="text-xs font-extrabold text-blue-400">$590</span>
-                      </div>
-                      <span className="text-[9px] text-slate-400">Longaniza picante</span>
-                    </div>
-                    <div className="bg-[#0a0a0a] p-2 rounded-xl border border-white/10">
-                      <div className="flex justify-between items-start">
-                        <span className="font-bold text-xs text-white">Fainá</span>
-                        <span className="text-xs font-extrabold text-blue-400">$120</span>
-                      </div>
-                      <span className="text-[9px] text-slate-400">Orilla / Centro</span>
-                    </div>
-                  </div>
+          {/* POS & Thermal Ticket Preview (Tilted De Costado) */}
+          <div className="[perspective:1200px] w-full">
+            <div className="w-full aspect-[16/10] bg-[#0a0f1c] rounded-2xl border border-white/15 shadow-[0_30px_70px_rgba(0,0,0,0.85)] [transform:rotateY(-12deg)_rotateX(6deg)_rotateZ(2deg)] transition-all hover:[transform:rotateY(0deg)_rotateX(0deg)_rotateZ(0deg)] flex flex-col overflow-hidden relative">
+              <div className="h-7 bg-[#070c18] flex items-center justify-between px-3 border-b border-white/10 text-[10px] text-slate-400 shrink-0">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+                  <span className="ml-1.5 font-mono text-slate-400 text-[10px]">pos.pizzeria.app/mostrador</span>
                 </div>
+                <span className="text-blue-400 font-bold bg-blue-500/10 px-2 py-0.5 rounded text-[9px]">POS EN VIVO</span>
+              </div>
 
-                {/* Thermal Receipt Simulation */}
-                <div className="bg-white text-slate-900 rounded-xl p-2.5 flex flex-col justify-between font-mono text-[10px] shadow-lg border border-slate-300">
-                  <div>
-                    <div className="text-center border-b border-dashed border-slate-400 pb-1 mb-1">
-                      <span className="font-black text-[11px] block">PIZZERIA NEXTCRM</span>
-                      <span className="text-[8px] text-slate-600 block">TICKET #104 - DELIVERY</span>
+              <div className="flex-1 p-3 grid grid-cols-3 gap-2.5 bg-black text-left select-none overflow-hidden">
+                  <div className="col-span-2 space-y-2">
+                    <div className="flex items-center justify-between bg-[#0a0a0a] px-3 py-1.5 rounded-xl border border-white/10 text-xs">
+                      <span className="text-slate-300 font-medium">🍕 Catálogo Rápido</span>
+                      <span className="text-[10px] text-blue-400 font-bold">12 Productos</span>
                     </div>
-                    <div className="space-y-0.5 text-[9px]">
-                      <div className="flex justify-between"><span>1x Fugazzeta</span><span>$540</span></div>
-                      <div className="flex justify-between"><span>2x Fainá Orilla</span><span>$240</span></div>
-                      <div className="text-[8px] text-slate-500">+ Panceta extra</div>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      <div className="bg-[#0a0a0a] p-2 rounded-xl border border-white/10">
+                        <div className="flex justify-between items-start">
+                          <span className="font-bold text-xs text-white">Muzzarella</span>
+                          <span className="text-xs font-extrabold text-blue-400">$480</span>
+                        </div>
+                        <span className="text-[9px] text-slate-400">Porción / Metro</span>
+                      </div>
+                      <div className="bg-[#0a0a0a] p-2 rounded-xl border border-blue-500/60 ring-1 ring-blue-500/30">
+                        <div className="flex justify-between items-start">
+                          <span className="font-bold text-xs text-white">Fugazzeta</span>
+                          <span className="text-xs font-extrabold text-blue-400">$540</span>
+                        </div>
+                        <span className="text-[9px] text-slate-400">Especial cebolla</span>
+                      </div>
+                      <div className="bg-[#0a0a0a] p-2 rounded-xl border border-white/10">
+                        <div className="flex justify-between items-start">
+                          <span className="font-bold text-xs text-white">Calabresa</span>
+                          <span className="text-xs font-extrabold text-blue-400">$590</span>
+                        </div>
+                        <span className="text-[9px] text-slate-400">Longaniza picante</span>
+                      </div>
+                      <div className="bg-[#0a0a0a] p-2 rounded-xl border border-white/10">
+                        <div className="flex justify-between items-start">
+                          <span className="font-bold text-xs text-white">Fainá</span>
+                          <span className="text-xs font-extrabold text-blue-400">$120</span>
+                        </div>
+                        <span className="text-[9px] text-slate-400">Orilla / Centro</span>
+                      </div>
                     </div>
                   </div>
-                  <div className="border-t border-dashed border-slate-400 pt-1">
-                    <div className="flex justify-between font-black text-xs">
-                      <span>TOTAL:</span>
-                      <span>$780</span>
+
+                  {/* Thermal Receipt Simulation */}
+                  <div className="bg-white text-slate-900 rounded-xl p-2.5 flex flex-col justify-between font-mono text-[10px] shadow-lg border border-slate-300">
+                    <div>
+                      <div className="text-center border-b border-dashed border-slate-400 pb-1 mb-1">
+                        <span className="font-black text-[11px] block">PIZZERIA NEXTCRM</span>
+                        <span className="text-[8px] text-slate-600 block">TICKET #104 - DELIVERY</span>
+                      </div>
+                      <div className="space-y-0.5 text-[9px]">
+                        <div className="flex justify-between"><span>1x Fugazzeta</span><span>$540</span></div>
+                        <div className="flex justify-between"><span>2x Fainá Orilla</span><span>$240</span></div>
+                        <div className="text-[8px] text-slate-500">+ Panceta extra</div>
+                      </div>
                     </div>
-                    <div className="mt-1 bg-blue-600 text-white font-bold text-[8px] py-1 rounded text-center">
-                      IMPRESO ✓ (80mm)
+                    <div className="border-t border-dashed border-slate-400 pt-1">
+                      <div className="flex justify-between font-black text-xs">
+                        <span>TOTAL:</span>
+                        <span>$780</span>
+                      </div>
+                      <div className="mt-1 bg-blue-600 text-white font-bold text-[8px] py-1 rounded text-center">
+                        IMPRESO ✓ (80mm)
+                      </div>
                     </div>
                   </div>
-                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -418,7 +432,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         </div>
       </section>
 
-      {/* PANTALLA 4: CAJA, ARQUEO, TARJETAS Y STOCK (DARK NEXTCRM THEME) */}
+      {/* PANTALLA 4: CAJA, ARQUEO, TARJETAS Y STOCK (TILTED DE COSTADO) */}
       <section id="seccion-caja-stock" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-[#050505]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-center w-full">
           <div>
@@ -451,54 +465,56 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
             </div>
           </div>
 
-          {/* Caja, Tarjetas y Stock Mockup */}
-          <div className="w-full aspect-[16/10] bg-[#0a0f1c] rounded-2xl border border-white/15 shadow-2xl p-4 flex flex-col justify-between">
-            <div className="grid grid-cols-3 gap-2">
-              <div className="bg-black border border-white/10 rounded-xl p-2.5">
-                <span className="text-[9px] text-slate-400 uppercase font-semibold block">Ventas Turno</span>
-                <span className="text-base font-black text-white font-mono">$24.850</span>
+          {/* Caja, Tarjetas y Stock Mockup (Tilted De Costado) */}
+          <div className="[perspective:1200px] w-full">
+            <div className="w-full aspect-[16/10] bg-[#0a0f1c] rounded-2xl border border-white/15 shadow-[0_30px_70px_rgba(0,0,0,0.85)] [transform:rotateY(-12deg)_rotateX(6deg)_rotateZ(2deg)] transition-all hover:[transform:rotateY(0deg)_rotateX(0deg)_rotateZ(0deg)] p-4 flex flex-col justify-between">
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-black border border-white/10 rounded-xl p-2.5">
+                  <span className="text-[9px] text-slate-400 uppercase font-semibold block">Ventas Turno</span>
+                  <span className="text-base font-black text-white font-mono">$24.850</span>
+                </div>
+                <div className="bg-black border border-blue-500/40 rounded-xl p-2.5 bg-blue-950/20">
+                  <span className="text-[9px] text-blue-400 uppercase font-semibold block">Efectivo Cajón</span>
+                  <span className="text-base font-black text-blue-400 font-mono">$14.650</span>
+                </div>
+                <div className="bg-black border border-purple-500/40 rounded-xl p-2.5 bg-purple-950/20">
+                  <span className="text-[9px] text-purple-300 uppercase font-semibold block">Propinas</span>
+                  <span className="text-base font-black text-purple-300 font-mono">$1.450</span>
+                </div>
               </div>
-              <div className="bg-black border border-blue-500/40 rounded-xl p-2.5 bg-blue-950/20">
-                <span className="text-[9px] text-blue-400 uppercase font-semibold block">Efectivo Cajón</span>
-                <span className="text-base font-black text-blue-400 font-mono">$14.650</span>
-              </div>
-              <div className="bg-black border border-purple-500/40 rounded-xl p-2.5 bg-purple-950/20">
-                <span className="text-[9px] text-purple-300 uppercase font-semibold block">Propinas</span>
-                <span className="text-base font-black text-purple-300 font-mono">$1.450</span>
-              </div>
-            </div>
 
-            {/* Desglose de Tarjetas */}
-            <div className="bg-black border border-white/10 rounded-xl p-2.5 space-y-1.5">
-              <div className="flex justify-between items-center text-xs">
-                <span className="font-bold text-blue-400 uppercase tracking-wider">Desglose Tarjetas POS ($10.200)</span>
-                <span className="text-[10px] text-slate-400">Conciliado OK ✓</span>
+              {/* Desglose de Tarjetas */}
+              <div className="bg-black border border-white/10 rounded-xl p-2.5 space-y-1.5">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="font-bold text-blue-400 uppercase tracking-wider">Desglose Tarjetas POS ($10.200)</span>
+                  <span className="text-[10px] text-slate-400">Conciliado OK ✓</span>
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-xs">
+                  <div className="bg-[#0a0a0a] border border-blue-500/30 p-2 rounded-lg">
+                    <span className="font-bold text-white block text-[10px]">Visa (Déb/Créd)</span>
+                    <span className="text-blue-400 font-black font-mono">$5.400</span>
+                  </div>
+                  <div className="bg-[#0a0a0a] border border-blue-500/30 p-2 rounded-lg">
+                    <span className="font-bold text-white block text-[10px]">MasterCard</span>
+                    <span className="text-blue-400 font-black font-mono">$3.200</span>
+                  </div>
+                  <div className="bg-[#0a0a0a] border border-blue-500/30 p-2 rounded-lg">
+                    <span className="font-bold text-white block text-[10px]">Oca / Cabal</span>
+                    <span className="text-blue-400 font-black font-mono">$1.600</span>
+                  </div>
+                </div>
               </div>
-              <div className="grid grid-cols-3 gap-2 text-xs">
-                <div className="bg-[#0a0a0a] border border-blue-500/30 p-2 rounded-lg">
-                  <span className="font-bold text-white block text-[10px]">Visa (Déb/Créd)</span>
-                  <span className="text-blue-400 font-black font-mono">$5.400</span>
-                </div>
-                <div className="bg-[#0a0a0a] border border-blue-500/30 p-2 rounded-lg">
-                  <span className="font-bold text-white block text-[10px]">MasterCard</span>
-                  <span className="text-blue-400 font-black font-mono">$3.200</span>
-                </div>
-                <div className="bg-[#0a0a0a] border border-blue-500/30 p-2 rounded-lg">
-                  <span className="font-bold text-white block text-[10px]">Oca / Cabal</span>
-                  <span className="text-blue-400 font-black font-mono">$1.600</span>
-                </div>
-              </div>
-            </div>
 
-            {/* Stock Bar */}
-            <div className="flex items-center justify-between text-xs bg-black px-3 py-2 rounded-xl border border-white/10">
-              <span className="text-slate-300 font-semibold flex items-center gap-1.5">
-                <Box size={14} className="text-orange-400" /> Inventario:
-              </span>
-              <div className="flex gap-3 text-[11px]">
-                <span className="text-blue-400 font-mono">Muzzarella: 18.5kg</span>
-                <span className="text-slate-500">|</span>
-                <span className="text-amber-400 font-mono">Cajas Pizza: 24 u. (Alerta)</span>
+              {/* Stock Bar */}
+              <div className="flex items-center justify-between text-xs bg-black px-3 py-2 rounded-xl border border-white/10">
+                <span className="text-slate-300 font-semibold flex items-center gap-1.5">
+                  <Box size={14} className="text-orange-400" /> Inventario:
+                </span>
+                <div className="flex gap-3 text-[11px]">
+                  <span className="text-blue-400 font-mono">Muzzarella: 18.5kg</span>
+                  <span className="text-slate-500">|</span>
+                  <span className="text-amber-400 font-mono">Cajas Pizza: 24 u. (Alerta)</span>
+                </div>
               </div>
             </div>
           </div>
@@ -511,68 +527,70 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         </div>
       </section>
 
-      {/* PANTALLA 5: COCINA KDS EN ACORDEÓN (DARK NEXTCRM THEME) */}
+      {/* PANTALLA 5: COCINA KDS EN ACORDEÓN (TILTED DE COSTADO) */}
       <section id="seccion-cocina" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-[#050505]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-center w-full">
-          <div className="w-full aspect-[16/10] bg-[#0a0f1c] rounded-2xl border border-white/15 shadow-2xl flex flex-col overflow-hidden relative order-2 md:order-1">
-            <div className="h-8 bg-black flex items-center justify-between px-4 border-b border-white/10 text-xs text-slate-400">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
-                  <span className="ml-2 font-mono text-slate-400 hidden sm:inline">cocina.pizzeria.app/kds</span>
-                </div>
-                <span className="text-blue-400 font-bold bg-blue-500/10 px-2.5 py-0.5 rounded border border-blue-500/20 text-[10px]">KDS ACORDEÓN</span>
-            </div>
-            <div className="flex-1 p-2.5 grid grid-cols-3 gap-2.5 bg-black text-left select-none overflow-hidden">
-                <div className="bg-[#0a0f1c] border border-white/10 rounded-xl p-2.5 flex flex-col justify-between">
-                  <div>
-                    <div className="flex justify-between items-center mb-1 pb-1 border-b border-white/10 text-[11px]">
-                      <span className="font-bold text-white">#102 Mesa 2</span>
-                      <span className="bg-blue-500/20 text-blue-400 text-[9px] px-1.5 py-0.5 rounded font-bold">12m</span>
+          <div className="[perspective:1200px] w-full order-2 md:order-1">
+            <div className="w-full aspect-[16/10] bg-[#0a0f1c] rounded-2xl border border-white/15 shadow-[0_30px_70px_rgba(0,0,0,0.85)] [transform:rotateY(10deg)_rotateX(6deg)_rotateZ(-1.5deg)] transition-all hover:[transform:rotateY(0deg)_rotateX(0deg)_rotateZ(0deg)] flex flex-col overflow-hidden relative">
+              <div className="h-8 bg-black flex items-center justify-between px-4 border-b border-white/10 text-xs text-slate-400 shrink-0">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
+                    <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                    <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
+                    <span className="ml-2 font-mono text-slate-400 hidden sm:inline">cocina.pizzeria.app/kds</span>
+                  </div>
+                  <span className="text-blue-400 font-bold bg-blue-500/10 px-2.5 py-0.5 rounded border border-blue-500/20 text-[10px]">KDS ACORDEÓN</span>
+              </div>
+              <div className="flex-1 p-2.5 grid grid-cols-3 gap-2.5 bg-black text-left select-none overflow-hidden">
+                  <div className="bg-[#0a0f1c] border border-white/10 rounded-xl p-2.5 flex flex-col justify-between">
+                    <div>
+                      <div className="flex justify-between items-center mb-1 pb-1 border-b border-white/10 text-[11px]">
+                        <span className="font-bold text-white">#102 Mesa 2</span>
+                        <span className="bg-blue-500/20 text-blue-400 text-[9px] px-1.5 py-0.5 rounded font-bold">12m</span>
+                      </div>
+                      <div className="space-y-1 text-[10px] text-slate-300">
+                        <p className="font-semibold text-white">• 1x Muzzarella</p>
+                        <p className="text-slate-400 pl-2">Sin aceitunas</p>
+                        <p className="font-semibold text-white">• 2x Fainá</p>
+                      </div>
                     </div>
-                    <div className="space-y-1 text-[10px] text-slate-300">
-                      <p className="font-semibold text-white">• 1x Muzzarella</p>
-                      <p className="text-slate-400 pl-2">Sin aceitunas</p>
-                      <p className="font-semibold text-white">• 2x Fainá</p>
+                    <div className="mt-1 bg-blue-600 text-white font-bold text-[9px] py-1 rounded text-center">
+                      ✓ LISTO
                     </div>
                   </div>
-                  <div className="mt-1 bg-blue-600 text-white font-bold text-[9px] py-1 rounded text-center">
-                    ✓ LISTO
-                  </div>
-                </div>
 
-                <div className="bg-[#0a0f1c] border border-amber-500/40 rounded-xl p-2.5 flex flex-col justify-between">
-                  <div>
-                    <div className="flex justify-between items-center mb-1 pb-1 border-b border-white/10 text-[11px]">
-                      <span className="font-bold text-white">#103 Delivery</span>
-                      <span className="bg-amber-500/20 text-amber-400 text-[9px] px-1.5 py-0.5 rounded font-bold">22m</span>
+                  <div className="bg-[#0a0f1c] border border-amber-500/40 rounded-xl p-2.5 flex flex-col justify-between">
+                    <div>
+                      <div className="flex justify-between items-center mb-1 pb-1 border-b border-white/10 text-[11px]">
+                        <span className="font-bold text-white">#103 Delivery</span>
+                        <span className="bg-amber-500/20 text-amber-400 text-[9px] px-1.5 py-0.5 rounded font-bold">22m</span>
+                      </div>
+                      <div className="space-y-1 text-[10px] text-slate-300">
+                        <p className="font-semibold text-white">• 1x Calabresa</p>
+                        <p className="font-semibold text-white">• 1x Coca 1.5L</p>
+                      </div>
                     </div>
-                    <div className="space-y-1 text-[10px] text-slate-300">
-                      <p className="font-semibold text-white">• 1x Calabresa</p>
-                      <p className="font-semibold text-white">• 1x Coca 1.5L</p>
+                    <div className="mt-1 bg-amber-600 text-white font-bold text-[9px] py-1 rounded text-center">
+                      🔥 EN HORNO
                     </div>
                   </div>
-                  <div className="mt-1 bg-amber-600 text-white font-bold text-[9px] py-1 rounded text-center">
-                    🔥 EN HORNO
-                  </div>
-                </div>
 
-                <div className="bg-[#0a0507] border border-red-500/60 rounded-xl p-2.5 flex flex-col justify-between ring-1 ring-red-500/30">
-                  <div>
-                    <div className="flex justify-between items-center mb-1 pb-1 border-b border-red-500/30 text-[11px]">
-                      <span className="font-bold text-white">#101 Delivery</span>
-                      <span className="bg-red-500 text-white font-black text-[9px] px-1.5 py-0.5 rounded animate-pulse">38m ⚠️</span>
+                  <div className="bg-[#0a0507] border border-red-500/60 rounded-xl p-2.5 flex flex-col justify-between ring-1 ring-red-500/30">
+                    <div>
+                      <div className="flex justify-between items-center mb-1 pb-1 border-b border-red-500/30 text-[11px]">
+                        <span className="font-bold text-white">#101 Delivery</span>
+                        <span className="bg-red-500 text-white font-black text-[9px] px-1.5 py-0.5 rounded animate-pulse">38m ⚠️</span>
+                      </div>
+                      <div className="space-y-1 text-[10px] text-slate-200">
+                        <p className="font-semibold text-white">• 2x Fugazzeta</p>
+                        <p className="text-red-300 font-medium pl-2">Apurar cadete</p>
+                      </div>
                     </div>
-                    <div className="space-y-1 text-[10px] text-slate-200">
-                      <p className="font-semibold text-white">• 2x Fugazzeta</p>
-                      <p className="text-red-300 font-medium pl-2">Apurar cadete</p>
+                    <div className="mt-1 bg-red-600 text-white font-bold text-[9px] py-1 rounded text-center">
+                      ⚠️ DEMORADO
                     </div>
                   </div>
-                  <div className="mt-1 bg-red-600 text-white font-bold text-[9px] py-1 rounded text-center">
-                    ⚠️ DEMORADO
-                  </div>
-                </div>
+              </div>
             </div>
           </div>
 

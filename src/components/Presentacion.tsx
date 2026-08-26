@@ -155,46 +155,50 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
       </header>
 
       {/* PANTALLA 1: HERO - TEMA NEGRO ORIGINAL CON LOGO NEXTCRM 3D */}
-      <section id="seccion-hero" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col items-center justify-center relative px-4 text-center bg-[#050505]">
+      <section id="seccion-hero" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col items-center justify-center relative px-6 text-center bg-[#050505]">
         
         {/* LOGO ISOMÉTRICO 3D NEXTCRM */}
-        <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center mb-4 [perspective:1000px] shrink-0">
-          <div className="absolute top-2 w-20 h-20 sm:w-24 sm:h-24 bg-transparent border-[3px] border-slate-700/50 rounded-2xl flex items-center justify-center z-20 [transform:rotateX(60deg)_rotateZ(45deg)] shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
+        <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center mb-5 [perspective:1000px] shrink-0">
+          <div className="absolute top-2 w-18 h-18 sm:w-22 sm:h-22 bg-transparent border-[2.5px] border-slate-700/50 rounded-2xl flex items-center justify-center z-20 [transform:rotateX(60deg)_rotateZ(45deg)] shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
             <div className="[transform:rotateZ(-45deg)_rotateX(-60deg)]">
-              <Layers size={28} className="text-[#00d8ff]" />
+              <Layers size={26} className="text-[#00d8ff]" />
             </div>
           </div>
-          <div className="absolute bottom-2 w-20 h-20 sm:w-24 sm:h-24 bg-[#1a233a] border-[3px] border-blue-500/50 rounded-2xl flex items-center justify-center z-10 [transform:rotateX(60deg)_rotateZ(45deg)] shadow-[0_20px_50px_rgba(59,130,246,0.4)]">
+          <div className="absolute bottom-2 w-18 h-18 sm:w-22 sm:h-22 bg-[#1a233a] border-[2.5px] border-blue-500/50 rounded-2xl flex items-center justify-center z-10 [transform:rotateX(60deg)_rotateZ(45deg)] shadow-[0_20px_50px_rgba(59,130,246,0.4)]">
             <div className="[transform:rotateZ(-45deg)_rotateX(-60deg)]">
-              <Zap size={22} className="text-blue-400" />
+              <Zap size={20} className="text-blue-400" />
             </div>
           </div>
         </div>
 
-        <div className="inline-flex items-center gap-2 border border-blue-500/30 text-blue-400 text-xs sm:text-sm font-semibold px-4 py-1 rounded-full mb-4 tracking-wider uppercase bg-blue-500/10 shadow-[0_0_20px_rgba(59,130,246,0.2)]">
-          <Sparkles size={14} className="text-blue-400" /> Software Gastronómico Premium + Pedidos por Voz con IA
+        {/* BADGE DELICADO Y FINO */}
+        <div className="inline-flex items-center gap-2 border border-blue-500/20 text-blue-300 text-[10px] sm:text-[11px] font-mono tracking-[0.22em] uppercase px-3.5 py-1 rounded-full mb-6 bg-blue-500/5 backdrop-blur-sm">
+          <Sparkles size={11} className="text-blue-400" /> Software Gastronómico Premium + Pedidos por Voz con IA
         </div>
 
-        <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-center mb-4 tracking-tight leading-[1.1] max-w-5xl text-white">
+        {/* TÍTULO PRINCIPAL GRANDE E IMPONENTE */}
+        <h1 className="text-5xl sm:text-7xl md:text-8xl font-black text-center mb-6 tracking-tight leading-[1.05] max-w-5xl text-white">
           El caos tiene<br/>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-300">los días contados.</span>
         </h1>
 
-        <p className="text-sm sm:text-base md:text-lg text-slate-300 text-center max-w-2xl mb-7 leading-relaxed font-normal">
+        {/* BAJADA CON TIPOGRAFÍA ELEGANTE ESTILO NEXTCRM (FINA, ESPACIADA Y MODERNA) */}
+        <p className="font-light tracking-[0.06em] sm:tracking-[0.1em] text-slate-300 text-xs sm:text-sm md:text-base text-center max-w-2xl mb-8 leading-relaxed uppercase">
           Centraliza mostrador, delivery, mesas, monitor KDS, stock, cierre de caja con desglose de tarjetas e impresión en ticketera preconfigurada.
         </p>
 
-        <div className="flex flex-wrap items-center justify-center gap-4 z-10">
+        {/* BOTONES DELICADOS Y BIEN PROPORCIONADOS */}
+        <div className="flex flex-wrap items-center justify-center gap-3.5 z-10">
           <button 
             onClick={() => document.getElementById('seccion-voz-ia')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-7 py-3.5 rounded-full flex items-center gap-2.5 transition-all shadow-xl hover:scale-105 cursor-pointer text-sm sm:text-base"
+            className="bg-blue-600 hover:bg-blue-500 text-white font-medium tracking-wide px-5 py-2.5 sm:px-6 sm:py-2.5 rounded-full flex items-center gap-2 transition-all shadow-lg hover:scale-105 cursor-pointer text-xs sm:text-sm"
           >
-            <Mic size={18} /> Ver Pedidos por Voz <ArrowDown size={16} />
+            <Mic size={15} /> Ver Pedidos por Voz <ArrowDown size={14} />
           </button>
 
           <button 
             onClick={() => document.getElementById('seccion-pos')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3.5 rounded-full flex items-center gap-2 border border-white/15 transition-all hover:scale-105 cursor-pointer text-sm sm:text-base"
+            className="bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-medium tracking-wide px-5 py-2.5 sm:px-6 sm:py-2.5 rounded-full flex items-center gap-2 border border-white/10 transition-all hover:scale-105 cursor-pointer text-xs sm:text-sm"
           >
             Explorar Módulos
           </button>
@@ -204,7 +208,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
            className="absolute bottom-5 animate-bounce cursor-pointer flex justify-center w-full z-10"
            onClick={() => document.getElementById('seccion-voz-ia')?.scrollIntoView({ behavior: 'smooth' })}
         >
-          <ChevronsDown size={28} className="text-slate-600 hover:text-slate-400 transition-colors" />
+          <ChevronsDown size={24} className="text-slate-600 hover:text-slate-400 transition-colors" />
         </div>
       </section>
 

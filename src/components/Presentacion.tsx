@@ -122,9 +122,10 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
   };
 
   return (
-    <div className="h-screen w-full bg-black text-white font-sans overflow-x-hidden overflow-y-auto snap-y snap-mandatory selection:bg-emerald-500 selection:text-white scroll-smooth relative">
-      {/* BARRA SUPERIOR FIJA / HEADER NEGRO PURO */}
-      <header className="fixed top-0 left-0 w-full z-40 px-4 sm:px-8 py-3 flex items-center justify-between bg-black/95 backdrop-blur-md border-b border-white/10">
+    <div className="h-screen w-full bg-[#050505] text-white font-sans overflow-x-hidden overflow-y-auto snap-y snap-mandatory selection:bg-blue-600 selection:text-white scroll-smooth relative">
+      
+      {/* BARRA SUPERIOR FIJA / HEADER AUTHENTIC NEXTCRM */}
+      <header className="fixed top-0 left-0 w-full z-40 px-4 sm:px-8 py-3.5 flex items-center justify-between bg-black/95 backdrop-blur-md border-b border-white/10">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400">
             <Layers size={18} />
@@ -153,32 +154,47 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         </div>
       </header>
 
-      {/* PANTALLA 1: HERO - TAMAÑO INTERMEDIO PROPORCIONAL & NEGRO PURO */}
-      <section id="seccion-hero" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col items-center justify-center relative px-4 text-center bg-black">
-        <div className="inline-flex items-center gap-2 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-bold px-4 py-1.5 rounded-full mb-6 tracking-wider uppercase bg-emerald-500/10 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-          <Sparkles size={14} className="text-emerald-400 animate-pulse" /> Software Gastronómico Premium + Pedidos por Voz con IA
+      {/* PANTALLA 1: HERO - TEMA NEGRO ORIGINAL CON LOGO NEXTCRM 3D */}
+      <section id="seccion-hero" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col items-center justify-center relative px-4 text-center bg-[#050505]">
+        
+        {/* LOGO ISOMÉTRICO 3D NEXTCRM */}
+        <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center mb-4 [perspective:1000px] shrink-0">
+          <div className="absolute top-2 w-20 h-20 sm:w-24 sm:h-24 bg-transparent border-[3px] border-slate-700/50 rounded-2xl flex items-center justify-center z-20 [transform:rotateX(60deg)_rotateZ(45deg)] shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
+            <div className="[transform:rotateZ(-45deg)_rotateX(-60deg)]">
+              <Layers size={28} className="text-[#00d8ff]" />
+            </div>
+          </div>
+          <div className="absolute bottom-2 w-20 h-20 sm:w-24 sm:h-24 bg-[#1a233a] border-[3px] border-blue-500/50 rounded-2xl flex items-center justify-center z-10 [transform:rotateX(60deg)_rotateZ(45deg)] shadow-[0_20px_50px_rgba(59,130,246,0.4)]">
+            <div className="[transform:rotateZ(-45deg)_rotateX(-60deg)]">
+              <Zap size={22} className="text-blue-400" />
+            </div>
+          </div>
         </div>
 
-        <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-center mb-6 tracking-tight leading-[1.1] max-w-5xl text-white">
+        <div className="inline-flex items-center gap-2 border border-blue-500/30 text-blue-400 text-xs sm:text-sm font-semibold px-4 py-1 rounded-full mb-4 tracking-wider uppercase bg-blue-500/10 shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+          <Sparkles size={14} className="text-blue-400" /> Software Gastronómico Premium + Pedidos por Voz con IA
+        </div>
+
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-center mb-4 tracking-tight leading-[1.1] max-w-5xl text-white">
           El caos tiene<br/>
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-green-400">los días contados.</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-300">los días contados.</span>
         </h1>
 
-        <p className="text-sm sm:text-base md:text-lg text-slate-300 text-center max-w-2xl mb-8 leading-relaxed font-normal">
+        <p className="text-sm sm:text-base md:text-lg text-slate-300 text-center max-w-2xl mb-7 leading-relaxed font-normal">
           Centraliza mostrador, delivery, mesas, monitor KDS, stock, cierre de caja con desglose de tarjetas e impresión en ticketera preconfigurada.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4 z-10">
           <button 
             onClick={() => document.getElementById('seccion-voz-ia')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-7 py-3.5 rounded-full flex items-center gap-2.5 transition-all shadow-xl hover:scale-105 cursor-pointer text-sm sm:text-base"
+            className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-7 py-3.5 rounded-full flex items-center gap-2.5 transition-all shadow-xl hover:scale-105 cursor-pointer text-sm sm:text-base"
           >
             <Mic size={18} /> Ver Pedidos por Voz <ArrowDown size={16} />
           </button>
 
           <button 
             onClick={() => document.getElementById('seccion-pos')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-3.5 rounded-full flex items-center gap-2 border border-white/15 transition-all hover:scale-105 cursor-pointer text-sm sm:text-base"
+            className="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3.5 rounded-full flex items-center gap-2 border border-white/15 transition-all hover:scale-105 cursor-pointer text-sm sm:text-base"
           >
             Explorar Módulos
           </button>
@@ -192,45 +208,45 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         </div>
       </section>
 
-      {/* PANTALLA 2: PEDIDOS POR VOZ & DICTADO DIRECTO (NEGRO PURO) */}
-      <section id="seccion-voz-ia" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-black">
+      {/* PANTALLA 2: PEDIDOS POR VOZ & DICTADO DIRECTO (TEMA OSCURO NEXTCRM) */}
+      <section id="seccion-voz-ia" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-[#050505]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-center w-full">
           <div>
-            <div className="inline-flex items-center gap-1.5 border border-emerald-500/40 text-emerald-400 text-xs font-bold px-3.5 py-1 rounded-full mb-4 tracking-widest uppercase bg-emerald-500/10">
+            <div className="inline-flex items-center gap-1.5 border border-blue-500/40 text-blue-400 text-xs font-bold px-3.5 py-1 rounded-full mb-4 tracking-widest uppercase bg-blue-500/10">
               <Mic size={14} /> Reconocimiento de Voz Multi-Producto
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 leading-tight">
-              Dicta pedidos<br/><span className="text-emerald-400">producto por producto.</span>
+              Dicta pedidos<br/><span className="text-blue-400">producto por producto.</span>
             </h2>
             <p className="text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed mb-6">
               Dicta al vuelo mientras atiendes el teléfono. Haz pausas naturales entre producto y producto: la IA acumula la comanda automáticamente sin perder los ítems anteriores.
             </p>
 
             <div className="grid grid-cols-2 gap-3 mb-6">
-              <div className="bg-[#050505] border border-emerald-500/30 p-3.5 rounded-2xl">
-                <div className="text-emerald-400 mb-1 flex items-center gap-1.5 font-bold text-sm">
+              <div className="bg-[#0a0f1c] border border-white/10 p-3.5 rounded-2xl">
+                <div className="text-blue-400 mb-1 flex items-center gap-1.5 font-bold text-sm">
                   <Headphones size={16} /> Supresión Acústica
                 </div>
                 <p className="text-xs text-slate-400">Aísla la voz de ruidos de cocina y horno.</p>
               </div>
 
-              <div className="bg-[#050505] border border-emerald-500/30 p-3.5 rounded-2xl">
-                <div className="text-emerald-400 mb-1 flex items-center gap-1.5 font-bold text-sm">
+              <div className="bg-[#0a0f1c] border border-white/10 p-3.5 rounded-2xl">
+                <div className="text-blue-400 mb-1 flex items-center gap-1.5 font-bold text-sm">
                   <MessageSquare size={16} /> WhatsApp Directo
                 </div>
                 <p className="text-xs text-slate-400">Pega audios o textos de clientes en 1 clic.</p>
               </div>
             </div>
 
-            <p className="text-xs text-emerald-400 font-mono">Toca los botones del simulador interactivo →</p>
+            <p className="text-xs text-blue-400 font-mono">Toca los botones del simulador interactivo →</p>
           </div>
 
-          {/* Floating Voice Simulator Mockup (Negro Puro) */}
-          <div className="bg-[#050505] border border-emerald-500/40 rounded-3xl p-6 shadow-[0_0_50px_rgba(16,185,129,0.25)] flex flex-col space-y-4">
-            <div className="flex items-center justify-between border-b border-emerald-500/20 pb-3">
+          {/* Floating Voice Simulator Mockup (Dark NextCRM Theme) */}
+          <div className="bg-[#0a0f1c] border border-white/15 rounded-3xl p-6 shadow-2xl flex flex-col space-y-4">
+            <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-emerald-400 animate-ping"></div>
-                <span className="text-xs font-mono font-bold text-emerald-300 uppercase tracking-wider">
+                <div className="w-3 h-3 rounded-full bg-blue-400 animate-ping"></div>
+                <span className="text-xs font-mono font-bold text-blue-300 uppercase tracking-wider">
                   ASISTENTE DE VOZ FLOTANTE
                 </span>
               </div>
@@ -247,40 +263,40 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => addVoiceDemoChunk('y 2 fainás con queso', 2, 'Fainá con Queso', 'Orilla', 240)}
-                  className="bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/30 text-emerald-300 px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer transition-all shadow"
+                  className="bg-blue-950/80 hover:bg-blue-900 border border-blue-500/30 text-blue-300 px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer transition-all shadow"
                 >
                   + Dictar: "2 fainás con queso"
                 </button>
                 <button
                   onClick={() => addVoiceDemoChunk('y 1 coca de litro y medio para delivery', 1, 'Refresco Coca-Cola 1.5L', 'Fría', 180)}
-                  className="bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/30 text-emerald-300 px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer transition-all shadow"
+                  className="bg-blue-950/80 hover:bg-blue-900 border border-blue-500/30 text-blue-300 px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer transition-all shadow"
                 >
                   + Dictar: "1 Coca 1.5L"
                 </button>
               </div>
             </div>
 
-            <div className="bg-black border border-emerald-500/30 p-3 rounded-xl flex items-center justify-between text-xs sm:text-sm">
+            <div className="bg-black border border-white/10 p-3 rounded-xl flex items-center justify-between text-xs sm:text-sm">
               <div className="flex items-center gap-2 truncate">
-                <Mic size={16} className="text-emerald-400 animate-pulse shrink-0" />
-                <span className="text-emerald-200 italic truncate">"{demoActiveText}"</span>
+                <Mic size={16} className="text-blue-400 animate-pulse shrink-0" />
+                <span className="text-blue-200 italic truncate">"{demoActiveText}"</span>
               </div>
-              <span className="text-[10px] text-slate-400 font-mono shrink-0 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-500/30">Pausa detectada ✓</span>
+              <span className="text-[10px] text-slate-400 font-mono shrink-0 bg-blue-950 px-2 py-0.5 rounded border border-blue-500/30">Pausa detectada ✓</span>
             </div>
 
-            <div className="bg-black border border-emerald-500/40 p-4 rounded-2xl space-y-2.5">
-              <div className="flex items-center justify-between text-xs sm:text-sm font-bold text-emerald-300 border-b border-emerald-500/20 pb-2">
-                <span className="flex items-center gap-2"><Sparkles size={15} className="text-emerald-400" /> COMANDA ACUMULADA ({demoVoiceItems.length} ÍTEMS)</span>
-                <span className="text-emerald-400 font-black text-base font-mono">${totalDemoPrice}</span>
+            <div className="bg-black border border-white/10 p-4 rounded-2xl space-y-2.5">
+              <div className="flex items-center justify-between text-xs sm:text-sm font-bold text-white border-b border-white/10 pb-2">
+                <span className="flex items-center gap-2"><Sparkles size={15} className="text-blue-400" /> COMANDA ACUMULADA ({demoVoiceItems.length} ÍTEMS)</span>
+                <span className="text-blue-400 font-black text-base font-mono">${totalDemoPrice}</span>
               </div>
 
               <div className="space-y-2 max-h-36 overflow-y-auto pr-1 custom-scrollbar text-xs sm:text-sm">
                 {demoVoiceItems.map((item, idx) => (
-                  <div key={idx} className="flex justify-between items-center bg-[#070707] px-3 py-2 rounded-xl border border-emerald-500/10">
+                  <div key={idx} className="flex justify-between items-center bg-[#070707] px-3 py-2 rounded-xl border border-white/5">
                     <span className="text-slate-200 truncate">
-                      <strong className="text-emerald-400 font-mono text-sm">{item.qty}x</strong> {item.name} {item.notes && <span className="text-xs text-emerald-400/90">({item.notes})</span>}
+                      <strong className="text-blue-400 font-mono text-sm">{item.qty}x</strong> {item.name} {item.notes && <span className="text-xs text-slate-400">({item.notes})</span>}
                     </span>
-                    <span className="font-mono font-bold text-emerald-300 ml-2">${item.price * item.qty}</span>
+                    <span className="font-mono font-bold text-white ml-2">${item.price * item.qty}</span>
                   </div>
                 ))}
               </div>
@@ -296,28 +312,28 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         </div>
       </section>
 
-      {/* PANTALLA 3: PUNTO DE VENTA & TICKETTERA (NEGRO PURO) */}
-      <section id="seccion-pos" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-black">
+      {/* PANTALLA 3: PUNTO DE VENTA & TICKETTERA (DARK NEXTCRM THEME) */}
+      <section id="seccion-pos" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-[#050505]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-center w-full">
           <div>
-            <span className="border border-green-500/30 text-green-400 text-xs font-bold px-3.5 py-1 rounded-full mb-4 tracking-widest uppercase bg-green-500/10 inline-block">
+            <span className="border border-blue-500/30 text-blue-400 text-xs font-bold px-3.5 py-1 rounded-full mb-4 tracking-widest uppercase bg-blue-500/10 inline-block">
               Punto de Venta + Impresión Térmica
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 leading-tight">
-              Toma pedidos &<br/><span className="text-green-400">ticketera lista.</span>
+              Toma pedidos &<br/><span className="text-blue-400">ticketera lista.</span>
             </h2>
             <p className="text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed mb-6">
               Compatible con ticketeras térmicas estándar (80mm y 58mm). <strong>Ya viene preconfigurada</strong> para imprimir comandas de cocina y tickets de entrega en 1 clic.
             </p>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-[#070707] border border-white/10 p-4 rounded-2xl">
-                <div className="text-emerald-400 mb-2"><Printer size={24}/></div>
+              <div className="bg-[#0a0f1c] border border-white/10 p-4 rounded-2xl">
+                <div className="text-blue-400 mb-2"><Printer size={24}/></div>
                 <h4 className="font-bold text-base mb-1">Ticketera Térmica</h4>
                 <p className="text-xs text-slate-400">80mm / 58mm preconfigurada</p>
               </div>
-              <div className="bg-[#070707] border border-white/10 p-4 rounded-2xl">
-                <div className="text-blue-400 mb-2"><Zap size={24}/></div>
+              <div className="bg-[#0a0f1c] border border-white/10 p-4 rounded-2xl">
+                <div className="text-cyan-400 mb-2"><Zap size={24}/></div>
                 <h4 className="font-bold text-base mb-1">Mostrador & Salón</h4>
                 <p className="text-xs text-slate-400">Manejo de mesas y delivery</p>
               </div>
@@ -325,39 +341,39 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
           </div>
 
           {/* POS & Thermal Ticket Preview */}
-          <div className="w-full aspect-[16/10] bg-[#070707] rounded-2xl border border-white/15 shadow-2xl flex overflow-hidden relative">
+          <div className="w-full aspect-[16/10] bg-[#0a0f1c] rounded-2xl border border-white/15 shadow-2xl flex overflow-hidden relative">
             <div className="flex-1 p-3 grid grid-cols-3 gap-2.5 bg-black text-left select-none">
                 <div className="col-span-2 space-y-2">
                   <div className="flex items-center justify-between bg-[#0a0a0a] px-3 py-1.5 rounded-xl border border-white/10 text-xs">
                     <span className="text-slate-300 font-medium">🍕 Catálogo Rápido</span>
-                    <span className="text-[10px] text-emerald-400 font-bold">12 Productos</span>
+                    <span className="text-[10px] text-blue-400 font-bold">12 Productos</span>
                   </div>
                   <div className="grid grid-cols-2 gap-1.5">
                     <div className="bg-[#0a0a0a] p-2 rounded-xl border border-white/10">
                       <div className="flex justify-between items-start">
                         <span className="font-bold text-xs text-white">Muzzarella</span>
-                        <span className="text-xs font-extrabold text-emerald-400">$480</span>
+                        <span className="text-xs font-extrabold text-blue-400">$480</span>
                       </div>
                       <span className="text-[9px] text-slate-400">Porción / Metro</span>
                     </div>
-                    <div className="bg-[#0a0a0a] p-2 rounded-xl border border-emerald-500/60 ring-1 ring-emerald-500/30">
+                    <div className="bg-[#0a0a0a] p-2 rounded-xl border border-blue-500/60 ring-1 ring-blue-500/30">
                       <div className="flex justify-between items-start">
                         <span className="font-bold text-xs text-white">Fugazzeta</span>
-                        <span className="text-xs font-extrabold text-emerald-400">$540</span>
+                        <span className="text-xs font-extrabold text-blue-400">$540</span>
                       </div>
                       <span className="text-[9px] text-slate-400">Especial cebolla</span>
                     </div>
                     <div className="bg-[#0a0a0a] p-2 rounded-xl border border-white/10">
                       <div className="flex justify-between items-start">
                         <span className="font-bold text-xs text-white">Calabresa</span>
-                        <span className="text-xs font-extrabold text-emerald-400">$590</span>
+                        <span className="text-xs font-extrabold text-blue-400">$590</span>
                       </div>
                       <span className="text-[9px] text-slate-400">Longaniza picante</span>
                     </div>
                     <div className="bg-[#0a0a0a] p-2 rounded-xl border border-white/10">
                       <div className="flex justify-between items-start">
                         <span className="font-bold text-xs text-white">Fainá</span>
-                        <span className="text-xs font-extrabold text-emerald-400">$120</span>
+                        <span className="text-xs font-extrabold text-blue-400">$120</span>
                       </div>
                       <span className="text-[9px] text-slate-400">Orilla / Centro</span>
                     </div>
@@ -382,7 +398,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       <span>TOTAL:</span>
                       <span>$780</span>
                     </div>
-                    <div className="mt-1 bg-emerald-600 text-white font-bold text-[8px] py-1 rounded text-center">
+                    <div className="mt-1 bg-blue-600 text-white font-bold text-[8px] py-1 rounded text-center">
                       IMPRESO ✓ (80mm)
                     </div>
                   </div>
@@ -398,8 +414,8 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         </div>
       </section>
 
-      {/* PANTALLA 4: CAJA, ARQUEO, TARJETAS Y STOCK (NEGRO PURO) */}
-      <section id="seccion-caja-stock" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-black">
+      {/* PANTALLA 4: CAJA, ARQUEO, TARJETAS Y STOCK (DARK NEXTCRM THEME) */}
+      <section id="seccion-caja-stock" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-[#050505]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-center w-full">
           <div>
             <span className="border border-blue-500/30 text-blue-400 text-xs font-bold px-3.5 py-1 rounded-full mb-4 tracking-widest uppercase bg-blue-500/10 inline-block">
@@ -413,17 +429,17 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
             </p>
 
             <div className="grid grid-cols-3 gap-3">
-              <div className="bg-[#070707] border border-white/10 p-3 rounded-2xl">
-                <Wallet size={20} className="text-emerald-400 mb-1" />
+              <div className="bg-[#0a0f1c] border border-white/10 p-3 rounded-2xl">
+                <Wallet size={20} className="text-blue-400 mb-1" />
                 <h4 className="font-bold text-xs text-white">Arqueo Ciego</h4>
                 <p className="text-[10px] text-slate-400">Cero trampas en caja</p>
               </div>
-              <div className="bg-[#070707] border border-white/10 p-3 rounded-2xl">
-                <CreditCard size={20} className="text-blue-400 mb-1" />
+              <div className="bg-[#0a0f1c] border border-white/10 p-3 rounded-2xl">
+                <CreditCard size={20} className="text-cyan-400 mb-1" />
                 <h4 className="font-bold text-xs text-white">Desglose POS</h4>
                 <p className="text-[10px] text-slate-400">Por sello y franquicia</p>
               </div>
-              <div className="bg-[#070707] border border-white/10 p-3 rounded-2xl">
+              <div className="bg-[#0a0f1c] border border-white/10 p-3 rounded-2xl">
                 <Box size={20} className="text-orange-400 mb-1" />
                 <h4 className="font-bold text-xs text-white">Stock Crítico</h4>
                 <p className="text-[10px] text-slate-400">Alertas automáticas</p>
@@ -432,15 +448,15 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
           </div>
 
           {/* Caja, Tarjetas y Stock Mockup */}
-          <div className="w-full aspect-[16/10] bg-[#070707] rounded-2xl border border-white/15 shadow-2xl p-4 flex flex-col justify-between">
+          <div className="w-full aspect-[16/10] bg-[#0a0f1c] rounded-2xl border border-white/15 shadow-2xl p-4 flex flex-col justify-between">
             <div className="grid grid-cols-3 gap-2">
               <div className="bg-black border border-white/10 rounded-xl p-2.5">
                 <span className="text-[9px] text-slate-400 uppercase font-semibold block">Ventas Turno</span>
                 <span className="text-base font-black text-white font-mono">$24.850</span>
               </div>
-              <div className="bg-black border border-emerald-500/40 rounded-xl p-2.5 bg-emerald-950/20">
-                <span className="text-[9px] text-emerald-400 uppercase font-semibold block">Efectivo Cajón</span>
-                <span className="text-base font-black text-emerald-400 font-mono">$14.650</span>
+              <div className="bg-black border border-blue-500/40 rounded-xl p-2.5 bg-blue-950/20">
+                <span className="text-[9px] text-blue-400 uppercase font-semibold block">Efectivo Cajón</span>
+                <span className="text-base font-black text-blue-400 font-mono">$14.650</span>
               </div>
               <div className="bg-black border border-purple-500/40 rounded-xl p-2.5 bg-purple-950/20">
                 <span className="text-[9px] text-purple-300 uppercase font-semibold block">Propinas</span>
@@ -476,7 +492,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                 <Box size={14} className="text-orange-400" /> Inventario:
               </span>
               <div className="flex gap-3 text-[11px]">
-                <span className="text-emerald-400 font-mono">Muzzarella: 18.5kg</span>
+                <span className="text-blue-400 font-mono">Muzzarella: 18.5kg</span>
                 <span className="text-slate-500">|</span>
                 <span className="text-amber-400 font-mono">Cajas Pizza: 24 u. (Alerta)</span>
               </div>
@@ -491,10 +507,10 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         </div>
       </section>
 
-      {/* PANTALLA 5: COCINA KDS EN ACORDEÓN (NEGRO PURO) */}
-      <section id="seccion-cocina" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-black">
+      {/* PANTALLA 5: COCINA KDS EN ACORDEÓN (DARK NEXTCRM THEME) */}
+      <section id="seccion-cocina" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-[#050505]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-center w-full">
-          <div className="w-full aspect-[16/10] bg-[#070707] rounded-2xl border border-white/15 shadow-2xl flex flex-col overflow-hidden relative order-2 md:order-1">
+          <div className="w-full aspect-[16/10] bg-[#0a0f1c] rounded-2xl border border-white/15 shadow-2xl flex flex-col overflow-hidden relative order-2 md:order-1">
             <div className="h-8 bg-black flex items-center justify-between px-4 border-b border-white/10 text-xs text-slate-400">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
@@ -502,14 +518,14 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                   <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
                   <span className="ml-2 font-mono text-slate-400 hidden sm:inline">cocina.pizzeria.app/kds</span>
                 </div>
-                <span className="text-red-400 font-bold bg-red-500/10 px-2.5 py-0.5 rounded border border-red-500/20 text-[10px]">KDS ACORDEÓN</span>
+                <span className="text-blue-400 font-bold bg-blue-500/10 px-2.5 py-0.5 rounded border border-blue-500/20 text-[10px]">KDS ACORDEÓN</span>
             </div>
             <div className="flex-1 p-2.5 grid grid-cols-3 gap-2.5 bg-black text-left select-none overflow-hidden">
-                <div className="bg-[#070707] border border-emerald-500/40 rounded-xl p-2.5 flex flex-col justify-between">
+                <div className="bg-[#0a0f1c] border border-white/10 rounded-xl p-2.5 flex flex-col justify-between">
                   <div>
                     <div className="flex justify-between items-center mb-1 pb-1 border-b border-white/10 text-[11px]">
                       <span className="font-bold text-white">#102 Mesa 2</span>
-                      <span className="bg-emerald-500/20 text-emerald-400 text-[9px] px-1.5 py-0.5 rounded font-bold">12m</span>
+                      <span className="bg-blue-500/20 text-blue-400 text-[9px] px-1.5 py-0.5 rounded font-bold">12m</span>
                     </div>
                     <div className="space-y-1 text-[10px] text-slate-300">
                       <p className="font-semibold text-white">• 1x Muzzarella</p>
@@ -517,12 +533,12 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       <p className="font-semibold text-white">• 2x Fainá</p>
                     </div>
                   </div>
-                  <div className="mt-1 bg-emerald-600 text-white font-bold text-[9px] py-1 rounded text-center">
+                  <div className="mt-1 bg-blue-600 text-white font-bold text-[9px] py-1 rounded text-center">
                     ✓ LISTO
                   </div>
                 </div>
 
-                <div className="bg-[#070707] border border-amber-500/40 rounded-xl p-2.5 flex flex-col justify-between">
+                <div className="bg-[#0a0f1c] border border-amber-500/40 rounded-xl p-2.5 flex flex-col justify-between">
                   <div>
                     <div className="flex justify-between items-center mb-1 pb-1 border-b border-white/10 text-[11px]">
                       <span className="font-bold text-white">#103 Delivery</span>
@@ -557,11 +573,11 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
           </div>
 
           <div className="order-1 md:order-2">
-            <span className="border border-red-500/30 text-red-400 text-xs font-bold px-3.5 py-1 rounded-full mb-4 tracking-widest uppercase bg-red-500/10 inline-block">
+            <span className="border border-blue-500/30 text-blue-400 text-xs font-bold px-3.5 py-1 rounded-full mb-4 tracking-widest uppercase bg-blue-500/10 inline-block">
               Monitor KDS Acordeón
             </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 leading-tight">
-              Cocina organizada<br/><span className="text-red-400">sin comprimirse.</span>
+              Cocina organizada<br/><span className="text-blue-400">sin comprimirse.</span>
             </h2>
             <p className="text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed mb-8">
               Las comandas no se amontonan ni quedan diminutas. Vista en acordeón con scroll suave por columna y semáforo de demoras.
@@ -581,8 +597,8 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         </div>
       </section>
 
-      {/* PANTALLA 6: STACK TECNOLÓGICO (NEGRO PURO) */}
-      <section id="seccion-tech-stack" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-black">
+      {/* PANTALLA 6: STACK TECNOLÓGICO */}
+      <section id="seccion-tech-stack" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-[#050505]">
         <div className="max-w-6xl mx-auto w-full text-center">
           <div className="inline-flex items-center gap-1.5 border border-blue-500/40 text-blue-400 text-xs font-bold px-4 py-1.5 rounded-full mb-4 tracking-widest uppercase bg-blue-500/10">
             <Cpu size={14} /> Arquitectura & Stack Tecnológico
@@ -595,35 +611,35 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
           </p>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 text-left">
-            <div className="bg-[#070707] border border-white/10 p-5 rounded-2xl shadow-lg">
+            <div className="bg-[#0a0f1c] border border-white/10 p-5 rounded-2xl shadow-lg">
               <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center mb-3 border border-white/20 text-white font-black text-base">▲</div>
               <h3 className="font-extrabold text-white text-base">Vercel</h3>
               <span className="text-[10px] text-blue-400 font-mono uppercase font-bold block mb-2">CDN Edge 99.99%</span>
               <p className="text-xs text-slate-400 leading-relaxed">Alojamiento global con máxima velocidad de carga.</p>
             </div>
 
-            <div className="bg-[#070707] border border-white/10 p-5 rounded-2xl shadow-lg">
+            <div className="bg-[#0a0f1c] border border-white/10 p-5 rounded-2xl shadow-lg">
               <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center mb-3 border border-amber-500/40 text-amber-400 text-base">🔥</div>
               <h3 className="font-extrabold text-white text-base">Firebase</h3>
               <span className="text-[10px] text-amber-400 font-mono uppercase font-bold block mb-2">Firestore Realtime</span>
               <p className="text-xs text-slate-400 leading-relaxed">Sincronización multi-pantalla instantánea.</p>
             </div>
 
-            <div className="bg-[#070707] border border-white/10 p-5 rounded-2xl shadow-lg">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-3 border border-emerald-500/40 text-emerald-400 text-xs font-mono">{'{ }'}</div>
+            <div className="bg-[#0a0f1c] border border-white/10 p-5 rounded-2xl shadow-lg">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center mb-3 border border-blue-500/40 text-blue-400 text-xs font-mono">{'{ }'}</div>
               <h3 className="font-extrabold text-white text-base">JSON</h3>
-              <span className="text-[10px] text-emerald-400 font-mono uppercase font-bold block mb-2">Datos Portátiles</span>
+              <span className="text-[10px] text-blue-400 font-mono uppercase font-bold block mb-2">Datos Portátiles</span>
               <p className="text-xs text-slate-400 leading-relaxed">Estructuración ágil para tickets y backups.</p>
             </div>
 
-            <div className="bg-[#070707] border border-white/10 p-5 rounded-2xl shadow-lg">
+            <div className="bg-[#0a0f1c] border border-white/10 p-5 rounded-2xl shadow-lg">
               <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center mb-3 border border-purple-500/40 text-purple-400 text-base">⚡</div>
               <h3 className="font-extrabold text-white text-base">Vite</h3>
               <span className="text-[10px] text-purple-400 font-mono uppercase font-bold block mb-2">Build Instantáneo</span>
               <p className="text-xs text-slate-400 leading-relaxed">Compilación ultrarrápida sin bloqueos.</p>
             </div>
 
-            <div className="bg-[#070707] border border-white/10 p-5 rounded-2xl shadow-lg col-span-2 sm:col-span-1">
+            <div className="bg-[#0a0f1c] border border-white/10 p-5 rounded-2xl shadow-lg col-span-2 sm:col-span-1">
               <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-3 border border-cyan-500/40 text-cyan-400 text-base">⚛️</div>
               <h3 className="font-extrabold text-white text-base">React</h3>
               <span className="text-[10px] text-cyan-400 font-mono uppercase font-bold block mb-2">UI Táctil Reactiva</span>
@@ -640,10 +656,10 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         </div>
       </section>
 
-      {/* PANTALLA 7: 3 PLANES (NEGRO PURO) */}
-      <section id="seccion-precios" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-black">
+      {/* PANTALLA 7: 3 PLANES (DARK NEXTCRM THEME) */}
+      <section id="seccion-precios" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-[#050505]">
          <div className="text-center mb-5 max-w-4xl mx-auto">
-           <div className="inline-flex items-center gap-1.5 border border-emerald-500/40 text-emerald-400 text-xs font-bold px-3.5 py-1 rounded-full mb-2 tracking-widest uppercase bg-emerald-500/10">
+           <div className="inline-flex items-center gap-1.5 border border-blue-500/40 text-blue-400 text-xs font-bold px-3.5 py-1 rounded-full mb-2 tracking-widest uppercase bg-blue-500/10">
              <DollarSign size={13} /> 3 Planes Transparentes & Razonables
            </div>
            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black">Tu inversión garantizada.</h2>
@@ -654,7 +670,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
          
          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5 w-full items-stretch mb-4">
             {/* PLAN 1: BÁSICO */}
-            <div className="bg-[#070707] border border-white/10 rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-xl">
+            <div className="bg-[#0a0f1c] border border-white/10 rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-xl">
                <div>
                  <div className="flex justify-between items-center mb-2">
                    <span className="text-[10px] font-mono font-bold text-slate-400 uppercase bg-white/5 border border-white/10 px-2.5 py-1 rounded-full">
@@ -671,22 +687,22 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       <span className="text-3xl font-black text-white">$190</span>
                       <span className="text-xs text-slate-400 uppercase">USD / Pago Único</span>
                     </div>
-                    <span className="text-xs text-emerald-400 font-semibold block mt-0.5">
+                    <span className="text-xs text-blue-400 font-semibold block mt-0.5">
                       O en hasta 6 cuotas de ~$32 USD (~$1.580 UYU)
                     </span>
                  </div>
 
                  <ul className="space-y-2 text-xs text-slate-300">
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                      <CheckCircle2 size={14} className="text-blue-400 shrink-0" />
                       <span><strong>Software Completo:</strong> POS, KDS Cocina, Mesas, Delivery, Stock y Caja.</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                      <CheckCircle2 size={14} className="text-blue-400 shrink-0" />
                       <span><strong>Ticketera Térmica:</strong> Preconfigurada para 80mm y 58mm.</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                      <CheckCircle2 size={14} className="text-blue-400 shrink-0" />
                       <span><strong>Carga Autogestionable:</strong> El cliente carga sus productos y precios.</span>
                     </li>
                     <li className="flex items-center gap-2 text-blue-300">
@@ -705,43 +721,43 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
             </div>
             
             {/* PLAN 2: INTERMEDIO */}
-            <div className="bg-[#05110a] border-2 border-emerald-500 text-white rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-2xl relative z-10">
+            <div className="bg-[#0e1629] border-2 border-blue-500 text-white rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-2xl relative z-10">
                <div>
                  <div className="flex justify-between items-center mb-2">
-                   <span className="text-[10px] font-mono font-bold text-emerald-300 uppercase bg-emerald-950 border border-emerald-500/40 px-2.5 py-1 rounded-full">
+                   <span className="text-[10px] font-mono font-bold text-blue-300 uppercase bg-blue-950 border border-blue-500/40 px-2.5 py-1 rounded-full">
                      CON MANTENIMIENTO
                    </span>
-                   <span className="text-[10px] font-black text-slate-950 bg-emerald-400 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                     <Flame size={11} className="fill-slate-950" /> RECOMENDADO
+                   <span className="text-[10px] font-black text-white bg-blue-600 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                     <Flame size={11} className="fill-white" /> RECOMENDADO
                    </span>
                  </div>
                  <h3 className="text-2xl font-black text-white">Plan Intermedio</h3>
                  
-                 <div className="my-3 pb-3 border-b border-emerald-500/30">
+                 <div className="my-3 pb-3 border-b border-blue-500/30">
                     <div className="flex items-baseline gap-1.5">
                       <span className="text-3xl font-black text-white">$35</span>
-                      <span className="text-xs text-emerald-300 uppercase">USD / Mes</span>
+                      <span className="text-xs text-blue-300 uppercase">USD / Mes</span>
                     </div>
-                    <span className="text-xs text-emerald-400 font-semibold block mt-0.5">
+                    <span className="text-xs text-blue-400 font-semibold block mt-0.5">
                       Equivalente a ~$1.490 UYU / mes
                     </span>
                  </div>
 
                  <ul className="space-y-2 text-xs text-slate-200">
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                      <CheckCircle2 size={14} className="text-blue-400 shrink-0" />
                       <span><strong>Todo lo del Plan Básico + Ticketera preconfigurada.</strong></span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                      <CheckCircle2 size={14} className="text-blue-400 shrink-0" />
                       <span><strong>Copias de Seguridad:</strong> Respaldo periódico y seguridad.</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                      <CheckCircle2 size={14} className="text-blue-400 shrink-0" />
                       <span><strong>Carga de Menú & Precios:</strong> Modificaciones por nuestro equipo.</span>
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                      <CheckCircle2 size={14} className="text-blue-400 shrink-0" />
                       <span><strong>2 Consultas Mensuales Incluidas:</strong> Soporte prioritario directo.</span>
                     </li>
                  </ul>
@@ -749,14 +765,14 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
 
                <button
                  onClick={() => { setSubmitted(false); setShowModal(true); }}
-                 className="w-full mt-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3 rounded-xl text-xs uppercase tracking-wider cursor-pointer shadow-lg transition-transform hover:scale-102"
+                 className="w-full mt-4 bg-blue-600 hover:bg-blue-500 text-white font-black py-3 rounded-xl text-xs uppercase tracking-wider cursor-pointer shadow-lg transition-transform hover:scale-102"
                >
                  Elegir Plan Intermedio
                </button>
             </div>
 
             {/* PLAN 3: PREMIUM IA FULL */}
-            <div className="bg-[#070707] border border-cyan-500/50 rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-xl">
+            <div className="bg-[#0a0f1c] border border-cyan-500/50 rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-xl">
                <div>
                  <div className="flex justify-between items-center mb-2">
                    <span className="text-[10px] font-mono font-bold text-cyan-300 uppercase bg-cyan-950 border border-cyan-500/40 px-2.5 py-1 rounded-full flex items-center gap-1">
@@ -805,7 +821,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
          </div>
 
          {/* Compact Support Policy Banner */}
-         <div className="max-w-6xl mx-auto bg-[#070707] border border-blue-500/30 rounded-2xl p-3 text-left text-xs text-slate-300 flex items-center justify-between gap-4">
+         <div className="max-w-6xl mx-auto bg-[#0a0f1c] border border-blue-500/30 rounded-2xl p-3 text-left text-xs text-slate-300 flex items-center justify-between gap-4">
            <div className="flex items-center gap-2 font-bold text-blue-400 uppercase text-xs shrink-0">
              <ShieldCheck size={16} /> Soporte y Garantía:
            </div>
@@ -822,10 +838,10 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
          </div>
       </section>
 
-      {/* PANTALLA 8: CTA FINAL (NEGRO PURO) */}
-      <section id="seccion-final" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col items-center justify-center bg-black text-white px-4 text-center relative border-t border-white/10">
+      {/* PANTALLA 8: CTA FINAL (DARK NEXTCRM THEME) */}
+      <section id="seccion-final" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col items-center justify-center bg-[#050505] text-white px-4 text-center relative border-t border-white/10">
          <h2 className="text-4xl sm:text-6xl md:text-7xl font-black mb-4 tracking-tight text-center leading-tight">
-            Evoluciona tu pizzería<br/><span className="text-emerald-400">hoy.</span>
+            Evoluciona tu pizzería<br/><span className="text-blue-400">hoy.</span>
          </h2>
          <p className="text-sm sm:text-base md:text-lg text-slate-300 mb-8 max-w-xl font-normal">
             Optimiza tus pedidos por voz, comanda de cocina y controla tu negocio en tiempo real.
@@ -834,9 +850,9 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
          <div className="flex flex-col items-center justify-center gap-3 z-10 w-full max-w-md px-4">
            <button 
              onClick={() => { setSubmitted(false); setError(''); setShowModal(true); }}
-             className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-8 py-4 rounded-full text-base shadow-2xl hover:scale-105 transition-all flex items-center justify-center gap-3 cursor-pointer active:scale-95 w-full"
+             className="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 rounded-full text-base shadow-2xl hover:scale-105 transition-all flex items-center justify-center gap-3 cursor-pointer active:scale-95 w-full"
            >
-             <MessageSquare size={18} className="text-slate-950"/> Solicitar Demo (24h)
+             <MessageSquare size={18} className="text-white"/> Solicitar Demo (24h)
            </button>
 
            <button 
@@ -848,9 +864,9 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
 
            <button 
              onClick={() => setShowClientAccessModal(true)}
-             className="bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 font-semibold px-8 py-3 rounded-full text-xs shadow-md hover:scale-105 transition-all flex items-center justify-center gap-2 cursor-pointer backdrop-blur-md border border-emerald-400/30 active:scale-95 w-full"
+             className="bg-blue-950/80 hover:bg-blue-900 text-blue-300 font-semibold px-8 py-3 rounded-full text-xs shadow-md hover:scale-105 transition-all flex items-center justify-center gap-2 cursor-pointer backdrop-blur-md border border-blue-400/30 active:scale-95 w-full"
            >
-             <LogIn size={14} className="text-emerald-400"/> Acceso Clientes con Licencia
+             <LogIn size={14} className="text-blue-400"/> Acceso Clientes con Licencia
            </button>
          </div>
       </section>
@@ -858,7 +874,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
       {/* MODAL ACCESO A LA DEMO */}
       {showDemoAccessModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-[#070707] border border-white/15 rounded-2xl p-6 max-w-md w-full shadow-2xl relative text-center text-white">
+          <div className="bg-[#0a0f1c] border border-white/15 rounded-2xl p-6 max-w-md w-full shadow-2xl relative text-center text-white">
             <button
               onClick={() => {
                 setShowDemoAccessModal(false);
@@ -871,7 +887,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
             </button>
 
             <div className="flex flex-col items-center justify-center gap-1.5 mb-3 text-center">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center">
                 <Rocket size={22} />
               </div>
               <h3 className="text-xl font-black text-white">Acceso a la Demo</h3>
@@ -879,8 +895,8 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
             </div>
 
             {demoAuthSuccess ? (
-              <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl mb-3 text-center space-y-1">
-                <div className="flex items-center justify-center gap-2 text-emerald-400 font-bold text-sm">
+              <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl mb-3 text-center space-y-1">
+                <div className="flex items-center justify-center gap-2 text-blue-400 font-bold text-sm">
                   <CheckCircle size={16} />
                   <span>{demoAuthSuccess}</span>
                 </div>
@@ -890,7 +906,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
               <form onSubmit={handleVerifyDemo} className="space-y-3 mb-3 text-left">
                 <div>
                   <label className="text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
-                    <Mail size={13} className="text-emerald-400" /> Correo o Usuario:
+                    <Mail size={13} className="text-blue-400" /> Correo o Usuario:
                   </label>
                   <input
                     type="text"
@@ -901,13 +917,13 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       setDemoAuthError('');
                     }}
                     placeholder="tu-correo@gmail.com"
-                    className="w-full bg-black border border-white/15 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none transition-colors"
+                    className="w-full bg-black border border-white/15 focus:border-blue-500 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none transition-colors"
                   />
                 </div>
 
                 <div>
                   <label className="text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
-                    <KeyRound size={13} className="text-emerald-400" /> Contraseña (si aplica):
+                    <KeyRound size={13} className="text-blue-400" /> Contraseña (si aplica):
                   </label>
                   <input
                     type="password"
@@ -917,7 +933,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       setDemoAuthError('');
                     }}
                     placeholder="••••••••"
-                    className="w-full bg-black border border-white/15 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none transition-colors font-mono"
+                    className="w-full bg-black border border-white/15 focus:border-blue-500 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none transition-colors font-mono"
                   />
                 </div>
 
@@ -931,7 +947,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                 <button
                   type="submit"
                   disabled={isVerifyingDemo}
-                  className="w-full bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-slate-950 font-extrabold py-3 px-4 rounded-xl text-sm shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-extrabold py-3 px-4 rounded-xl text-sm shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer"
                 >
                   <Rocket size={16} /> {isVerifyingDemo ? 'Verificando...' : 'Entrar a la Demo'}
                 </button>
@@ -947,7 +963,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                   setError('');
                   setShowModal(true);
                 }}
-                className="text-xs font-bold text-emerald-400 hover:text-emerald-300 transition-colors underline cursor-pointer"
+                className="text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors underline cursor-pointer"
               >
                 Solicitar Acceso Demo
               </button>
@@ -959,7 +975,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
       {/* MODAL ACCESO CLIENTES */}
       {showClientAccessModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-[#070707] border border-white/15 rounded-2xl p-6 max-w-md w-full shadow-2xl relative text-center text-white">
+          <div className="bg-[#0a0f1c] border border-white/15 rounded-2xl p-6 max-w-md w-full shadow-2xl relative text-center text-white">
             <button
               onClick={() => setShowClientAccessModal(false)}
               className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10"
@@ -968,7 +984,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
             </button>
 
             <div className="flex flex-col items-center justify-center gap-1.5 mb-3 text-center">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center">
                 <ShieldCheck size={22} />
               </div>
               <h3 className="text-xl font-black text-white">Acceso a tu CRM</h3>
@@ -986,13 +1002,13 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                   value={clientUrlInput}
                   onChange={(e) => setClientUrlInput(e.target.value)}
                   placeholder="Ej: napoli o mi-pizzeria.vercel.app"
-                  className="w-full bg-[#050505] border border-white/15 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors font-mono"
+                  className="w-full bg-[#050505] border border-white/15 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition-colors font-mono"
                   autoFocus
                 />
                 <button
                   type="submit"
                   disabled={!clientUrlInput.trim()}
-                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-2 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 text-xs disabled:opacity-40 cursor-pointer"
+                  className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 text-xs disabled:opacity-40 cursor-pointer"
                 >
                   <ExternalLink size={14} /> Ir a mi CRM Privado
                 </button>
@@ -1003,7 +1019,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
               href="https://api.whatsapp.com/send?phone=59898356320&text=Hola,%20olvidé%20el%20enlace%20de%20acceso%20a%20mi%20CRM"
               target="_blank"
               rel="noreferrer"
-              className="text-xs text-slate-400 hover:text-emerald-400 underline"
+              className="text-xs text-slate-400 hover:text-blue-400 underline"
             >
               ¿Olvidaste tu enlace? Solicítalo por WhatsApp (098 356 320)
             </a>
@@ -1014,7 +1030,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
       {/* MODAL SOLICITAR DEMO */}
       {showModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-[#070707] border border-white/15 rounded-2xl p-6 max-w-md w-full shadow-2xl relative text-center text-white">
+          <div className="bg-[#0a0f1c] border border-white/15 rounded-2xl p-6 max-w-md w-full shadow-2xl relative text-center text-white">
             <button
               onClick={() => setShowModal(false)}
               className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10"
@@ -1025,7 +1041,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
             {!submitted ? (
               <>
                 <div className="flex flex-col items-center justify-center gap-1.5 mb-2 text-center">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center">
                     <Sparkles size={20} />
                   </div>
                   <div>
@@ -1043,7 +1059,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                 <form onSubmit={handleSubmit} className="space-y-3 text-center">
                   <div>
                     <label className="block text-xs font-semibold uppercase text-slate-400 mb-1 flex items-center justify-center gap-1 text-center">
-                      <Mail size={13} className="text-emerald-400" /> Correo Electrónico <span className="text-red-400">*</span>
+                      <Mail size={13} className="text-blue-400" /> Correo Electrónico <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="email"
@@ -1051,28 +1067,28 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="tu-correo@ejemplo.com"
-                      className="w-full bg-black border border-white/15 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors text-center"
+                      className="w-full bg-black border border-white/15 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition-colors text-center"
                       autoFocus
                     />
                   </div>
 
                   <div>
                     <label className="block text-xs font-semibold uppercase text-slate-400 mb-1 flex items-center justify-center gap-1 text-center">
-                      <Building size={13} className="text-emerald-400" /> Pizzería / Negocio
+                      <Building size={13} className="text-blue-400" /> Pizzería / Negocio
                     </label>
                     <input
                       type="text"
                       value={negocio}
                       onChange={(e) => setNegocio(e.target.value)}
                       placeholder="Ej. Pizzería Napoli"
-                      className="w-full bg-black border border-white/15 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors text-center"
+                      className="w-full bg-black border border-white/15 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition-colors text-center"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl transition-all shadow flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 text-xs uppercase tracking-wider"
+                    className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 text-xs uppercase tracking-wider"
                   >
                     <Send size={14} /> {isSubmitting ? 'Enviando...' : 'Solicitar Acceso 24hs'}
                   </button>
@@ -1080,12 +1096,12 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
               </>
             ) : (
               <div className="text-center py-2 space-y-3">
-                <div className="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto">
+                <div className="w-12 h-12 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center mx-auto">
                   <CheckCircle size={28} />
                 </div>
                 <h3 className="text-xl font-bold text-white">¡Solicitud Registrada!</h3>
                 <p className="text-slate-300 text-xs leading-relaxed">
-                  Te activaremos el acceso exclusivo por <strong className="text-white">24 horas</strong> para <strong className="text-emerald-400">{email}</strong>.
+                  Te activaremos el acceso exclusivo por <strong className="text-white">24 horas</strong> para <strong className="text-blue-400">{email}</strong>.
                 </p>
 
                 <div className="pt-2 flex flex-col gap-2">
@@ -1093,7 +1109,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                     href={`https://api.whatsapp.com/send?phone=59898356320&text=${encodeURIComponent(`Hola, acabo de solicitar acceso demo para el correo: ${email}`)}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl transition-all shadow flex items-center justify-center gap-1.5 cursor-pointer text-xs"
+                    className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl transition-all shadow flex items-center justify-center gap-1.5 cursor-pointer text-xs"
                   >
                     <MessageSquare size={14} /> Abrir WhatsApp con mi Solicitud (098 356 320)
                   </a>

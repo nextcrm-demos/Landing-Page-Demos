@@ -122,61 +122,63 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
   };
 
   return (
-    <div className="h-screen w-full bg-[#0a0f1c] text-white font-sans overflow-x-hidden overflow-y-auto snap-y snap-mandatory selection:bg-emerald-500 selection:text-white scroll-smooth relative">
-      {/* BARRA SUPERIOR FIJA / HEADER */}
-      <header className="fixed top-0 left-0 w-full z-40 px-4 sm:px-8 py-3 flex items-center justify-between bg-[#0a0f1c]/95 backdrop-blur-md border-b border-slate-800/80">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center font-black text-white shadow-lg shadow-emerald-500/20 text-sm">
-            🍕
+    <div className="h-screen w-full bg-black text-white font-sans overflow-x-hidden overflow-y-auto snap-y snap-mandatory selection:bg-emerald-500 selection:text-white scroll-smooth relative">
+      {/* BARRA SUPERIOR FIJA / HEADER NEGRO PURO */}
+      <header className="fixed top-0 left-0 w-full z-40 px-4 sm:px-8 py-3 flex items-center justify-between bg-black/95 backdrop-blur-md border-b border-white/10">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400">
+            <Layers size={18} />
           </div>
           <div>
-            <span className="font-extrabold text-base sm:text-lg tracking-tight text-white">NextCRM <span className="text-emerald-400 font-bold">Pizzerías</span></span>
+            <span className="font-light tracking-[0.2em] text-sm sm:text-base text-white uppercase">
+              NEXT <span className="font-bold text-blue-400">CRM</span>
+            </span>
           </div>
         </div>
 
         <div className="flex items-center gap-2.5">
           <button
             onClick={() => setShowDemoAccessModal(true)}
-            className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold px-4 py-2 rounded-full shadow-lg shadow-emerald-600/30 transition-all hover:scale-105 cursor-pointer"
+            className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-bold px-4 py-2 rounded-full shadow-lg transition-all hover:scale-105 cursor-pointer"
           >
             <Rocket size={14} className="stroke-[2.5]" /> Acceso a Demo
           </button>
 
           <button
             onClick={() => setShowClientAccessModal(true)}
-            className="bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-semibold text-xs sm:text-sm px-3.5 py-2 rounded-full border border-slate-700 transition-all cursor-pointer flex items-center gap-1.5"
+            className="bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white font-semibold text-xs sm:text-sm px-3.5 py-2 rounded-full border border-white/10 transition-all cursor-pointer flex items-center gap-1.5"
           >
             <LogIn size={14} /> Acceso Clientes
           </button>
         </div>
       </header>
 
-      {/* PANTALLA 1: HERO */}
-      <section id="seccion-hero" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col items-center justify-center relative px-4 text-center">
-        <div className="inline-flex items-center gap-2 border border-emerald-500/30 text-emerald-400 text-[11px] sm:text-xs font-semibold px-4 py-1.5 rounded-full mb-5 tracking-wider uppercase bg-emerald-500/10 backdrop-blur-sm">
-          <Sparkles size={13} className="text-emerald-400" /> Software Gastronómico Premium + Pedidos por Voz con IA
+      {/* PANTALLA 1: HERO - TAMAÑO INTERMEDIO PROPORCIONAL & NEGRO PURO */}
+      <section id="seccion-hero" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col items-center justify-center relative px-4 text-center bg-black">
+        <div className="inline-flex items-center gap-2 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-bold px-4 py-1.5 rounded-full mb-6 tracking-wider uppercase bg-emerald-500/10 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+          <Sparkles size={14} className="text-emerald-400 animate-pulse" /> Software Gastronómico Premium + Pedidos por Voz con IA
         </div>
 
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-center mb-4 tracking-tight leading-tight max-w-4xl text-white">
-          El caos operativo tiene<br/>
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-center mb-6 tracking-tight leading-[1.1] max-w-5xl text-white">
+          El caos tiene<br/>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-green-400">los días contados.</span>
         </h1>
 
-        <p className="text-sm sm:text-base md:text-lg text-slate-400 text-center max-w-2xl mb-8 leading-relaxed font-normal">
+        <p className="text-sm sm:text-base md:text-lg text-slate-300 text-center max-w-2xl mb-8 leading-relaxed font-normal">
           Centraliza mostrador, delivery, mesas, monitor KDS, stock, cierre de caja con desglose de tarjetas e impresión en ticketera preconfigurada.
         </p>
 
-        <div className="flex flex-wrap items-center justify-center gap-3.5 z-10">
+        <div className="flex flex-wrap items-center justify-center gap-4 z-10">
           <button 
             onClick={() => document.getElementById('seccion-voz-ia')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-6 py-3 rounded-full flex items-center gap-2.5 transition-all shadow-lg hover:scale-105 cursor-pointer text-sm"
+            className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-7 py-3.5 rounded-full flex items-center gap-2.5 transition-all shadow-xl hover:scale-105 cursor-pointer text-sm sm:text-base"
           >
-            <Mic size={16} /> Ver Pedidos por Voz <ArrowDown size={15} />
+            <Mic size={18} /> Ver Pedidos por Voz <ArrowDown size={16} />
           </button>
 
           <button 
             onClick={() => document.getElementById('seccion-pos')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-slate-800/80 hover:bg-slate-700 text-slate-200 font-semibold px-5 py-3 rounded-full flex items-center gap-2 border border-slate-700 transition-all hover:scale-105 cursor-pointer text-sm"
+            className="bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-3.5 rounded-full flex items-center gap-2 border border-white/15 transition-all hover:scale-105 cursor-pointer text-sm sm:text-base"
           >
             Explorar Módulos
           </button>
@@ -186,18 +188,18 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
            className="absolute bottom-5 animate-bounce cursor-pointer flex justify-center w-full z-10"
            onClick={() => document.getElementById('seccion-voz-ia')?.scrollIntoView({ behavior: 'smooth' })}
         >
-          <ChevronsDown size={24} className="text-slate-600 hover:text-slate-400 transition-colors" />
+          <ChevronsDown size={28} className="text-slate-600 hover:text-slate-400 transition-colors" />
         </div>
       </section>
 
-      {/* PANTALLA 2: PEDIDOS POR VOZ & DICTADO DIRECTO */}
-      <section id="seccion-voz-ia" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-gradient-to-b from-[#0a0f1c] via-[#061510] to-[#0a0f1c]">
+      {/* PANTALLA 2: PEDIDOS POR VOZ & DICTADO DIRECTO (NEGRO PURO) */}
+      <section id="seccion-voz-ia" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-black">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-center w-full">
           <div>
             <div className="inline-flex items-center gap-1.5 border border-emerald-500/40 text-emerald-400 text-xs font-bold px-3.5 py-1 rounded-full mb-4 tracking-widest uppercase bg-emerald-500/10">
               <Mic size={14} /> Reconocimiento de Voz Multi-Producto
             </div>
-            <h2 className="text-4xl sm:text-5xl font-black mb-4 leading-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 leading-tight">
               Dicta pedidos<br/><span className="text-emerald-400">producto por producto.</span>
             </h2>
             <p className="text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed mb-6">
@@ -205,14 +207,14 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
             </p>
 
             <div className="grid grid-cols-2 gap-3 mb-6">
-              <div className="bg-[#0b1b15] border border-emerald-500/30 p-3.5 rounded-2xl">
+              <div className="bg-[#050505] border border-emerald-500/30 p-3.5 rounded-2xl">
                 <div className="text-emerald-400 mb-1 flex items-center gap-1.5 font-bold text-sm">
                   <Headphones size={16} /> Supresión Acústica
                 </div>
                 <p className="text-xs text-slate-400">Aísla la voz de ruidos de cocina y horno.</p>
               </div>
 
-              <div className="bg-[#0b1b15] border border-emerald-500/30 p-3.5 rounded-2xl">
+              <div className="bg-[#050505] border border-emerald-500/30 p-3.5 rounded-2xl">
                 <div className="text-emerald-400 mb-1 flex items-center gap-1.5 font-bold text-sm">
                   <MessageSquare size={16} /> WhatsApp Directo
                 </div>
@@ -223,8 +225,8 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
             <p className="text-xs text-emerald-400 font-mono">Toca los botones del simulador interactivo →</p>
           </div>
 
-          {/* Floating Voice Simulator Mockup */}
-          <div className="bg-[#040e0a] border border-emerald-500/40 rounded-3xl p-6 shadow-[0_0_50px_rgba(16,185,129,0.3)] flex flex-col space-y-4">
+          {/* Floating Voice Simulator Mockup (Negro Puro) */}
+          <div className="bg-[#050505] border border-emerald-500/40 rounded-3xl p-6 shadow-[0_0_50px_rgba(16,185,129,0.25)] flex flex-col space-y-4">
             <div className="flex items-center justify-between border-b border-emerald-500/20 pb-3">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-emerald-400 animate-ping"></div>
@@ -258,7 +260,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
               </div>
             </div>
 
-            <div className="bg-black/60 border border-emerald-500/30 p-3 rounded-xl flex items-center justify-between text-xs sm:text-sm">
+            <div className="bg-black border border-emerald-500/30 p-3 rounded-xl flex items-center justify-between text-xs sm:text-sm">
               <div className="flex items-center gap-2 truncate">
                 <Mic size={16} className="text-emerald-400 animate-pulse shrink-0" />
                 <span className="text-emerald-200 italic truncate">"{demoActiveText}"</span>
@@ -266,7 +268,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
               <span className="text-[10px] text-slate-400 font-mono shrink-0 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-500/30">Pausa detectada ✓</span>
             </div>
 
-            <div className="bg-[#061711] border border-emerald-500/40 p-4 rounded-2xl space-y-2.5">
+            <div className="bg-black border border-emerald-500/40 p-4 rounded-2xl space-y-2.5">
               <div className="flex items-center justify-between text-xs sm:text-sm font-bold text-emerald-300 border-b border-emerald-500/20 pb-2">
                 <span className="flex items-center gap-2"><Sparkles size={15} className="text-emerald-400" /> COMANDA ACUMULADA ({demoVoiceItems.length} ÍTEMS)</span>
                 <span className="text-emerald-400 font-black text-base font-mono">${totalDemoPrice}</span>
@@ -274,7 +276,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
 
               <div className="space-y-2 max-h-36 overflow-y-auto pr-1 custom-scrollbar text-xs sm:text-sm">
                 {demoVoiceItems.map((item, idx) => (
-                  <div key={idx} className="flex justify-between items-center bg-black/40 px-3 py-2 rounded-xl border border-emerald-500/10">
+                  <div key={idx} className="flex justify-between items-center bg-[#070707] px-3 py-2 rounded-xl border border-emerald-500/10">
                     <span className="text-slate-200 truncate">
                       <strong className="text-emerald-400 font-mono text-sm">{item.qty}x</strong> {item.name} {item.notes && <span className="text-xs text-emerald-400/90">({item.notes})</span>}
                     </span>
@@ -287,72 +289,72 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         </div>
 
         <div 
-           className="absolute bottom-6 animate-bounce cursor-pointer flex justify-center w-full z-10"
+           className="absolute bottom-5 animate-bounce cursor-pointer flex justify-center w-full z-10"
            onClick={() => document.getElementById('seccion-pos')?.scrollIntoView({ behavior: 'smooth' })}
         >
-          <ChevronsDown size={30} className="text-slate-600 hover:text-slate-400 transition-colors" />
+          <ChevronsDown size={28} className="text-slate-600 hover:text-slate-400 transition-colors" />
         </div>
       </section>
 
-      {/* PANTALLA 3: PUNTO DE VENTA & TICKETTERA TÉRMICA */}
-      <section id="seccion-pos" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8">
+      {/* PANTALLA 3: PUNTO DE VENTA & TICKETTERA (NEGRO PURO) */}
+      <section id="seccion-pos" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-black">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-center w-full">
           <div>
             <span className="border border-green-500/30 text-green-400 text-xs font-bold px-3.5 py-1 rounded-full mb-4 tracking-widest uppercase bg-green-500/10 inline-block">
               Punto de Venta + Impresión Térmica
             </span>
-            <h2 className="text-4xl sm:text-5xl font-black mb-4 leading-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 leading-tight">
               Toma pedidos &<br/><span className="text-green-400">ticketera lista.</span>
             </h2>
-            <p className="text-slate-400 text-sm sm:text-base md:text-lg leading-relaxed mb-6">
-              Compatible con ticketeras térmicas estándar (80mm y 58mm). <strong>Ya viene preconfigurada</strong> para imprimir comandas de cocina y tickets fiscales o de entrega en 1 clic.
+            <p className="text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed mb-6">
+              Compatible con ticketeras térmicas estándar (80mm y 58mm). <strong>Ya viene preconfigurada</strong> para imprimir comandas de cocina y tickets de entrega en 1 clic.
             </p>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-[#111827] border border-slate-800 p-4 rounded-2xl">
+              <div className="bg-[#070707] border border-white/10 p-4 rounded-2xl">
                 <div className="text-emerald-400 mb-2"><Printer size={24}/></div>
                 <h4 className="font-bold text-base mb-1">Ticketera Térmica</h4>
-                <p className="text-xs text-slate-500">80mm / 58mm preconfigurada</p>
+                <p className="text-xs text-slate-400">80mm / 58mm preconfigurada</p>
               </div>
-              <div className="bg-[#111827] border border-slate-800 p-4 rounded-2xl">
+              <div className="bg-[#070707] border border-white/10 p-4 rounded-2xl">
                 <div className="text-blue-400 mb-2"><Zap size={24}/></div>
                 <h4 className="font-bold text-base mb-1">Mostrador & Salón</h4>
-                <p className="text-xs text-slate-500">Manejo de mesas y delivery</p>
+                <p className="text-xs text-slate-400">Manejo de mesas y delivery</p>
               </div>
             </div>
           </div>
 
           {/* POS & Thermal Ticket Preview */}
-          <div className="w-full aspect-[16/10] bg-[#0d1322] rounded-2xl border border-slate-700/60 shadow-2xl flex overflow-hidden relative">
-            <div className="flex-1 p-3 grid grid-cols-3 gap-2.5 bg-[#090d16] text-left select-none">
+          <div className="w-full aspect-[16/10] bg-[#070707] rounded-2xl border border-white/15 shadow-2xl flex overflow-hidden relative">
+            <div className="flex-1 p-3 grid grid-cols-3 gap-2.5 bg-black text-left select-none">
                 <div className="col-span-2 space-y-2">
-                  <div className="flex items-center justify-between bg-[#111827] px-3 py-1.5 rounded-xl border border-slate-800 text-xs">
-                    <span className="text-slate-400 font-medium">🍕 Catálogo Rápido</span>
+                  <div className="flex items-center justify-between bg-[#0a0a0a] px-3 py-1.5 rounded-xl border border-white/10 text-xs">
+                    <span className="text-slate-300 font-medium">🍕 Catálogo Rápido</span>
                     <span className="text-[10px] text-emerald-400 font-bold">12 Productos</span>
                   </div>
                   <div className="grid grid-cols-2 gap-1.5">
-                    <div className="bg-[#151f32] p-2 rounded-xl border border-slate-700/50">
+                    <div className="bg-[#0a0a0a] p-2 rounded-xl border border-white/10">
                       <div className="flex justify-between items-start">
                         <span className="font-bold text-xs text-white">Muzzarella</span>
                         <span className="text-xs font-extrabold text-emerald-400">$480</span>
                       </div>
                       <span className="text-[9px] text-slate-400">Porción / Metro</span>
                     </div>
-                    <div className="bg-[#151f32] p-2 rounded-xl border border-emerald-500/60 ring-1 ring-emerald-500/30">
+                    <div className="bg-[#0a0a0a] p-2 rounded-xl border border-emerald-500/60 ring-1 ring-emerald-500/30">
                       <div className="flex justify-between items-start">
                         <span className="font-bold text-xs text-white">Fugazzeta</span>
                         <span className="text-xs font-extrabold text-emerald-400">$540</span>
                       </div>
                       <span className="text-[9px] text-slate-400">Especial cebolla</span>
                     </div>
-                    <div className="bg-[#151f32] p-2 rounded-xl border border-slate-700/50">
+                    <div className="bg-[#0a0a0a] p-2 rounded-xl border border-white/10">
                       <div className="flex justify-between items-start">
                         <span className="font-bold text-xs text-white">Calabresa</span>
                         <span className="text-xs font-extrabold text-emerald-400">$590</span>
                       </div>
                       <span className="text-[9px] text-slate-400">Longaniza picante</span>
                     </div>
-                    <div className="bg-[#151f32] p-2 rounded-xl border border-slate-700/50">
+                    <div className="bg-[#0a0a0a] p-2 rounded-xl border border-white/10">
                       <div className="flex justify-between items-start">
                         <span className="font-bold text-xs text-white">Fainá</span>
                         <span className="text-xs font-extrabold text-emerald-400">$120</span>
@@ -389,79 +391,79 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
           </div>
         </div>
         <div 
-           className="absolute bottom-6 animate-bounce cursor-pointer flex justify-center w-full z-10"
+           className="absolute bottom-5 animate-bounce cursor-pointer flex justify-center w-full z-10"
            onClick={() => document.getElementById('seccion-caja-stock')?.scrollIntoView({ behavior: 'smooth' })}
         >
-          <ChevronsDown size={30} className="text-slate-600 hover:text-slate-400 transition-colors" />
+          <ChevronsDown size={28} className="text-slate-600 hover:text-slate-400 transition-colors" />
         </div>
       </section>
 
-      {/* PANTALLA 4: CAJA, ARQUEO, TARJETAS Y STOCK */}
-      <section id="seccion-caja-stock" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-[#090d18]">
+      {/* PANTALLA 4: CAJA, ARQUEO, TARJETAS Y STOCK (NEGRO PURO) */}
+      <section id="seccion-caja-stock" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-black">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-center w-full">
           <div>
             <span className="border border-blue-500/30 text-blue-400 text-xs font-bold px-3.5 py-1 rounded-full mb-4 tracking-widest uppercase bg-blue-500/10 inline-block">
               Control Financiero & Stock
             </span>
-            <h2 className="text-4xl sm:text-5xl font-black mb-4 leading-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 leading-tight">
               Cierre de caja,<br/><span className="text-blue-400">tarjetas y stock.</span>
             </h2>
-            <p className="text-slate-400 text-sm sm:text-base md:text-lg leading-relaxed mb-6">
+            <p className="text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed mb-6">
               Arqueo ciego de turnos sin descuadres contables. <strong>Resumen de ventas por tarjeta POS (Visa, Master, Oca, Cabal)</strong>, control de propinas y descuento automático de ingredientes.
             </p>
 
             <div className="grid grid-cols-3 gap-3">
-              <div className="bg-[#111827] border border-slate-800 p-3 rounded-2xl">
+              <div className="bg-[#070707] border border-white/10 p-3 rounded-2xl">
                 <Wallet size={20} className="text-emerald-400 mb-1" />
                 <h4 className="font-bold text-xs text-white">Arqueo Ciego</h4>
-                <p className="text-[10px] text-slate-500">Cero trampas en caja</p>
+                <p className="text-[10px] text-slate-400">Cero trampas en caja</p>
               </div>
-              <div className="bg-[#111827] border border-slate-800 p-3 rounded-2xl">
+              <div className="bg-[#070707] border border-white/10 p-3 rounded-2xl">
                 <CreditCard size={20} className="text-blue-400 mb-1" />
                 <h4 className="font-bold text-xs text-white">Desglose POS</h4>
-                <p className="text-[10px] text-slate-500">Por sello y franquicia</p>
+                <p className="text-[10px] text-slate-400">Por sello y franquicia</p>
               </div>
-              <div className="bg-[#111827] border border-slate-800 p-3 rounded-2xl">
+              <div className="bg-[#070707] border border-white/10 p-3 rounded-2xl">
                 <Box size={20} className="text-orange-400 mb-1" />
                 <h4 className="font-bold text-xs text-white">Stock Crítico</h4>
-                <p className="text-[10px] text-slate-500">Alertas automáticas</p>
+                <p className="text-[10px] text-slate-400">Alertas automáticas</p>
               </div>
             </div>
           </div>
 
           {/* Caja, Tarjetas y Stock Mockup */}
-          <div className="w-full aspect-[16/10] bg-[#0d1322] rounded-2xl border border-slate-700/60 shadow-2xl p-4 flex flex-col justify-between">
+          <div className="w-full aspect-[16/10] bg-[#070707] rounded-2xl border border-white/15 shadow-2xl p-4 flex flex-col justify-between">
             <div className="grid grid-cols-3 gap-2">
-              <div className="bg-[#111827] border border-slate-800 rounded-xl p-2.5">
+              <div className="bg-black border border-white/10 rounded-xl p-2.5">
                 <span className="text-[9px] text-slate-400 uppercase font-semibold block">Ventas Turno</span>
                 <span className="text-base font-black text-white font-mono">$24.850</span>
               </div>
-              <div className="bg-[#111827] border border-emerald-500/30 rounded-xl p-2.5 bg-emerald-500/5">
+              <div className="bg-black border border-emerald-500/40 rounded-xl p-2.5 bg-emerald-950/20">
                 <span className="text-[9px] text-emerald-400 uppercase font-semibold block">Efectivo Cajón</span>
                 <span className="text-base font-black text-emerald-400 font-mono">$14.650</span>
               </div>
-              <div className="bg-[#111827] border border-purple-500/30 rounded-xl p-2.5 bg-purple-500/5">
+              <div className="bg-black border border-purple-500/40 rounded-xl p-2.5 bg-purple-950/20">
                 <span className="text-[9px] text-purple-300 uppercase font-semibold block">Propinas</span>
                 <span className="text-base font-black text-purple-300 font-mono">$1.450</span>
               </div>
             </div>
 
             {/* Desglose de Tarjetas */}
-            <div className="bg-[#111827] border border-slate-800 rounded-xl p-2.5 space-y-1.5">
+            <div className="bg-black border border-white/10 rounded-xl p-2.5 space-y-1.5">
               <div className="flex justify-between items-center text-xs">
                 <span className="font-bold text-blue-400 uppercase tracking-wider">Desglose Tarjetas POS ($10.200)</span>
                 <span className="text-[10px] text-slate-400">Conciliado OK ✓</span>
               </div>
               <div className="grid grid-cols-3 gap-2 text-xs">
-                <div className="bg-[#0b1329] border border-blue-500/30 p-2 rounded-lg">
+                <div className="bg-[#0a0a0a] border border-blue-500/30 p-2 rounded-lg">
                   <span className="font-bold text-white block text-[10px]">Visa (Déb/Créd)</span>
                   <span className="text-blue-400 font-black font-mono">$5.400</span>
                 </div>
-                <div className="bg-[#0b1329] border border-blue-500/30 p-2 rounded-lg">
+                <div className="bg-[#0a0a0a] border border-blue-500/30 p-2 rounded-lg">
                   <span className="font-bold text-white block text-[10px]">MasterCard</span>
                   <span className="text-blue-400 font-black font-mono">$3.200</span>
                 </div>
-                <div className="bg-[#0b1329] border border-blue-500/30 p-2 rounded-lg">
+                <div className="bg-[#0a0a0a] border border-blue-500/30 p-2 rounded-lg">
                   <span className="font-bold text-white block text-[10px]">Oca / Cabal</span>
                   <span className="text-blue-400 font-black font-mono">$1.600</span>
                 </div>
@@ -469,43 +471,43 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
             </div>
 
             {/* Stock Bar */}
-            <div className="flex items-center justify-between text-xs bg-[#111827] px-3 py-2 rounded-xl border border-slate-800">
-              <span className="text-slate-400 font-semibold flex items-center gap-1.5">
+            <div className="flex items-center justify-between text-xs bg-black px-3 py-2 rounded-xl border border-white/10">
+              <span className="text-slate-300 font-semibold flex items-center gap-1.5">
                 <Box size={14} className="text-orange-400" /> Inventario:
               </span>
               <div className="flex gap-3 text-[11px]">
                 <span className="text-emerald-400 font-mono">Muzzarella: 18.5kg</span>
-                <span className="text-slate-400">|</span>
+                <span className="text-slate-500">|</span>
                 <span className="text-amber-400 font-mono">Cajas Pizza: 24 u. (Alerta)</span>
               </div>
             </div>
           </div>
         </div>
         <div 
-           className="absolute bottom-6 animate-bounce cursor-pointer flex justify-center w-full z-10"
+           className="absolute bottom-5 animate-bounce cursor-pointer flex justify-center w-full z-10"
            onClick={() => document.getElementById('seccion-cocina')?.scrollIntoView({ behavior: 'smooth' })}
         >
-          <ChevronsDown size={30} className="text-slate-600 hover:text-slate-400 transition-colors" />
+          <ChevronsDown size={28} className="text-slate-600 hover:text-slate-400 transition-colors" />
         </div>
       </section>
 
-      {/* PANTALLA 5: COCINA KDS EN ACORDEÓN */}
-      <section id="seccion-cocina" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8">
+      {/* PANTALLA 5: COCINA KDS EN ACORDEÓN (NEGRO PURO) */}
+      <section id="seccion-cocina" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-black">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-center w-full">
-          <div className="w-full aspect-[16/10] bg-[#0d1322] rounded-2xl border border-slate-700/60 shadow-2xl flex flex-col overflow-hidden relative order-2 md:order-1">
-            <div className="h-8 bg-[#1e293b] flex items-center justify-between px-4 border-b border-slate-800 text-xs text-slate-400">
+          <div className="w-full aspect-[16/10] bg-[#070707] rounded-2xl border border-white/15 shadow-2xl flex flex-col overflow-hidden relative order-2 md:order-1">
+            <div className="h-8 bg-black flex items-center justify-between px-4 border-b border-white/10 text-xs text-slate-400">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
                   <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
                   <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
-                  <span className="ml-2 font-mono text-slate-500 hidden sm:inline">cocina.pizzeria.app/kds</span>
+                  <span className="ml-2 font-mono text-slate-400 hidden sm:inline">cocina.pizzeria.app/kds</span>
                 </div>
                 <span className="text-red-400 font-bold bg-red-500/10 px-2.5 py-0.5 rounded border border-red-500/20 text-[10px]">KDS ACORDEÓN</span>
             </div>
-            <div className="flex-1 p-2.5 grid grid-cols-3 gap-2.5 bg-[#080c14] text-left select-none overflow-hidden">
-                <div className="bg-[#111827] border border-emerald-500/40 rounded-xl p-2.5 flex flex-col justify-between">
+            <div className="flex-1 p-2.5 grid grid-cols-3 gap-2.5 bg-black text-left select-none overflow-hidden">
+                <div className="bg-[#070707] border border-emerald-500/40 rounded-xl p-2.5 flex flex-col justify-between">
                   <div>
-                    <div className="flex justify-between items-center mb-1 pb-1 border-b border-slate-800 text-[11px]">
+                    <div className="flex justify-between items-center mb-1 pb-1 border-b border-white/10 text-[11px]">
                       <span className="font-bold text-white">#102 Mesa 2</span>
                       <span className="bg-emerald-500/20 text-emerald-400 text-[9px] px-1.5 py-0.5 rounded font-bold">12m</span>
                     </div>
@@ -520,9 +522,9 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                   </div>
                 </div>
 
-                <div className="bg-[#111827] border border-amber-500/40 rounded-xl p-2.5 flex flex-col justify-between">
+                <div className="bg-[#070707] border border-amber-500/40 rounded-xl p-2.5 flex flex-col justify-between">
                   <div>
-                    <div className="flex justify-between items-center mb-1 pb-1 border-b border-slate-800 text-[11px]">
+                    <div className="flex justify-between items-center mb-1 pb-1 border-b border-white/10 text-[11px]">
                       <span className="font-bold text-white">#103 Delivery</span>
                       <span className="bg-amber-500/20 text-amber-400 text-[9px] px-1.5 py-0.5 rounded font-bold">22m</span>
                     </div>
@@ -536,7 +538,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                   </div>
                 </div>
 
-                <div className="bg-[#1e131d] border border-red-500/60 rounded-xl p-2.5 flex flex-col justify-between ring-1 ring-red-500/30">
+                <div className="bg-[#0a0507] border border-red-500/60 rounded-xl p-2.5 flex flex-col justify-between ring-1 ring-red-500/30">
                   <div>
                     <div className="flex justify-between items-center mb-1 pb-1 border-b border-red-500/30 text-[11px]">
                       <span className="font-bold text-white">#101 Delivery</span>
@@ -558,10 +560,10 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
             <span className="border border-red-500/30 text-red-400 text-xs font-bold px-3.5 py-1 rounded-full mb-4 tracking-widest uppercase bg-red-500/10 inline-block">
               Monitor KDS Acordeón
             </span>
-            <h2 className="text-4xl sm:text-5xl font-black mb-4 leading-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 leading-tight">
               Cocina organizada<br/><span className="text-red-400">sin comprimirse.</span>
             </h2>
-            <p className="text-slate-400 text-sm sm:text-base md:text-lg leading-relaxed mb-8">
+            <p className="text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed mb-8">
               Las comandas no se amontonan ni quedan diminutas. Vista en acordeón con scroll suave por columna y semáforo de demoras.
             </p>
             <ul className="space-y-3 text-sm md:text-base">
@@ -572,20 +574,20 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
           </div>
         </div>
         <div 
-           className="absolute bottom-6 animate-bounce cursor-pointer flex justify-center w-full z-10"
+           className="absolute bottom-5 animate-bounce cursor-pointer flex justify-center w-full z-10"
            onClick={() => document.getElementById('seccion-tech-stack')?.scrollIntoView({ behavior: 'smooth' })}
         >
-          <ChevronsDown size={30} className="text-slate-600 hover:text-slate-400 transition-colors" />
+          <ChevronsDown size={28} className="text-slate-600 hover:text-slate-400 transition-colors" />
         </div>
       </section>
 
-      {/* PANTALLA 6: STACK TECNOLÓGICO */}
-      <section id="seccion-tech-stack" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-[#090e1a]">
+      {/* PANTALLA 6: STACK TECNOLÓGICO (NEGRO PURO) */}
+      <section id="seccion-tech-stack" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-black">
         <div className="max-w-6xl mx-auto w-full text-center">
           <div className="inline-flex items-center gap-1.5 border border-blue-500/40 text-blue-400 text-xs font-bold px-4 py-1.5 rounded-full mb-4 tracking-widest uppercase bg-blue-500/10">
             <Cpu size={14} /> Arquitectura & Stack Tecnológico
           </div>
-          <h2 className="text-4xl sm:text-5xl font-black mb-3">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-3">
             Tecnología moderna, <span className="text-blue-400">robusta y ultrarrápida.</span>
           </h2>
           <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto mb-10">
@@ -593,35 +595,35 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
           </p>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 text-left">
-            <div className="bg-[#111827] border border-slate-800 p-5 rounded-2xl shadow-lg">
+            <div className="bg-[#070707] border border-white/10 p-5 rounded-2xl shadow-lg">
               <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center mb-3 border border-white/20 text-white font-black text-base">▲</div>
               <h3 className="font-extrabold text-white text-base">Vercel</h3>
               <span className="text-[10px] text-blue-400 font-mono uppercase font-bold block mb-2">CDN Edge 99.99%</span>
               <p className="text-xs text-slate-400 leading-relaxed">Alojamiento global con máxima velocidad de carga.</p>
             </div>
 
-            <div className="bg-[#111827] border border-slate-800 p-5 rounded-2xl shadow-lg">
+            <div className="bg-[#070707] border border-white/10 p-5 rounded-2xl shadow-lg">
               <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center mb-3 border border-amber-500/40 text-amber-400 text-base">🔥</div>
               <h3 className="font-extrabold text-white text-base">Firebase</h3>
               <span className="text-[10px] text-amber-400 font-mono uppercase font-bold block mb-2">Firestore Realtime</span>
               <p className="text-xs text-slate-400 leading-relaxed">Sincronización multi-pantalla instantánea.</p>
             </div>
 
-            <div className="bg-[#111827] border border-slate-800 p-5 rounded-2xl shadow-lg">
+            <div className="bg-[#070707] border border-white/10 p-5 rounded-2xl shadow-lg">
               <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-3 border border-emerald-500/40 text-emerald-400 text-xs font-mono">{'{ }'}</div>
               <h3 className="font-extrabold text-white text-base">JSON</h3>
               <span className="text-[10px] text-emerald-400 font-mono uppercase font-bold block mb-2">Datos Portátiles</span>
               <p className="text-xs text-slate-400 leading-relaxed">Estructuración ágil para tickets y backups.</p>
             </div>
 
-            <div className="bg-[#111827] border border-slate-800 p-5 rounded-2xl shadow-lg">
+            <div className="bg-[#070707] border border-white/10 p-5 rounded-2xl shadow-lg">
               <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center mb-3 border border-purple-500/40 text-purple-400 text-base">⚡</div>
               <h3 className="font-extrabold text-white text-base">Vite</h3>
               <span className="text-[10px] text-purple-400 font-mono uppercase font-bold block mb-2">Build Instantáneo</span>
               <p className="text-xs text-slate-400 leading-relaxed">Compilación ultrarrápida sin bloqueos.</p>
             </div>
 
-            <div className="bg-[#111827] border border-slate-800 p-5 rounded-2xl shadow-lg col-span-2 sm:col-span-1">
+            <div className="bg-[#070707] border border-white/10 p-5 rounded-2xl shadow-lg col-span-2 sm:col-span-1">
               <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-3 border border-cyan-500/40 text-cyan-400 text-base">⚛️</div>
               <h3 className="font-extrabold text-white text-base">React</h3>
               <span className="text-[10px] text-cyan-400 font-mono uppercase font-bold block mb-2">UI Táctil Reactiva</span>
@@ -631,15 +633,15 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         </div>
 
         <div 
-           className="absolute bottom-6 animate-bounce cursor-pointer flex justify-center w-full z-10"
+           className="absolute bottom-5 animate-bounce cursor-pointer flex justify-center w-full z-10"
            onClick={() => document.getElementById('seccion-precios')?.scrollIntoView({ behavior: 'smooth' })}
         >
-          <ChevronsDown size={30} className="text-slate-600 hover:text-slate-400 transition-colors" />
+          <ChevronsDown size={28} className="text-slate-600 hover:text-slate-400 transition-colors" />
         </div>
       </section>
 
-      {/* PANTALLA 7: 3 PLANES CÓMODOS Y ESPACIOSOS */}
-      <section id="seccion-precios" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-[#080d1a]">
+      {/* PANTALLA 7: 3 PLANES (NEGRO PURO) */}
+      <section id="seccion-precios" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-black">
          <div className="text-center mb-5 max-w-4xl mx-auto">
            <div className="inline-flex items-center gap-1.5 border border-emerald-500/40 text-emerald-400 text-xs font-bold px-3.5 py-1 rounded-full mb-2 tracking-widest uppercase bg-emerald-500/10">
              <DollarSign size={13} /> 3 Planes Transparentes & Razonables
@@ -652,10 +654,10 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
          
          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5 w-full items-stretch mb-4">
             {/* PLAN 1: BÁSICO */}
-            <div className="bg-[#111827] border border-slate-800 rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-xl">
+            <div className="bg-[#070707] border border-white/10 rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-xl">
                <div>
                  <div className="flex justify-between items-center mb-2">
-                   <span className="text-[10px] font-mono font-bold text-slate-400 uppercase bg-slate-800 px-2.5 py-1 rounded-full">
+                   <span className="text-[10px] font-mono font-bold text-slate-400 uppercase bg-white/5 border border-white/10 px-2.5 py-1 rounded-full">
                      AUTOGESTIONABLE
                    </span>
                    <span className="text-[10px] font-bold text-blue-400 bg-blue-500/10 border border-blue-500/30 px-2.5 py-0.5 rounded-full flex items-center gap-1">
@@ -664,7 +666,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                  </div>
                  <h3 className="text-2xl font-black text-white">Plan Básico</h3>
                  
-                 <div className="my-3 pb-3 border-b border-slate-800">
+                 <div className="my-3 pb-3 border-b border-white/10">
                     <div className="flex items-baseline gap-1.5">
                       <span className="text-3xl font-black text-white">$190</span>
                       <span className="text-xs text-slate-400 uppercase">USD / Pago Único</span>
@@ -696,14 +698,14 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
 
                <button
                  onClick={() => { setSubmitted(false); setShowModal(true); }}
-                 className="w-full mt-4 bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-colors"
+                 className="w-full mt-4 bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-colors border border-white/10"
                >
                  Elegir Plan Básico
                </button>
             </div>
             
             {/* PLAN 2: INTERMEDIO */}
-            <div className="bg-[#13221b] border-2 border-emerald-500 text-white rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-2xl relative z-10">
+            <div className="bg-[#05110a] border-2 border-emerald-500 text-white rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-2xl relative z-10">
                <div>
                  <div className="flex justify-between items-center mb-2">
                    <span className="text-[10px] font-mono font-bold text-emerald-300 uppercase bg-emerald-950 border border-emerald-500/40 px-2.5 py-1 rounded-full">
@@ -754,7 +756,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
             </div>
 
             {/* PLAN 3: PREMIUM IA FULL */}
-            <div className="bg-[#111827] border border-cyan-500/50 rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-xl">
+            <div className="bg-[#070707] border border-cyan-500/50 rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-xl">
                <div>
                  <div className="flex justify-between items-center mb-2">
                    <span className="text-[10px] font-mono font-bold text-cyan-300 uppercase bg-cyan-950 border border-cyan-500/40 px-2.5 py-1 rounded-full flex items-center gap-1">
@@ -763,7 +765,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                  </div>
                  <h3 className="text-2xl font-black text-white">Plan Premium IA</h3>
                  
-                 <div className="my-3 pb-3 border-b border-slate-800">
+                 <div className="my-3 pb-3 border-b border-white/10">
                     <div className="flex items-baseline gap-1.5">
                       <span className="text-3xl font-black text-white">$55</span>
                       <span className="text-xs text-cyan-300 uppercase">USD / Mes</span>
@@ -803,7 +805,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
          </div>
 
          {/* Compact Support Policy Banner */}
-         <div className="max-w-6xl mx-auto bg-[#0d1629] border border-blue-500/30 rounded-2xl p-3 text-left text-xs text-slate-300 flex items-center justify-between gap-4">
+         <div className="max-w-6xl mx-auto bg-[#070707] border border-blue-500/30 rounded-2xl p-3 text-left text-xs text-slate-300 flex items-center justify-between gap-4">
            <div className="flex items-center gap-2 font-bold text-blue-400 uppercase text-xs shrink-0">
              <ShieldCheck size={16} /> Soporte y Garantía:
            </div>
@@ -820,35 +822,35 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
          </div>
       </section>
 
-      {/* PANTALLA 8: CTA FINAL */}
-      <section id="seccion-final" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col items-center justify-center bg-[#159a49] text-white px-4 text-center relative">
-         <h2 className="text-3xl sm:text-5xl md:text-6xl font-extrabold mb-3 tracking-tight text-center leading-tight">
-            Evoluciona tu pizzería hoy.
+      {/* PANTALLA 8: CTA FINAL (NEGRO PURO) */}
+      <section id="seccion-final" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col items-center justify-center bg-black text-white px-4 text-center relative border-t border-white/10">
+         <h2 className="text-4xl sm:text-6xl md:text-7xl font-black mb-4 tracking-tight text-center leading-tight">
+            Evoluciona tu pizzería<br/><span className="text-emerald-400">hoy.</span>
          </h2>
-         <p className="text-base sm:text-lg md:text-xl text-white/90 mb-7 max-w-lg font-normal">
+         <p className="text-sm sm:text-base md:text-lg text-slate-300 mb-8 max-w-xl font-normal">
             Optimiza tus pedidos por voz, comanda de cocina y controla tu negocio en tiempo real.
          </p>
          
          <div className="flex flex-col items-center justify-center gap-3 z-10 w-full max-w-md px-4">
            <button 
              onClick={() => { setSubmitted(false); setError(''); setShowModal(true); }}
-             className="bg-[#0a0f1c] hover:bg-[#1a2333] text-white font-bold px-8 py-4 rounded-full text-lg shadow-2xl hover:scale-105 transition-all flex items-center justify-center gap-3 cursor-pointer border border-white/20 active:scale-95 w-full"
+             className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-8 py-4 rounded-full text-base shadow-2xl hover:scale-105 transition-all flex items-center justify-center gap-3 cursor-pointer active:scale-95 w-full"
            >
-             <MessageSquare size={20} className="text-emerald-400"/> Solicitar Demo (24h)
+             <MessageSquare size={18} className="text-slate-950"/> Solicitar Demo (24h)
            </button>
 
            <button 
              onClick={() => setShowDemoAccessModal(true)}
-             className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-3.5 rounded-full text-sm sm:text-base shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 w-full"
+             className="bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-3.5 rounded-full text-sm shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 w-full border border-white/15"
            >
-             <Rocket size={18} /> Ingresar a la Demo (Tengo Acceso)
+             <Rocket size={16} /> Ingresar a la Demo (Tengo Acceso)
            </button>
 
            <button 
              onClick={() => setShowClientAccessModal(true)}
-             className="bg-emerald-950/80 hover:bg-emerald-900 text-emerald-200 font-semibold px-8 py-3 rounded-full text-xs sm:text-sm shadow-md hover:scale-105 transition-all flex items-center justify-center gap-2 cursor-pointer backdrop-blur-md border border-emerald-400/30 active:scale-95 w-full"
+             className="bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 font-semibold px-8 py-3 rounded-full text-xs shadow-md hover:scale-105 transition-all flex items-center justify-center gap-2 cursor-pointer backdrop-blur-md border border-emerald-400/30 active:scale-95 w-full"
            >
-             <LogIn size={15} className="text-emerald-400"/> Acceso Clientes con Licencia
+             <LogIn size={14} className="text-emerald-400"/> Acceso Clientes con Licencia
            </button>
          </div>
       </section>
@@ -856,14 +858,14 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
       {/* MODAL ACCESO A LA DEMO */}
       {showDemoAccessModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-[#0f172a] border border-slate-700/80 rounded-2xl p-6 max-w-md w-full shadow-2xl relative text-center text-white">
+          <div className="bg-[#070707] border border-white/15 rounded-2xl p-6 max-w-md w-full shadow-2xl relative text-center text-white">
             <button
               onClick={() => {
                 setShowDemoAccessModal(false);
                 setDemoAuthError('');
                 setDemoAuthSuccess('');
               }}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-slate-800"
+              className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10"
             >
               <X size={18} />
             </button>
@@ -899,7 +901,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       setDemoAuthError('');
                     }}
                     placeholder="tu-correo@gmail.com"
-                    className="w-full bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none transition-colors"
+                    className="w-full bg-black border border-white/15 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none transition-colors"
                   />
                 </div>
 
@@ -915,7 +917,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       setDemoAuthError('');
                     }}
                     placeholder="••••••••"
-                    className="w-full bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none transition-colors font-mono"
+                    className="w-full bg-black border border-white/15 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 outline-none transition-colors font-mono"
                   />
                 </div>
 
@@ -936,7 +938,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
               </form>
             )}
 
-            <div className="pt-2 border-t border-slate-800 text-center">
+            <div className="pt-2 border-t border-white/10 text-center">
               <button
                 type="button"
                 onClick={() => {
@@ -957,10 +959,10 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
       {/* MODAL ACCESO CLIENTES */}
       {showClientAccessModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-[#0f172a] border border-slate-700/80 rounded-2xl p-6 max-w-md w-full shadow-2xl relative text-center text-white">
+          <div className="bg-[#070707] border border-white/15 rounded-2xl p-6 max-w-md w-full shadow-2xl relative text-center text-white">
             <button
               onClick={() => setShowClientAccessModal(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-slate-800"
+              className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10"
             >
               <X size={18} />
             </button>
@@ -973,7 +975,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
               <p className="text-xs text-slate-400">Portal exclusivo para clientes con licencia</p>
             </div>
 
-            <div className="bg-slate-800/60 p-3.5 rounded-xl border border-slate-700/60 text-left mb-4 space-y-2.5">
+            <div className="bg-black p-3.5 rounded-xl border border-white/10 text-left mb-4 space-y-2.5">
               <p className="text-xs text-slate-300">
                 Ingresa el nombre o enlace asignado a tu pizzería:
               </p>
@@ -984,7 +986,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                   value={clientUrlInput}
                   onChange={(e) => setClientUrlInput(e.target.value)}
                   placeholder="Ej: napoli o mi-pizzeria.vercel.app"
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors font-mono"
+                  className="w-full bg-[#050505] border border-white/15 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors font-mono"
                   autoFocus
                 />
                 <button
@@ -1012,10 +1014,10 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
       {/* MODAL SOLICITAR DEMO */}
       {showModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-[#0f172a] border border-slate-700/80 rounded-2xl p-6 max-w-md w-full shadow-2xl relative text-center text-white">
+          <div className="bg-[#070707] border border-white/15 rounded-2xl p-6 max-w-md w-full shadow-2xl relative text-center text-white">
             <button
               onClick={() => setShowModal(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-slate-800"
+              className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10"
             >
               <X size={18} />
             </button>
@@ -1049,7 +1051,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="tu-correo@ejemplo.com"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors text-center"
+                      className="w-full bg-black border border-white/15 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors text-center"
                       autoFocus
                     />
                   </div>
@@ -1063,7 +1065,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       value={negocio}
                       onChange={(e) => setNegocio(e.target.value)}
                       placeholder="Ej. Pizzería Napoli"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors text-center"
+                      className="w-full bg-black border border-white/15 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500 transition-colors text-center"
                     />
                   </div>
 
@@ -1098,7 +1100,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                   
                   <button
                     onClick={() => setShowModal(false)}
-                    className="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-2 rounded-xl text-xs cursor-pointer"
+                    className="w-full bg-white/10 hover:bg-white/20 text-slate-300 font-semibold py-2 rounded-xl text-xs cursor-pointer"
                   >
                     Cerrar
                   </button>

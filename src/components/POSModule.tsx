@@ -151,47 +151,53 @@ export function POSModule({
           
           {/* STEPPER HEADER BAR (AUTHENTIC DARK THEME) */}
           <div className="flex flex-wrap items-center justify-between gap-3 bg-[#0a0f1c]/90 border border-white/10 rounded-2xl p-3 mb-4 shrink-0 shadow-lg backdrop-blur-md">
-            <div className="flex items-center gap-2 md:gap-3 text-xs font-mono font-bold">
+            <div className="flex flex-wrap items-center gap-2 bg-black/60 border border-white/10 rounded-2xl p-1.5 text-xs font-bold font-mono">
               <button
+                type="button"
                 onClick={() => setPosStep(1)}
-                className={`px-3.5 py-1.5 rounded-xl transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
                   posStep === 1 
-                    ? 'bg-blue-600 text-white shadow-md' 
+                    ? 'bg-emerald-600 text-white shadow-[0_0_12px_rgba(16,185,129,0.4)]' 
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                1. MENÚ
+                <span className="w-5 h-5 rounded-full bg-black/40 text-emerald-300 flex items-center justify-center text-[10px] font-bold">1</span>
+                <span>1. MENÚ & GUSTOS</span>
               </button>
               
               <span className="text-slate-600">›</span>
 
               <button
+                type="button"
                 onClick={() => setPosStep(2)}
-                className={`px-3.5 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
                   posStep === 2 
-                    ? 'bg-blue-600 text-white shadow-md' 
+                    ? 'bg-emerald-600 text-white shadow-[0_0_12px_rgba(16,185,129,0.4)]' 
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                <span>2. DESTINO</span>
-                <span className="text-[10px] bg-black/40 px-1.5 py-0.5 rounded border border-white/10 text-blue-300">
-                  [{currentOrderPayment.tipo.toUpperCase()}]
+                <span className="w-5 h-5 rounded-full bg-black/40 text-emerald-300 flex items-center justify-center text-[10px] font-bold">2</span>
+                <span>2. DESTINO & CLIENTE</span>
+                <span className="text-[9px] bg-black/50 px-1.5 py-0.5 rounded border border-emerald-500/30 text-emerald-300 uppercase">
+                  {currentOrderPayment.tipo}
                 </span>
               </button>
 
               <span className="text-slate-600">›</span>
 
               <button
+                type="button"
                 onClick={() => setPosStep(3)}
-                className={`px-3.5 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
                   posStep === 3 
-                    ? 'bg-blue-600 text-white shadow-md' 
+                    ? 'bg-emerald-600 text-white shadow-[0_0_12px_rgba(16,185,129,0.4)]' 
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
-                <span>3. COBRO</span>
-                <span className="text-[10px] bg-black/40 px-1.5 py-0.5 rounded border border-white/10 text-blue-300">
-                  [{currentOrderPayment.metodo.toUpperCase()}]
+                <span className="w-5 h-5 rounded-full bg-black/40 text-emerald-300 flex items-center justify-center text-[10px] font-bold">3</span>
+                <span>3. PAGO & CONFIRMAR</span>
+                <span className="text-[9px] bg-black/50 px-1.5 py-0.5 rounded border border-emerald-500/30 text-emerald-300 uppercase">
+                  {currentOrderPayment.metodo}
                 </span>
               </button>
             </div>
@@ -201,11 +207,12 @@ export function POSModule({
               <button
                 type="button"
                 onClick={() => onOpenAIModal('voice')}
-                className="px-4 py-2 rounded-xl bg-blue-600/20 text-blue-300 border border-blue-500/40 hover:bg-blue-600 hover:text-white font-bold text-xs tracking-wider flex items-center gap-2 transition-all shadow-md cursor-pointer"
-                title="Tomar pedido por dictado de voz inteligente"
+                className="px-4 py-2 rounded-xl bg-emerald-600/20 text-emerald-300 border border-emerald-500/50 hover:bg-emerald-600 hover:text-white font-bold text-xs tracking-wider flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)] cursor-pointer"
+                title="Tomar pedido por dictado de voz inteligente con IA"
               >
-                <Mic size={15} className="text-blue-400" />
+                <Mic size={15} className="text-emerald-400" />
                 <span>PEDIDO POR VOZ</span>
+                <span className="text-[9px] font-black bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-500/40">AI</span>
               </button>
             )}
           </div>

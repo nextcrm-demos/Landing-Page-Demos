@@ -25,6 +25,7 @@ import { AIOrderModal } from './components/AIOrderModal';
 import { AdminDemoPanelModal } from './components/AdminDemoPanelModal';
 import { ExpiredDemoLockScreen } from './components/ExpiredDemoLockScreen';
 import { WhatsAppInboxModule } from './components/WhatsAppInboxModule';
+import { WebClientAppModule } from './components/WebClientAppModule';
 import { ModuleLockScreen } from './components/ModuleLockScreen';
 import { ParsedOrderResult } from './utils/aiOrderParser';
 
@@ -124,12 +125,12 @@ export default function App() {
   const [monthlyClosings, setMonthlyClosings] = useState<MonthlyClosing[]>(defaultMonthlyClosings);
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
   const [isExpiredLocked, setIsExpiredLocked] = useState(false);
-  const [userPlan, setUserPlan] = useState<'plan_basico' | 'plan_pro' | 'plan_vip'>(() => {
+  const [userPlan, setUserPlan] = useState<'plan_basico' | 'plan_pro' | 'plan_vip' | 'plan_full'>(() => {
     const saved = localStorage.getItem('nextcrm_user_plan');
-    return (saved as any) || 'plan_vip';
+    return (saved as any) || 'plan_full';
   });
 
-  const handlePlanUpgrade = (newPlan: 'plan_pro' | 'plan_vip') => {
+  const handlePlanUpgrade = (newPlan: 'plan_pro' | 'plan_vip' | 'plan_full') => {
     setUserPlan(newPlan);
     localStorage.setItem('nextcrm_user_plan', newPlan);
   };
@@ -793,6 +794,32 @@ export default function App() {
               const nextClients = [...clientsDB, { id: 'c_' + Date.now(), ...newC }];
               setClientsDB(nextClients);
               saveClient({ id: 'c_' + Date.now(), ...newC });
+            }}
+          />
+        )
+      )}
+
+      {activeTab === 'Módulo Web' && (
+        userPlan !== 'plan_full' && !demoSession.isAdmin ? (
+          <ModuleLockScreen
+            moduleName="Módulo Web & App Clientes (Venta Directa)"
+            requiredPlan="plan_full"
+            currentPlan={userPlan}
+            onUpgradeSuccess={handlePlanUpgrade}
+          />
+        ) : (
+          <WebClientAppModule
+            menuItems={menuItems}
+            onNewWebOrder={(newOrder) => {
+              setKitchenOrders(prev => [newOrder, ...prev]);
+              setDailyOrders(prev => [newOrder, ...prev]);
+              saveOrder(newOrder);
+              triggerModal({
+                type: 'alert',
+                title: '¡Nuevo Pedido Web Recibido!',
+                message: `El cliente ${newOrder.cliente.nombre} ha enviado un pedido desde la App Web (#${newOrder.id}) por un total de $${newOrder.total}. Ha ingresado a la Cocina KDS.`,
+                onConfirm: closeModal,
+              });
             }}
           />
         )

@@ -3,9 +3,9 @@ import { Lock, Unlock, Sparkles, ShieldCheck, MessageSquare, Check, ArrowRight, 
 
 interface ModuleLockScreenProps {
   moduleName: string;
-  requiredPlan: 'plan_pro' | 'plan_vip';
-  currentPlan: 'plan_basico' | 'plan_pro' | 'plan_vip';
-  onUpgradeSuccess: (newPlan: 'plan_pro' | 'plan_vip') => void;
+  requiredPlan: 'plan_pro' | 'plan_vip' | 'plan_full';
+  currentPlan: 'plan_basico' | 'plan_pro' | 'plan_vip' | 'plan_full';
+  onUpgradeSuccess: (newPlan: 'plan_pro' | 'plan_vip' | 'plan_full') => void;
 }
 
 export function ModuleLockScreen({
@@ -21,13 +21,15 @@ export function ModuleLockScreen({
   const planTitles = {
     plan_basico: 'Plan Básico (Módulo 1)',
     plan_pro: 'Plan Pro (Módulo 2)',
-    plan_vip: 'Plan VIP / Ilimitado (Módulo 3)',
+    plan_vip: 'Plan VIP DGI (Módulo 3)',
+    plan_full: 'Plan Full Omnicanal (Módulo 4)',
   };
 
   const planRequests = {
     plan_basico: '1 solicitud de soporte/cambio por mes',
     plan_pro: '2 solicitudes de soporte/cambios por mes',
     plan_vip: 'Solicitudes ILIMITADAS (Atención VIP prioritaria)',
+    plan_full: 'Solicitudes ILIMITADAS + Carga de Menú Bonificada',
   };
 
   const handleUnlock = (e: React.FormEvent) => {
@@ -38,12 +40,19 @@ export function ModuleLockScreen({
     const code = unlockCode.trim().toUpperCase();
     if (!code) return;
 
-    if (code === 'VIP-2026' || code === 'JPZ207UI' || code === 'NEXTCRM-VIP') {
-      setSuccessMsg('¡Plan VIP Desbloqueado Exitosamente! Todos los módulos habilitados.');
-      setTimeout(() => onUpgradeSuccess('plan_vip'), 800);
+    if (code === 'FULL-2026' || code === 'OMNICANAL-2026' || code === 'JPZ207UI' || code === 'NEXTCRM-FULL') {
+      setSuccessMsg('¡Plan Full Omnicanal Desbloqueado! Todos los módulos y Web App habilitados.');
+      setTimeout(() => onUpgradeSuccess('plan_full'), 800);
+    } else if (code === 'VIP-2026' || code === 'NEXTCRM-VIP') {
+      if (requiredPlan === 'plan_full') {
+        setErrorMsg('Esta clave es para Plan VIP. El Módulo Web requiere Plan Full Omnicanal.');
+      } else {
+        setSuccessMsg('¡Plan VIP Desbloqueado Exitosamente!');
+        setTimeout(() => onUpgradeSuccess('plan_vip'), 800);
+      }
     } else if (code === 'PRO-2026' || code === 'NEXTCRM-PRO') {
-      if (requiredPlan === 'plan_vip') {
-        setErrorMsg('Esta clave es para Plan Pro. Este módulo requiere Plan VIP.');
+      if (requiredPlan === 'plan_vip' || requiredPlan === 'plan_full') {
+        setErrorMsg('Esta clave es para Plan Pro. Este módulo requiere un plan superior.');
       } else {
         setSuccessMsg('¡Plan Pro Desbloqueado Exitosamente!');
         setTimeout(() => onUpgradeSuccess('plan_pro'), 800);

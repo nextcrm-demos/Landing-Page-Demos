@@ -675,183 +675,356 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
 
         <div 
            className="absolute bottom-5 animate-bounce cursor-pointer flex justify-center w-full z-10"
+           onClick={() => document.getElementById('seccion-webapp')?.scrollIntoView({ behavior: 'smooth' })}
+        >
+          <ChevronsDown size={28} className="text-slate-600 hover:text-slate-400 transition-colors" />
+        </div>
+      </section>
+
+      {/* PANTALLA 6.5: WEB APP CLIENTES & CARTA DIGITAL QR (3D TILTED) */}
+      <section id="seccion-webapp" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-[#03060f]">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-center w-full">
+          <div>
+            <div className="inline-flex items-center gap-2 border border-purple-500/40 text-purple-400 text-xs font-bold px-3.5 py-1 rounded-full mb-3 tracking-widest uppercase bg-purple-500/10">
+              <Globe size={14} /> Módulo 4 • Tu Propia App Web & Menú QR
+            </div>
+            
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-3 tracking-tight leading-tight">
+              Tus clientes piden desde su celular.<br />
+              <span className="text-purple-400">Sin comisiones a terceros.</span>
+            </h2>
+            
+            <p className="text-slate-300 text-xs sm:text-sm md:text-base leading-relaxed mb-5 font-normal">
+              Bríndale a tus clientes una experiencia de compra premium con tu propio enlace web personalizado (<code className="text-purple-300 bg-purple-950/60 px-1.5 py-0.5 rounded font-mono text-xs">tu-pizzeria.nextcrm.uy</code>) o códigos QR en las mesas.
+            </p>
+
+            <div className="space-y-2.5 mb-6 text-xs text-slate-300">
+              <div className="flex items-center gap-2.5">
+                <CheckCircle2 size={16} className="text-purple-400 shrink-0" />
+                <span><strong>0% Comisiones:</strong> Todo el margen de ganancia queda en tu pizzería.</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <CheckCircle2 size={16} className="text-purple-400 shrink-0" />
+                <span><strong>Sincronización Total:</strong> Los pedidos web caen directo al POS y a la Cocina KDS.</span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <CheckCircle2 size={16} className="text-purple-400 shrink-0" />
+                <span><strong>Menú QR para Salón:</strong> El comensal escanea, pide y la comanda llega al chef.</span>
+              </div>
+            </div>
+
+            <button
+              onClick={() => { setSubmitted(false); setShowModal(true); }}
+              className="bg-purple-600 hover:bg-purple-500 text-white font-black px-6 py-3 rounded-2xl text-xs uppercase tracking-wider shadow-[0_0_25px_rgba(147,51,234,0.4)] transition-all cursor-pointer flex items-center gap-2"
+            >
+              <Smartphone size={16} /> Solicitar Demo con Web App
+            </button>
+          </div>
+
+          {/* 3D TILTED SMARTPHONE MOCKUP */}
+          <div className="[perspective:1200px] w-full flex justify-center">
+            <div className="w-full max-w-[320px] aspect-[9/17] bg-[#0c1324] rounded-[2.5rem] border-4 border-slate-700 shadow-[0_30px_70px_rgba(0,0,0,0.9)] [transform:rotateY(-12deg)_rotateX(6deg)_rotateZ(2deg)] transition-all hover:[transform:rotateY(0deg)_rotateX(0deg)_rotateZ(0deg)] flex flex-col overflow-hidden relative text-white">
+              
+              {/* PHONE TOP NOTCH */}
+              <div className="bg-black px-5 py-2 flex justify-between items-center text-[9px] font-mono text-slate-400 shrink-0">
+                <span>20:55</span>
+                <div className="w-12 h-2.5 bg-slate-800 rounded-full"></div>
+                <span>100% 🔋</span>
+              </div>
+
+              {/* APP HEADER */}
+              <div className="bg-[#101b33] p-3 border-b border-white/10 flex items-center justify-between shrink-0">
+                <div>
+                  <h4 className="font-black text-xs text-white uppercase">🍕 Pizzería Gourmet</h4>
+                  <p className="text-[9px] text-emerald-400 font-mono">Abierto Ahora • Delivery 30m</p>
+                </div>
+                <span className="text-[9px] bg-purple-600/30 text-purple-300 border border-purple-500/40 px-2 py-0.5 rounded-full font-bold">
+                  App Online
+                </span>
+              </div>
+
+              {/* PRODUCTS LIST */}
+              <div className="flex-1 p-2.5 space-y-2 bg-[#090f1c] text-left select-none overflow-hidden">
+                <div className="bg-[#121c33] border border-white/10 rounded-xl p-2 flex items-center justify-between">
+                  <div>
+                    <p className="font-bold text-xs text-white">1 Metro Muzzarella</p>
+                    <p className="text-[9px] text-slate-400">+ Jamón y Aceitunas</p>
+                    <p className="text-[11px] font-mono font-bold text-emerald-400">$850</p>
+                  </div>
+                  <span className="bg-purple-600 text-white font-bold text-[9px] px-2 py-1 rounded-lg">+ Pedir</span>
+                </div>
+
+                <div className="bg-[#121c33] border border-white/10 rounded-xl p-2 flex items-center justify-between">
+                  <div>
+                    <p className="font-bold text-xs text-white">2x Fainá con Queso</p>
+                    <p className="text-[9px] text-slate-400">Bien doradito</p>
+                    <p className="text-[11px] font-mono font-bold text-emerald-400">$210</p>
+                  </div>
+                  <span className="bg-purple-600 text-white font-bold text-[9px] px-2 py-1 rounded-lg">+ Pedir</span>
+                </div>
+
+                <div className="bg-[#121c33] border border-white/10 rounded-xl p-2 flex items-center justify-between">
+                  <div>
+                    <p className="font-bold text-xs text-white">Coca-Cola 1.5L</p>
+                    <p className="text-[9px] text-slate-400">Línea Original Fría</p>
+                    <p className="text-[11px] font-mono font-bold text-emerald-400">$150</p>
+                  </div>
+                  <span className="bg-purple-600 text-white font-bold text-[9px] px-2 py-1 rounded-lg">+ Pedir</span>
+                </div>
+              </div>
+
+              {/* CART FLOATING FOOTER */}
+              <div className="bg-black/95 p-3 border-t border-purple-500/30 flex items-center justify-between shrink-0">
+                <div>
+                  <span className="text-[9px] text-slate-400 block font-mono">3 productos</span>
+                  <span className="font-black text-xs text-emerald-400 font-mono">$1.210</span>
+                </div>
+                <div className="bg-emerald-600 text-white font-black text-[10px] px-3 py-1.5 rounded-xl uppercase tracking-wider">
+                  ✓ Confirmar
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div 
+           className="absolute bottom-5 animate-bounce cursor-pointer flex justify-center w-full z-10"
            onClick={() => document.getElementById('seccion-precios')?.scrollIntoView({ behavior: 'smooth' })}
         >
           <ChevronsDown size={28} className="text-slate-600 hover:text-slate-400 transition-colors" />
         </div>
       </section>
 
-      {/* PANTALLA 7: 3 PLANES (DARK NEXTCRM THEME) */}
+      {/* PANTALLA 7: 4 PLANES COMERCIALES (DARK NEXTCRM THEME) */}
       <section id="seccion-precios" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col justify-center relative px-4 md:px-8 bg-[#050505]">
-         <div className="text-center mb-5 max-w-4xl mx-auto">
-           <div className="inline-flex items-center gap-1.5 border border-blue-500/40 text-blue-400 text-xs font-bold px-3.5 py-1 rounded-full mb-2 tracking-widest uppercase bg-blue-500/10">
-             <DollarSign size={13} /> 3 Planes Transparentes & Razonables
+         <div className="text-center mb-4 max-w-4xl mx-auto">
+           <div className="inline-flex items-center gap-1.5 border border-blue-500/40 text-blue-400 text-xs font-bold px-3.5 py-1 rounded-full mb-1.5 tracking-widest uppercase bg-blue-500/10">
+             <DollarSign size={13} /> 4 Módulos & Planes Escalables
            </div>
-           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black">Tu inversión garantizada.</h2>
-           <p className="text-slate-400 text-xs sm:text-sm mt-1">
-             Opciones con y sin mantenimiento mensual, con 1 año de soporte técnico ante fallos de plataforma.
+           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black">Tu inversión garantizada.</h2>
+           <p className="text-slate-400 text-xs mt-0.5">
+             Elige el módulo ideal para tu pizzería y desbloquea nuevas funciones cuando lo necesites.
            </p>
          </div>
          
-         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5 w-full items-stretch mb-4">
+         <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 w-full items-stretch mb-3">
             {/* PLAN 1: BÁSICO */}
-            <div className="bg-[#0a0f1c] border border-white/10 rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-xl">
+            <div className="bg-[#0a0f1c] border border-white/10 rounded-3xl p-4.5 flex flex-col justify-between shadow-xl">
                <div>
-                 <div className="flex justify-between items-center mb-2">
-                   <span className="text-[10px] font-mono font-bold text-slate-400 uppercase bg-white/5 border border-white/10 px-2.5 py-1 rounded-full">
-                     AUTOGESTIONABLE
+                 <div className="flex justify-between items-center mb-1.5">
+                   <span className="text-[9px] font-mono font-bold text-slate-400 uppercase bg-white/5 border border-white/10 px-2 py-0.5 rounded-full">
+                     MÓDULO 1
                    </span>
-                   <span className="text-[10px] font-bold text-blue-400 bg-blue-500/10 border border-blue-500/30 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                     <CreditCard size={11} /> 6 cuotas
+                   <span className="text-[9px] font-bold text-slate-300 bg-white/10 px-2 py-0.5 rounded-full">
+                     BÁSICO
                    </span>
                  </div>
-                 <h3 className="text-2xl font-black text-white">Plan Básico</h3>
+                 <h3 className="text-xl font-black text-white">Plan Básico</h3>
                  
-                 <div className="my-3 pb-3 border-b border-white/10">
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-3xl font-black text-white">$190</span>
-                      <span className="text-xs text-slate-400 uppercase">USD / Pago Único</span>
+                 <div className="my-2.5 pb-2.5 border-b border-white/10">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-2xl font-black text-white font-mono">$1.490</span>
+                      <span className="text-[10px] text-slate-400 uppercase">UYU / mes</span>
                     </div>
-                    <span className="text-xs text-blue-400 font-semibold block mt-0.5">
-                      O en hasta 6 cuotas de ~$32 USD (~$1.580 UYU)
+                    <span className="text-[10px] text-slate-400 font-semibold block mt-0.5">
+                      O compra definitiva por $190 USD
                     </span>
                  </div>
 
-                 <ul className="space-y-2 text-xs text-slate-300">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={14} className="text-blue-400 shrink-0" />
-                      <span><strong>Software Completo:</strong> POS, KDS Cocina, Mesas, Delivery, Stock y Caja.</span>
+                 <ul className="space-y-1.5 text-[11px] text-slate-300">
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
+                      <span><strong>POS Touch Rápido:</strong> Mostrador & Delivery.</span>
                     </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={14} className="text-blue-400 shrink-0" />
-                      <span><strong>Ticketera Térmica:</strong> Preconfigurada para 80mm y 58mm.</span>
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
+                      <span><strong>Ticketera Térmica:</strong> 80mm y 58mm.</span>
                     </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={14} className="text-blue-400 shrink-0" />
-                      <span><strong>Carga Autogestionable:</strong> El cliente carga sus productos y precios.</span>
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
+                      <span><strong>Control de Menú y Caja:</strong> Arqueo diario.</span>
                     </li>
-                    <li className="flex items-center gap-2 text-blue-300">
-                      <ShieldCheck size={14} className="text-blue-400 shrink-0" />
-                      <span><strong>1 año de soporte:</strong> 1 consulta técnica mensual incluida.</span>
+                    <li className="flex items-center gap-1.5 text-blue-300">
+                      <ShieldCheck size={13} className="text-blue-400 shrink-0" />
+                      <span><strong>1 consulta mensual:</strong> Soporte cubierto.</span>
                     </li>
                  </ul>
                </div>
 
                <button
                  onClick={() => { setSubmitted(false); setShowModal(true); }}
-                 className="w-full mt-4 bg-white/10 hover:bg-white/20 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-colors border border-white/10"
+                 className="w-full mt-3 bg-white/10 hover:bg-white/20 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-colors border border-white/10"
                >
                  Elegir Plan Básico
                </button>
             </div>
             
-            {/* PLAN 2: INTERMEDIO */}
-            <div className="bg-[#0e1629] border-2 border-blue-500 text-white rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-2xl relative z-10">
+            {/* PLAN 2: PRO */}
+            <div className="bg-[#0e1629] border border-blue-500/50 text-white rounded-3xl p-4.5 flex flex-col justify-between shadow-xl">
                <div>
-                 <div className="flex justify-between items-center mb-2">
-                   <span className="text-[10px] font-mono font-bold text-blue-300 uppercase bg-blue-950 border border-blue-500/40 px-2.5 py-1 rounded-full">
-                     CON MANTENIMIENTO
+                 <div className="flex justify-between items-center mb-1.5">
+                   <span className="text-[9px] font-mono font-bold text-blue-300 uppercase bg-blue-950 border border-blue-500/40 px-2 py-0.5 rounded-full">
+                     MÓDULO 2
                    </span>
-                   <span className="text-[10px] font-black text-white bg-blue-600 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                     <Flame size={11} className="fill-white" /> RECOMENDADO
+                   <span className="text-[9px] font-bold text-blue-300 bg-blue-600/30 px-2 py-0.5 rounded-full">
+                     PRO KDS & IA
                    </span>
                  </div>
-                 <h3 className="text-2xl font-black text-white">Plan Intermedio</h3>
+                 <h3 className="text-xl font-black text-white">Plan Pro</h3>
                  
-                 <div className="my-3 pb-3 border-b border-blue-500/30">
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-3xl font-black text-white">$35</span>
-                      <span className="text-xs text-blue-300 uppercase">USD / Mes</span>
+                 <div className="my-2.5 pb-2.5 border-b border-blue-500/30">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-2xl font-black text-white font-mono">$2.490</span>
+                      <span className="text-[10px] text-blue-300 uppercase">UYU / mes</span>
                     </div>
-                    <span className="text-xs text-blue-400 font-semibold block mt-0.5">
-                      Equivalente a ~$1.490 UYU / mes
+                    <span className="text-[10px] text-blue-400 font-semibold block mt-0.5">
+                      Cocina ágil y pedidos por voz
                     </span>
                  </div>
 
-                 <ul className="space-y-2 text-xs text-slate-200">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={14} className="text-blue-400 shrink-0" />
-                      <span><strong>Todo lo del Plan Básico + Ticketera preconfigurada.</strong></span>
+                 <ul className="space-y-1.5 text-[11px] text-slate-200">
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
+                      <span><strong>Todo lo del Plan Básico.</strong></span>
                     </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={14} className="text-blue-400 shrink-0" />
-                      <span><strong>Copias de Seguridad:</strong> Respaldo periódico y seguridad.</span>
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
+                      <span><strong>Monitor KDS Cocina:</strong> Alertas y demoras.</span>
                     </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={14} className="text-blue-400 shrink-0" />
-                      <span><strong>Carga de Menú & Precios:</strong> Modificaciones por nuestro equipo.</span>
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
+                      <span><strong>WhatsApp & Pedido por Voz:</strong> IA nativa.</span>
                     </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={14} className="text-blue-400 shrink-0" />
-                      <span><strong>2 Consultas Mensuales Incluidas:</strong> Soporte prioritario directo.</span>
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
+                      <span><strong>2 consultas mensuales:</strong> Soporte directo.</span>
                     </li>
                  </ul>
                </div>
 
                <button
                  onClick={() => { setSubmitted(false); setShowModal(true); }}
-                 className="w-full mt-4 bg-blue-600 hover:bg-blue-500 text-white font-black py-3 rounded-xl text-xs uppercase tracking-wider cursor-pointer shadow-lg transition-transform hover:scale-102"
+                 className="w-full mt-3 bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider cursor-pointer shadow-md transition-all"
                >
-                 Elegir Plan Intermedio
+                 Elegir Plan Pro
                </button>
             </div>
 
-            {/* PLAN 3: PREMIUM IA FULL */}
-            <div className="bg-[#0a0f1c] border border-cyan-500/50 rounded-3xl p-5 md:p-6 flex flex-col justify-between shadow-xl">
+            {/* PLAN 3: VIP DGI */}
+            <div className="bg-[#06140e] border border-emerald-500/50 rounded-3xl p-4.5 flex flex-col justify-between shadow-xl">
                <div>
-                 <div className="flex justify-between items-center mb-2">
-                   <span className="text-[10px] font-mono font-bold text-cyan-300 uppercase bg-cyan-950 border border-cyan-500/40 px-2.5 py-1 rounded-full flex items-center gap-1">
-                     <Sparkles size={11} className="text-cyan-400" /> FULL IA & VOZ
+                 <div className="flex justify-between items-center mb-1.5">
+                   <span className="text-[9px] font-mono font-bold text-emerald-300 uppercase bg-emerald-950 border border-emerald-500/40 px-2 py-0.5 rounded-full">
+                     MÓDULO 3
+                   </span>
+                   <span className="text-[9px] font-bold text-emerald-300 bg-emerald-600/30 px-2 py-0.5 rounded-full">
+                     DGI OFICIAL
                    </span>
                  </div>
-                 <h3 className="text-2xl font-black text-white">Plan Premium IA</h3>
+                 <h3 className="text-xl font-black text-white">Plan VIP DGI</h3>
                  
-                 <div className="my-3 pb-3 border-b border-white/10">
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-3xl font-black text-white">$55</span>
-                      <span className="text-xs text-cyan-300 uppercase">USD / Mes</span>
+                 <div className="my-2.5 pb-2.5 border-b border-emerald-500/30">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-2xl font-black text-white font-mono">$3.490</span>
+                      <span className="text-[10px] text-emerald-300 uppercase">UYU / mes</span>
                     </div>
-                    <span className="text-xs text-cyan-400 font-semibold block mt-0.5">
-                      Equivalente a ~$2.290 UYU / mes
+                    <span className="text-[10px] text-emerald-400 font-semibold block mt-0.5">
+                      Facturando Partner Homologado
                     </span>
                  </div>
 
-                 <ul className="space-y-2 text-xs text-slate-300">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={14} className="text-cyan-400 shrink-0" />
-                      <span><strong>Todo lo del Plan Intermedio + Mantenimiento total.</strong></span>
+                 <ul className="space-y-1.5 text-[11px] text-slate-300">
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                      <span><strong>Todo lo del Plan Pro.</strong></span>
                     </li>
-                    <li className="flex items-center gap-2 text-cyan-200">
-                      <Mic size={14} className="text-cyan-400 shrink-0" />
-                      <span><strong>Pedidos por Voz con IA:</strong> Dictado directo por producto.</span>
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                      <span><strong>Facturación DGI en Vivo:</strong> e-Tickets / e-Facturas.</span>
                     </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={14} className="text-cyan-400 shrink-0" />
-                      <span><strong>Conversión de WhatsApp:</strong> Comprensión automática de mensajes.</span>
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                      <span><strong>Firma Electrónica CAE:</strong> Automática en POS.</span>
                     </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 size={14} className="text-cyan-400 shrink-0" />
-                      <span><strong>2 Consultas Mensuales + Soporte VIP:</strong> Asistencia preferencial.</span>
+                    <li className="flex items-center gap-1.5 text-emerald-300 font-semibold">
+                      <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                      <span><strong>Solicitudes ILIMITADAS:</strong> Soporte VIP.</span>
                     </li>
                  </ul>
                </div>
 
                <button
                  onClick={() => { setSubmitted(false); setShowModal(true); }}
-                 className="w-full mt-4 bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-colors"
+                 className="w-full mt-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider cursor-pointer shadow-md transition-all"
                >
-                 Elegir Plan Premium IA
+                 Elegir Plan VIP DGI
+               </button>
+            </div>
+
+            {/* PLAN 4: FULL OMNICANAL + WEB APP */}
+            <div className="bg-gradient-to-b from-purple-950/40 to-black border-2 border-purple-500 text-white rounded-3xl p-4.5 flex flex-col justify-between shadow-2xl relative">
+               <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full shadow-lg border border-purple-300">
+                 ★ Más Completo
+               </div>
+
+               <div>
+                 <div className="flex justify-between items-center mb-1.5">
+                   <span className="text-[9px] font-mono font-bold text-purple-300 uppercase bg-purple-950 border border-purple-500/40 px-2 py-0.5 rounded-full">
+                     MÓDULO 4
+                   </span>
+                   <span className="text-[9px] font-black text-white bg-purple-600 px-2 py-0.5 rounded-full">
+                     FULL APP WEB
+                   </span>
+                 </div>
+                 <h3 className="text-xl font-black text-white">Full Omnicanal</h3>
+                 
+                 <div className="my-2.5 pb-2.5 border-b border-purple-500/30">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-2xl font-black text-white font-mono">$4.490</span>
+                      <span className="text-[10px] text-purple-300 uppercase">UYU / mes</span>
+                    </div>
+                    <span className="text-[10px] text-purple-300 font-semibold block mt-0.5">
+                      CRM + Tu Web App sin Comisiones
+                    </span>
+                 </div>
+
+                 <ul className="space-y-1.5 text-[11px] text-slate-200">
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-purple-400 shrink-0" />
+                      <span><strong>Todo el CRM Full + Facturación DGI.</strong></span>
+                    </li>
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-purple-400 shrink-0" />
+                      <span><strong>Tu Propia App Web:</strong> Pedidos desde el celular.</span>
+                    </li>
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-purple-400 shrink-0" />
+                      <span><strong>Menú QR para Mesas:</strong> 0% comisión a terceros.</span>
+                    </li>
+                    <li className="flex items-center gap-1.5 text-purple-300 font-semibold">
+                      <CheckCircle2 size={13} className="text-purple-400 shrink-0" />
+                      <span><strong>Carga de Menú Bonificada + VIP.</strong></span>
+                    </li>
+                 </ul>
+               </div>
+
+               <button
+                 onClick={() => { setSubmitted(false); setShowModal(true); }}
+                 className="w-full mt-3 bg-purple-600 hover:bg-purple-500 text-white font-black py-2.5 rounded-xl text-xs uppercase tracking-wider cursor-pointer shadow-lg transition-transform hover:scale-102"
+               >
+                 Elegir Plan Full
                </button>
             </div>
          </div>
 
          {/* Compact Support Policy Banner */}
-         <div className="max-w-6xl mx-auto bg-[#0a0f1c] border border-blue-500/30 rounded-2xl p-3 text-left text-xs text-slate-300 flex items-center justify-between gap-4">
-           <div className="flex items-center gap-2 font-bold text-blue-400 uppercase text-xs shrink-0">
-             <ShieldCheck size={16} /> Soporte y Garantía:
+         <div className="max-w-7xl mx-auto bg-[#0a0f1c] border border-blue-500/30 rounded-2xl p-2.5 text-left text-[11px] text-slate-300 flex items-center justify-between gap-3">
+           <div className="flex items-center gap-1.5 font-bold text-blue-400 uppercase text-[11px] shrink-0">
+             <ShieldCheck size={14} /> Soporte y Garantía Oficial:
            </div>
-           <p className="text-slate-300 truncate">
-             1 año de soporte técnico cubierto ante fallos. Plan Básico incluye 1 consulta mensual al año; Planes mensuales incluyen carga de carta y 2 consultas al mes.
+           <p className="text-slate-300 truncate text-[11px]">
+             1 año de garantía ante fallos. Planes Básico (1 consulta/mes), Pro (2 consultas/mes), VIP y Full (Consultas ILIMITADAS y carga bonificada).
            </p>
          </div>
          

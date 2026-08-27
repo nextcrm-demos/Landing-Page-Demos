@@ -781,6 +781,7 @@ export default function App() {
         onOpenAdminPanel={() => setIsAdminPanelOpen(true)}
         userPlan={userPlan}
         onSwitchToClientApp={() => setAppMode('client_app')}
+        onChangePlan={handlePlanUpgrade}
       />
 
       {activeTab === 'Toma de Pedidos' && (
@@ -813,7 +814,7 @@ export default function App() {
       )}
 
       {activeTab === 'WhatsApp' && (
-        userPlan === 'plan_basico' && !demoSession.isAdmin ? (
+        userPlan === 'plan_basico' ? (
           <ModuleLockScreen
             moduleName="Bandeja de Entrada de WhatsApp & IA"
             requiredPlan="plan_pro"
@@ -842,7 +843,7 @@ export default function App() {
       )}
 
       {activeTab === 'Módulo Web' && (
-        userPlan !== 'plan_full' && !demoSession.isAdmin ? (
+        userPlan !== 'plan_full' ? (
           <ModuleLockScreen
             moduleName="Módulo Web & App Clientes (Venta Directa)"
             requiredPlan="plan_full"
@@ -868,7 +869,7 @@ export default function App() {
       )}
 
       {activeTab === 'Cocina' && (
-        userPlan === 'plan_basico' && !demoSession.isAdmin ? (
+        userPlan === 'plan_basico' ? (
           <ModuleLockScreen
             moduleName="Monitor KDS de Cocina en Tiempo Real"
             requiredPlan="plan_pro"
@@ -948,7 +949,7 @@ export default function App() {
       )}
 
       {activeTab === 'Stock' && (
-        userPlan === 'plan_basico' && !demoSession.isAdmin ? (
+        userPlan === 'plan_basico' ? (
           <ModuleLockScreen
             moduleName="Control de Stock & Insumos Críticos"
             requiredPlan="plan_pro"
@@ -966,7 +967,7 @@ export default function App() {
       )}
 
       {activeTab === 'Facturación' && (
-        userPlan !== 'plan_vip' && !demoSession.isAdmin ? (
+        (userPlan === 'plan_basico' || userPlan === 'plan_pro') ? (
           <ModuleLockScreen
             moduleName="Facturación Electrónica & CFE DGI"
             requiredPlan="plan_vip"
@@ -981,7 +982,7 @@ export default function App() {
       )}
 
       {activeTab === 'Reportes' && (
-        userPlan === 'plan_basico' && !demoSession.isAdmin ? (
+        userPlan === 'plan_basico' ? (
           <ModuleLockScreen
             moduleName="Reportes Avanzados & Cierres Mensuales"
             requiredPlan="plan_pro"

@@ -13,6 +13,7 @@ interface HeaderProps {
   onOpenAdminPanel?: () => void;
   userPlan?: 'plan_basico' | 'plan_pro' | 'plan_vip' | 'plan_full';
   onSwitchToClientApp?: () => void;
+  onChangePlan?: (plan: 'plan_basico' | 'plan_pro' | 'plan_vip' | 'plan_full') => void;
 }
 
 export function Header({
@@ -26,6 +27,7 @@ export function Header({
   onOpenAdminPanel,
   userPlan = 'plan_full',
   onSwitchToClientApp,
+  onChangePlan,
 }: HeaderProps) {
   const tabs = [
     'Toma de Pedidos', 'WhatsApp', 'Módulo Web', 'Cocina', 'Mostrador', 'Mesas', 'Delivery', 
@@ -43,7 +45,7 @@ export function Header({
   };
 
   const isTabLocked = (tab: string) => {
-    if (isAdmin || userPlan === 'plan_full') return false;
+    if (userPlan === 'plan_full') return false;
     if (userPlan === 'plan_basico') {
       return ['WhatsApp', 'Módulo Web', 'Cocina', 'Stock', 'Facturación', 'Reportes'].includes(tab);
     }
@@ -95,6 +97,32 @@ export function Header({
             <ShieldCheck size={13} className="text-blue-400" />
             <span>Admin Demos</span>
           </button>
+        )}
+
+        {/* PLAN SIMULATOR PILLS (PARA PROBAR LOS BLOQUEOS DE CADA PLAN AL INSTANTE) */}
+        {onChangePlan && (
+          <div className="flex items-center bg-black/60 border border-white/10 rounded-xl p-0.5 gap-0.5 text-[10px] font-mono">
+            <span className="text-slate-400 px-1.5 hidden xl:inline text-[9px] font-bold">Probar Plan:</span>
+            {[
+              { id: 'plan_basico', label: '1. Básico' },
+              { id: 'plan_pro', label: '2. Pro' },
+              { id: 'plan_vip', label: '3. VIP' },
+              { id: 'plan_full', label: '4. Full' },
+            ].map((p) => (
+              <button
+                key={p.id}
+                onClick={() => onChangePlan(p.id as any)}
+                className={`px-2 py-0.5 rounded-lg font-bold transition-all cursor-pointer ${
+                  userPlan === p.id
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                }`}
+                title={`Cambiar a ${p.label} para probar bloqueos`}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
         )}
       </div>
       

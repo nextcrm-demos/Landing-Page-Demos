@@ -834,8 +834,8 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       <span className="text-2xl font-black text-white font-mono">$1.490</span>
                       <span className="text-[10px] text-slate-400 uppercase">UYU / mes</span>
                     </div>
-                    <span className="text-[10px] text-slate-400 font-semibold block mt-0.5">
-                      O compra definitiva por $190 USD
+                    <span className="text-[10px] text-blue-400 font-semibold block mt-0.5">
+                      O Compra Definitiva: $190 USD (en hasta 6 cuotas)
                     </span>
                  </div>
 
@@ -846,15 +846,18 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
-                      <span><strong>Ticketera Térmica:</strong> 80mm y 58mm.</span>
+                      <span><strong>Impresión Térmica:</strong> Para 80mm/58mm <em>(Hardware no incluido)</em>.</span>
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
-                      <span><strong>Control de Menú y Caja:</strong> Arqueo diario.</span>
+                      <span><strong>Carga Inicial de Menú:</strong> 1 sola vez por única vez <em>(luego autogestionable)</em>.</span>
                     </li>
-                    <li className="flex items-center gap-1.5 text-blue-300">
-                      <ShieldCheck size={13} className="text-blue-400 shrink-0" />
-                      <span><strong>1 consulta mensual:</strong> Soporte cubierto.</span>
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
+                      <span><strong>Caja y Clientes:</strong> Arqueo diario de turno.</span>
+                    </li>
+                    <li className="flex items-center gap-1.5 text-slate-500 line-through text-[10px]">
+                      <span>No incluye KDS, WhatsApp, Voz IA ni DGI.</span>
                     </li>
                  </ul>
                </div>
@@ -886,7 +889,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       <span className="text-[10px] text-blue-300 uppercase">UYU / mes</span>
                     </div>
                     <span className="text-[10px] text-blue-400 font-semibold block mt-0.5">
-                      Cocina ágil y pedidos por voz
+                      O Compra Definitiva: $290 USD (en hasta 6 cuotas)
                     </span>
                  </div>
 
@@ -905,7 +908,10 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
-                      <span><strong>2 consultas mensuales:</strong> Soporte directo.</span>
+                      <span><strong>Stock e Insumos + 2 consultas/mes.</strong></span>
+                    </li>
+                    <li className="flex items-center gap-1.5 text-slate-500 line-through text-[10px]">
+                      <span>No incluye Facturación DGI ni Web App.</span>
                     </li>
                  </ul>
                </div>
@@ -937,7 +943,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       <span className="text-[10px] text-emerald-300 uppercase">UYU / mes</span>
                     </div>
                     <span className="text-[10px] text-emerald-400 font-semibold block mt-0.5">
-                      Facturando Partner Homologado
+                      O Compra Definitiva: $390 USD (en hasta 6 cuotas)
                     </span>
                  </div>
 
@@ -952,11 +958,14 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
-                      <span><strong>Firma Electrónica CAE:</strong> Automática en POS.</span>
+                      <span><strong>Partner Facturando.uy:</strong> CAE y QR fiscal.</span>
                     </li>
                     <li className="flex items-center gap-1.5 text-emerald-300 font-semibold">
                       <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
                       <span><strong>Solicitudes ILIMITADAS:</strong> Soporte VIP.</span>
+                    </li>
+                    <li className="flex items-center gap-1.5 text-slate-500 line-through text-[10px]">
+                      <span>No incluye App Web de Clientes.</span>
                     </li>
                  </ul>
                </div>
@@ -992,26 +1001,30 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       <span className="text-[10px] text-purple-300 uppercase">UYU / mes</span>
                     </div>
                     <span className="text-[10px] text-purple-300 font-semibold block mt-0.5">
-                      CRM + Tu Web App sin Comisiones
+                      O Compra Definitiva: $490 USD (en hasta 6 cuotas)
                     </span>
                  </div>
 
                  <ul className="space-y-1.5 text-[11px] text-slate-200">
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-purple-400 shrink-0" />
-                      <span><strong>Todo el CRM Full + Facturación DGI.</strong></span>
+                      <span><strong>TODO el CRM Full + Facturación DGI.</strong></span>
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-purple-400 shrink-0" />
-                      <span><strong>Tu Propia App Web:</strong> Pedidos desde el celular.</span>
+                      <span><strong>Tu Propia App Web:</strong> Pedidos desde celular.</span>
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-purple-400 shrink-0" />
-                      <span><strong>Menú QR para Mesas:</strong> 0% comisión a terceros.</span>
+                      <span><strong>Menú QR para Mesas:</strong> 0% comisión.</span>
+                    </li>
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-purple-400 shrink-0" />
+                      <span><strong>Seguimiento de Envíos en Tiempo Real.</strong></span>
                     </li>
                     <li className="flex items-center gap-1.5 text-purple-300 font-semibold">
                       <CheckCircle2 size={13} className="text-purple-400 shrink-0" />
-                      <span><strong>Carga de Menú Bonificada + VIP.</strong></span>
+                      <span><strong>Carga de Menú Bonificada + Soporte VIP.</strong></span>
                     </li>
                  </ul>
                </div>

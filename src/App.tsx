@@ -25,6 +25,7 @@ import { AIOrderModal } from './components/AIOrderModal';
 import { AdminDemoPanelModal } from './components/AdminDemoPanelModal';
 import { ExpiredDemoLockScreen } from './components/ExpiredDemoLockScreen';
 import { WhatsAppInboxModule } from './components/WhatsAppInboxModule';
+import { ModuleLockScreen } from './components/ModuleLockScreen';
 import { ParsedOrderResult } from './utils/aiOrderParser';
 
 import {
@@ -123,6 +124,15 @@ export default function App() {
   const [monthlyClosings, setMonthlyClosings] = useState<MonthlyClosing[]>(defaultMonthlyClosings);
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
   const [isExpiredLocked, setIsExpiredLocked] = useState(false);
+  const [userPlan, setUserPlan] = useState<'plan_basico' | 'plan_pro' | 'plan_vip'>(() => {
+    const saved = localStorage.getItem('nextcrm_user_plan');
+    return (saved as any) || 'plan_vip';
+  });
+
+  const handlePlanUpgrade = (newPlan: 'plan_pro' | 'plan_vip') => {
+    setUserPlan(newPlan);
+    localStorage.setItem('nextcrm_user_plan', newPlan);
+  };
 
   // Anti-Copy & Anti-Inspection Protection for client demos
   useEffect(() => {
@@ -727,6 +737,7 @@ export default function App() {
         onGoToPresentation={() => setShowPresentation(true)}
         isAdmin={demoSession.isAdmin}
         onOpenAdminPanel={() => setIsAdminPanelOpen(true)}
+        userPlan={userPlan}
       />
 
       {activeTab === 'Toma de Pedidos' && (
@@ -759,33 +770,51 @@ export default function App() {
       )}
 
       {activeTab === 'WhatsApp' && (
-        <WhatsAppInboxModule
-          menuItems={menuItems}
-          clients={clientsDB}
-          onApplyParsedOrder={(parsed, directConfirm) => {
-            handleApplyAIParsedOrder(parsed, directConfirm);
-            if (directConfirm) {
-              setActiveTab('Cocina');
-            } else {
-              setActiveTab('Toma de Pedidos');
-            }
-          }}
-          onSaveNewClient={(newC) => {
-            const nextClients = [...clientsDB, { id: 'c_' + Date.now(), ...newC }];
-            setClientsDB(nextClients);
-            saveClient({ id: 'c_' + Date.now(), ...newC });
-          }}
-        />
+        userPlan === 'plan_basico' && !demoSession.isAdmin ? (
+          <ModuleLockScreen
+            moduleName="Bandeja de Entrada de WhatsApp & IA"
+            requiredPlan="plan_pro"
+            currentPlan={userPlan}
+            onUpgradeSuccess={handlePlanUpgrade}
+          />
+        ) : (
+          <WhatsAppInboxModule
+            menuItems={menuItems}
+            clients={clientsDB}
+            onApplyParsedOrder={(parsed, directConfirm) => {
+              handleApplyAIParsedOrder(parsed, directConfirm);
+              if (directConfirm) {
+                setActiveTab('Cocina');
+              } else {
+                setActiveTab('Toma de Pedidos');
+              }
+            }}
+            onSaveNewClient={(newC) => {
+              const nextClients = [...clientsDB, { id: 'c_' + Date.now(), ...newC }];
+              setClientsDB(nextClients);
+              saveClient({ id: 'c_' + Date.now(), ...newC });
+            }}
+          />
+        )
       )}
 
       {activeTab === 'Cocina' && (
-        <KDSModule
-          kitchenOrders={kitchenOrders}
-          currentTime={currentTime}
-          markAsDone={markAsDone}
-          handleEditOrder={handleEditOrder}
-          handleCancelOrder={handleCancelOrder}
-        />
+        userPlan === 'plan_basico' && !demoSession.isAdmin ? (
+          <ModuleLockScreen
+            moduleName="Monitor KDS de Cocina en Tiempo Real"
+            requiredPlan="plan_pro"
+            currentPlan={userPlan}
+            onUpgradeSuccess={handlePlanUpgrade}
+          />
+        ) : (
+          <KDSModule
+            kitchenOrders={kitchenOrders}
+            currentTime={currentTime}
+            markAsDone={markAsDone}
+            handleEditOrder={handleEditOrder}
+            handleCancelOrder={handleCancelOrder}
+          />
+        )
       )}
 
       {activeTab === 'Mostrador' && (
@@ -850,33 +879,59 @@ export default function App() {
       )}
 
       {activeTab === 'Stock' && (
-        <StockModule
-          menuItems={menuItems}
-          stock={stock}
-          setStock={setStock}
-          thresholds={thresholds}
-        />
+        userPlan === 'plan_basico' && !demoSession.isAdmin ? (
+          <ModuleLockScreen
+            moduleName="Control de Stock & Insumos Críticos"
+            requiredPlan="plan_pro"
+            currentPlan={userPlan}
+            onUpgradeSuccess={handlePlanUpgrade}
+          />
+        ) : (
+          <StockModule
+            menuItems={menuItems}
+            stock={stock}
+            setStock={setStock}
+            thresholds={thresholds}
+          />
+        )
       )}
 
       {activeTab === 'Facturación' && (
-        <FacturacionModule
-          orders={dailyOrders}
-        />
+        userPlan !== 'plan_vip' && !demoSession.isAdmin ? (
+          <ModuleLockScreen
+            moduleName="Facturación Electrónica & CFE DGI"
+            requiredPlan="plan_vip"
+            currentPlan={userPlan}
+            onUpgradeSuccess={handlePlanUpgrade}
+          />
+        ) : (
+          <FacturacionModule
+            orders={dailyOrders}
+          />
+        )
       )}
 
       {activeTab === 'Reportes' && (
-        <ReportesModule
-          dailyOrders={dailyOrders}
-          historicalTurns={historicalTurns}
-          monthlyClosings={monthlyClosings}
-          onSaveMonthlyClosing={handleSaveMonthlyClosing}
-          onDeleteMonthlyClosing={handleDeleteMonthlyClosing}
-          openingCash={openingCash}
-          cajeroName={cajeroName}
-          menuItems={menuItems}
-        />
+        userPlan === 'plan_basico' && !demoSession.isAdmin ? (
+          <ModuleLockScreen
+            moduleName="Reportes Avanzados & Cierres Mensuales"
+            requiredPlan="plan_pro"
+            currentPlan={userPlan}
+            onUpgradeSuccess={handlePlanUpgrade}
+          />
+        ) : (
+          <ReportesModule
+            dailyOrders={dailyOrders}
+            historicalTurns={historicalTurns}
+            monthlyClosings={monthlyClosings}
+            onSaveMonthlyClosing={handleSaveMonthlyClosing}
+            onDeleteMonthlyClosing={handleDeleteMonthlyClosing}
+            openingCash={openingCash}
+            cajeroName={cajeroName}
+            menuItems={menuItems}
+          />
+        )
       )}
-
 
       {activeTab === 'Historial' && (
         <HistorialModule

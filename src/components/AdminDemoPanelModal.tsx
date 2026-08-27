@@ -35,6 +35,7 @@ export function AdminDemoPanelModal({
   const [emailOrUser, setEmailOrUser] = useState('');
   const [password, setPassword] = useState('demo123');
   const [duracionHoras, setDuracionHoras] = useState<number>(24);
+  const [plan, setPlan] = useState<'plan_basico' | 'plan_pro' | 'plan_vip'>('plan_vip');
   const [notas, setNotas] = useState('');
   const [formError, setFormError] = useState('');
   const [actionSuccess, setActionSuccess] = useState('');
@@ -76,6 +77,9 @@ export function AdminDemoPanelModal({
       creadoPor: currentAdminEmail,
       notas: notas.trim() || undefined,
       totalIngresos: 0,
+      plan,
+      solicitudesRealizadas: 0,
+      solicitudesMaximas: plan === 'plan_basico' ? 1 : plan === 'plan_pro' ? 2 : 999,
     };
 
     const res = await saveDemoAccount(newAcc);
@@ -280,12 +284,38 @@ export function AdminDemoPanelModal({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+                <div>
+                  <label className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 block mb-1.5">
+                    Plan Asignado (Módulos)
+                  </label>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {[
+                      { id: 'plan_basico', label: 'Básico (M1)' },
+                      { id: 'plan_pro', label: 'Pro (M2)' },
+                      { id: 'plan_vip', label: 'VIP (M3)' },
+                    ].map((p) => (
+                      <button
+                        type="button"
+                        key={p.id}
+                        onClick={() => setPlan(p.id as any)}
+                        className={`py-2 rounded-xl text-[11px] font-bold transition-all cursor-pointer ${
+                          plan === p.id
+                            ? 'bg-emerald-600 text-white border border-emerald-400 shadow-sm'
+                            : 'bg-black/30 text-slate-400 border border-white/5 hover:border-white/20'
+                        }`}
+                      >
+                        {p.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <div>
                   <label className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 block mb-1.5">
                     Duración de Prueba
                   </label>
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-4 gap-1.5">
                     {[
                       { label: '24 Horas', val: 24 },
                       { label: '48 Horas', val: 48 },
@@ -296,7 +326,7 @@ export function AdminDemoPanelModal({
                         type="button"
                         key={dur.val}
                         onClick={() => setDuracionHoras(dur.val)}
-                        className={`py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                        className={`py-2 rounded-xl text-[11px] font-semibold transition-all cursor-pointer ${
                           duracionHoras === dur.val
                             ? 'bg-blue-600 text-white border border-blue-400 shadow-sm'
                             : 'bg-black/30 text-slate-400 border border-white/5 hover:border-white/20'
@@ -314,7 +344,7 @@ export function AdminDemoPanelModal({
                   </label>
                   <input
                     type="text"
-                    placeholder="Ej: Contactado por Instagram / Quiere delivery y KDS"
+                    placeholder="Ej: Contactado por WhatsApp"
                     value={notas}
                     onChange={(e) => setNotas(e.target.value)}
                     className="w-full bg-black/40 border border-white/10 focus:border-blue-500 rounded-xl px-3.5 py-2 text-xs text-white outline-none"

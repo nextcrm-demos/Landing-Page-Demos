@@ -1,5 +1,5 @@
 import React from 'react';
-import { LogOut, Home, ShieldCheck } from 'lucide-react';
+import { LogOut, Home, ShieldCheck, Lock } from 'lucide-react';
 import { Order } from '../types';
 
 interface HeaderProps {
@@ -11,6 +11,7 @@ interface HeaderProps {
   onGoToPresentation?: () => void;
   isAdmin?: boolean;
   onOpenAdminPanel?: () => void;
+  userPlan?: 'plan_basico' | 'plan_pro' | 'plan_vip';
 }
 
 export function Header({
@@ -21,7 +22,8 @@ export function Header({
   onCerrarTurno,
   onGoToPresentation,
   isAdmin = false,
-  onOpenAdminPanel
+  onOpenAdminPanel,
+  userPlan = 'plan_vip',
 }: HeaderProps) {
   const tabs = [
     'Toma de Pedidos', 'WhatsApp', 'Cocina', 'Mostrador', 'Mesas', 'Delivery', 
@@ -38,53 +40,75 @@ export function Header({
     }).length;
   };
 
+  const isTabLocked = (tab: string) => {
+    if (isAdmin || userPlan === 'plan_vip') return false;
+    if (userPlan === 'plan_basico') {
+      return ['WhatsApp', 'Cocina', 'Stock', 'Facturación', 'Reportes'].includes(tab);
+    }
+    if (userPlan === 'plan_pro') {
+      return ['Facturación'].includes(tab);
+    }
+    return false;
+  };
+
   return (
-    <header className="bg-[#0a0f1c]/80 backdrop-blur-xl text-slate-300 font-medium flex items-center px-6 h-16 shrink-0 border-b border-white/10 z-20 relative">
-      <div className="flex items-center gap-3 mr-6 shrink-0">
-        <div className="font-light tracking-[0.2em] text-white text-sm">NEXT CRM</div>
+    <header className="bg-[#0a0f1c]/90 backdrop-blur-xl text-slate-300 font-medium flex items-center px-4 sm:px-6 h-14 shrink-0 border-b border-white/10 z-20 relative w-full justify-between">
+      
+      {/* BRAND & QUICK ACTION */}
+      <div className="flex items-center gap-2 sm:gap-3 shrink-0 mr-2">
+        <div className="font-light tracking-[0.2em] text-white text-xs sm:text-sm whitespace-nowrap">
+          NEXT <span className="font-bold text-blue-400">CRM</span>
+        </div>
+        
         {onGoToPresentation && (
           <button
             onClick={onGoToPresentation}
             title="Volver a la landing page de presentación"
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white rounded-lg text-xs transition-all border border-white/10 cursor-pointer"
+            className="flex items-center gap-1 px-2.5 py-1 bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white rounded-lg text-[11px] transition-all border border-white/10 cursor-pointer"
           >
-            <Home size={13} />
-            <span className="hidden sm:inline">Landing</span>
+            <Home size={12} />
+            <span className="hidden md:inline">Landing</span>
           </button>
         )}
+
         {isAdmin && onOpenAdminPanel && (
           <button
             onClick={onOpenAdminPanel}
             title="Panel de Control de Clientes & Demos (Admin)"
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/40 text-blue-300 hover:text-white rounded-lg text-xs transition-all border border-blue-500/40 shadow-[0_0_12px_rgba(59,130,246,0.2)] cursor-pointer"
+            className="flex items-center gap-1 px-2.5 py-1 bg-blue-600/20 hover:bg-blue-600/40 text-blue-300 hover:text-white rounded-lg text-[11px] font-bold transition-all border border-blue-500/40 shadow-[0_0_10px_rgba(59,130,246,0.2)] cursor-pointer"
           >
-            <ShieldCheck size={14} className="text-blue-400" />
-            <span className="font-bold">Clientes Demo (Admin)</span>
+            <ShieldCheck size={13} className="text-blue-400" />
+            <span>Admin Demos</span>
           </button>
         )}
       </div>
       
-      <div className="flex gap-1 h-full items-center ml-auto overflow-x-auto hide-scrollbar">
+      {/* FULL-WIDTH TABS BAR (EXPANDS COMFORTABLY ACROSS THE SCREEN) */}
+      <div className="flex gap-1 h-full items-center flex-1 justify-end overflow-x-auto hide-scrollbar">
         {tabs.map(tab => {
           const badgeCount = getPendingBadgeCount(tab);
+          const locked = isTabLocked(tab);
+
           return (
             <button 
               key={tab} 
               onClick={() => setActiveTab(tab)} 
-              className={`px-4 py-2 rounded-xl transition-all flex items-center gap-1.5 relative text-xs tracking-wide whitespace-nowrap cursor-pointer ${
+              className={`px-2.5 sm:px-3 py-1.5 rounded-xl transition-all flex items-center gap-1 relative text-[11px] sm:text-xs tracking-normal whitespace-nowrap cursor-pointer ${
                 activeTab === tab 
-                  ? 'bg-white/10 text-white shadow-sm' 
+                  ? 'bg-blue-600 text-white font-bold shadow-md' 
                   : 'hover:bg-white/5 hover:text-white text-slate-400'
               }`}
             >
-              {tab}
+              <span>{tab}</span>
+              {locked && <Lock size={10} className="text-amber-400 shrink-0 ml-0.5" />}
+              
               {tab === 'Cocina' && kitchenOrdersCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full animate-pulse">
+                <span className="bg-red-500 text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full animate-pulse ml-0.5">
                   {kitchenOrdersCount}
                 </span>
               )}
               {['Mostrador', 'Mesas', 'Delivery'].includes(tab) && badgeCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full">
+                <span className="bg-orange-500 text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full ml-0.5">
                   {badgeCount}
                 </span>
               )}
@@ -92,13 +116,13 @@ export function Header({
           );
         })}
         
-        <div className="w-px h-6 bg-white/10 mx-2"></div>
+        <div className="w-px h-5 bg-white/10 mx-1.5 shrink-0"></div>
         
         <button 
           onClick={onCerrarTurno} 
-          className="px-4 py-2 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white rounded-xl transition-all flex items-center gap-2 text-xs tracking-wide whitespace-nowrap border border-red-500/20 cursor-pointer"
+          className="px-3 py-1.5 bg-red-500/10 hover:bg-red-600 text-red-300 hover:text-white rounded-xl transition-all flex items-center gap-1.5 text-[11px] sm:text-xs font-bold tracking-normal whitespace-nowrap border border-red-500/30 cursor-pointer shrink-0"
         >
-           <LogOut size={14}/> Cerrar Turno
+           <LogOut size={13}/> Cerrar Turno
         </button>
       </div>
     </header>

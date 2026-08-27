@@ -22,6 +22,9 @@ export interface DemoAccount {
   totalIngresos?: number;
   creadoPor: string;
   notas?: string;
+  plan?: 'plan_basico' | 'plan_pro' | 'plan_vip';
+  solicitudesRealizadas?: number;
+  solicitudesMaximas?: number; // 1 (Basico), 2 (Pro), 999 (VIP)
 }
 
 export interface Gusto {

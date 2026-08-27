@@ -1,7 +1,7 @@
 import React from 'react';
 import { Wallet, Download, Printer } from 'lucide-react';
 import { Order, HistoricalTurn, ModalConfig } from '../types';
-import { downloadCSV, printTableReport } from '../utils/printHelpers';
+import { downloadCSV, printTableReport, printCierreTurnoThermalTicket } from '../utils/printHelpers';
 
 interface ArqueoModuleProps {
   dailyOrders: Order[];
@@ -59,9 +59,22 @@ export function ArqueoModule({
       <div className="max-w-4xl mx-auto flex flex-col items-center relative z-10">
         <div className="bg-[#0a0f1c]/80 backdrop-blur-md rounded-2xl p-4 border border-white/10 flex items-center justify-between w-full mb-8 shadow-xl">
           <h2 className="text-base font-light text-white tracking-[0.15em] flex items-center gap-3 uppercase"><Wallet size={20}/> Gestión de Caja</h2>
-          <div className="flex gap-3">
+          <div className="flex gap-2">
+            <button 
+              onClick={() => printCierreTurnoThermalTicket({
+                cajero: cajeroName,
+                openingCash,
+                dailyOrders,
+                totals: t,
+                triggerAlert: (msg) => triggerModal({ type: 'alert', title: 'Aviso', message: msg, onConfirm: closeModal })
+              })}
+              className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
+              title="Imprimir Ticket Térmico de Cierre (80mm)"
+            >
+              <Printer size={15} /> Ticket Térmico 80mm
+            </button>
             <button onClick={() => downloadCSV(['Metodo','Monto'], [['Efectivo Físico', cajaReal], ['Efectivo Turno', t.efectivo], ['Debito', t.debito], ['Credito', t.credito], ['Transferencia', t.transferencia], ['A Confirmar', t.a_confirmar]], 'arqueo.csv')} className="p-2.5 bg-white/5 text-slate-300 rounded-xl hover:bg-white/10 border border-white/10 transition-colors cursor-pointer" title="Exportar Arqueo"><Download size={18}/></button>
-            <button onClick={() => printTableReport('Arqueo de Caja', ['Método', 'Monto ($)'], [['Caja Base Inicial', openingCash], ['Ingreso Efectivo', t.efectivo], ['Débito', t.debito], ['Crédito', t.credito], ['Transferencias', t.transferencia], ['A Confirmar', t.a_confirmar], ['TOTAL FÍSICO CAJA', cajaReal]])} className="p-2.5 bg-white/5 text-slate-300 rounded-xl hover:bg-white/10 border border-white/10 transition-colors cursor-pointer" title="Imprimir Arqueo"><Printer size={18}/></button>
+            <button onClick={() => printTableReport('Arqueo de Caja', ['Método', 'Monto ($)'], [['Caja Base Inicial', openingCash], ['Ingreso Efectivo', t.efectivo], ['Débito', t.debito], ['Crédito', t.credito], ['Transferencias', t.transferencia], ['A Confirmar', t.a_confirmar], ['TOTAL FÍSICO CAJA', cajaReal]])} className="p-2.5 bg-white/5 text-slate-300 rounded-xl hover:bg-white/10 border border-white/10 transition-colors cursor-pointer" title="Imprimir Informe"><Printer size={18}/></button>
           </div>
         </div>
         

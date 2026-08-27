@@ -78,6 +78,8 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
     }
   };
 
+  const [verifiedAccountData, setVerifiedAccountData] = useState<any>(null);
+
   const handleVerifyDemo = async (e: React.FormEvent) => {
     e.preventDefault();
     setDemoAuthError('');
@@ -93,10 +95,11 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
       const result = await verifyDemoAccess(demoAuthInput, demoPasswordInput);
       if (result.allowed) {
         setDemoAuthSuccess(result.message);
-        setTimeout(() => {
-          setShowDemoAccessModal(false);
-          onStartDemo();
-        }, 800);
+        setVerifiedAccountData(result.account || {
+          clienteNombre: 'Cliente Demo',
+          negocioNombre: 'Pizzería Gourmet',
+          duracionHoras: 24,
+        });
       } else {
         setDemoAuthError(result.message);
       }
@@ -917,12 +920,46 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
             </div>
 
             {demoAuthSuccess ? (
-              <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl mb-3 text-center space-y-1">
-                <div className="flex items-center justify-center gap-2 text-blue-400 font-bold text-sm">
-                  <CheckCircle size={16} />
-                  <span>{demoAuthSuccess}</span>
+              <div className="p-5 bg-gradient-to-b from-blue-950/60 to-black border border-blue-500/40 rounded-2xl mb-2 text-center space-y-3.5 shadow-2xl">
+                <div className="w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center mx-auto border border-blue-500/30">
+                  <CheckCircle size={24} />
                 </div>
-                <p className="text-xs text-slate-300">Cargando el sistema...</p>
+                
+                <div>
+                  <h4 className="text-base font-black text-white uppercase tracking-wider">
+                    ¡Bienvenido a NextCRM Pizzería!
+                  </h4>
+                  <p className="text-xs text-blue-300 font-medium mt-1">
+                    {verifiedAccountData?.clienteNombre || demoAuthInput}
+                    {verifiedAccountData?.negocioNombre ? ` • ${verifiedAccountData.negocioNombre}` : ''}
+                  </p>
+                </div>
+
+                <div className="bg-black/60 border border-white/10 p-3 rounded-xl text-left text-xs text-slate-300 space-y-1.5 font-mono">
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Duración Activa:</span>
+                    <span className="text-emerald-400 font-bold">24 Horas Habilitadas</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Módulos Incluidos:</span>
+                    <span className="text-blue-400 font-bold">POS, WhatsApp, KDS, DGI</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Soporte y Asistencia:</span>
+                    <span className="text-white">098 356 320</span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowDemoAccessModal(false);
+                    onStartDemo();
+                  }}
+                  className="w-full bg-blue-600 hover:bg-blue-500 text-white font-extrabold py-3.5 px-4 rounded-xl text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
+                >
+                  <Rocket size={15} /> ¡Entendido, Ingresar al Sistema!
+                </button>
               </div>
             ) : (
               <form onSubmit={handleVerifyDemo} className="space-y-3 mb-3 text-left">

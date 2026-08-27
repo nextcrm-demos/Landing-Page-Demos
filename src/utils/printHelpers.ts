@@ -158,7 +158,167 @@ export const printTicket = (orderToPrint: Order | null, triggerAlert?: (msg: str
 
   printWindow.document.write(htmlContent);
   printWindow.document.close();
-  setTimeout(() => { printWindow.focus(); printWindow.print(); printWindow.close(); }, 250);
+};
+
+export const printCierreTurnoThermalTicket = (params: {
+  cajero: string;
+  openingCash: string;
+  dailyOrders: Order[];
+  totals: {
+    efectivo: number;
+    debito: number;
+    credito: number;
+    transferencia: number;
+    a_confirmar: number;
+    total_ventas: number;
+    total_propinas: number;
+  };
+  triggerAlert?: (msg: string) => void;
+}) => {
+  const { cajero, openingCash, dailyOrders, totals, triggerAlert } = params;
+  const printWindow = window.open('', '_blank', 'width=420,height=750');
+  if (!printWindow) {
+    if (triggerAlert) triggerAlert('Habilita las ventanas emergentes para imprimir el ticket de cierre.');
+    return;
+  }
+
+  const baseNum = Number(openingCash) || 0;
+  const efectivoTotalFisico = baseNum + totals.efectivo;
+  const cantComandas = dailyOrders.length;
+  const ticketPromedio = cantComandas > 0 ? Math.round(totals.total_ventas / cantComandas) : 0;
+
+  // Calculate items sold
+  let totalMetros = 0;
+  let totalPizzetas = 0;
+  let totalFainas = 0;
+  let totalBebidas = 0;
+
+  dailyOrders.forEach(o => {
+    o.cart.forEach(item => {
+      const n = item.nombre.toLowerCase();
+      if (n.includes('metro') || n.includes('1/2 metro')) {
+        totalMetros += (n.includes('1/2') ? 0.5 : 1) * item.cantidad;
+      } else if (n.includes('pizzeta') || n.includes('porcion') || n.includes('porción')) {
+        totalPizzetas += item.cantidad;
+      } else if (n.includes('faina') || n.includes('fainá')) {
+        totalFainas += item.cantidad;
+      } else if (n.includes('coca') || n.includes('refresco') || n.includes('cerveza') || n.includes('agua') || n.includes('salus')) {
+        totalBebidas += item.cantidad;
+      }
+    });
+  });
+
+  const now = new Date();
+  const fechaHora = now.toLocaleDateString('es-UY') + ' ' + now.toLocaleTimeString('es-UY', { hour: '2-digit', minute: '2-digit' });
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8" />
+        <title>Ticket de Cierre de Caja - NEXT CRM</title>
+        <style>
+          @page { size: 80mm auto; margin: 0; }
+          body { 
+            font-family: 'Courier New', Courier, monospace, Arial; 
+            margin: 0; 
+            padding: 10px 8px; 
+            color: #000; 
+            font-size: 12px; 
+            line-height: 1.35;
+          }
+          .center { text-align: center; }
+          .right { text-align: right; }
+          .bold { font-weight: bold; }
+          .black-box { 
+            background: #000; 
+            color: #fff; 
+            padding: 6px; 
+            text-align: center; 
+            font-weight: 900; 
+            font-size: 14px; 
+            margin: 8px 0; 
+            border-radius: 4px;
+          }
+          .divider { border-top: 1px dashed #000; margin: 6px 0; }
+          .double-divider { border-top: 2px solid #000; margin: 8px 0; }
+          .flex { display: flex; justify-content: space-between; margin: 2px 0; }
+          .kpi-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 900; margin: 4px 0; }
+          .sub { font-size: 10px; color: #444; }
+          .sig-line { border-top: 1px solid #000; margin-top: 35px; padding-top: 4px; text-align: center; font-size: 10px; }
+        </style>
+      </head>
+      <body>
+        <div class="center">
+          <h2 style="margin: 0; font-size: 20px; font-weight: 900; letter-spacing: 1px;">NEXT CRM</h2>
+          <p style="margin: 2px 0; font-size: 13px; font-weight: bold;">PIZZERÍA ARTESANAL</p>
+          <p class="sub" style="margin: 0;">RUT 219876540019 • TEL: 098 356 320</p>
+        </div>
+
+        <div class="black-box">
+          *** ACTA DE CIERRE DE CAJA ***
+        </div>
+
+        <div class="flex"><span>FECHA/HORA:</span><span class="bold">${fechaHora}</span></div>
+        <div class="flex"><span>CAJERO/A:</span><span class="bold">${cajero || 'Admin'}</span></div>
+        <div class="flex"><span>TERMINAL:</span><span class="bold">POS 01 - MOSTRADOR</span></div>
+
+        <div class="double-divider"></div>
+
+        <div class="center bold" style="font-size: 12px; margin-bottom: 4px;">RESUMEN OPERATIVO DE VENTAS</div>
+        <div class="kpi-row"><span>TOTAL FACTURADO:</span><span>$${totals.total_ventas.toLocaleString()}</span></div>
+        <div class="flex"><span>COMANDAS TOTALES:</span><span class="bold">${cantComandas}</span></div>
+        <div class="flex"><span>TICKET PROMEDIO:</span><span class="bold">$${ticketPromedio}</span></div>
+        <div class="flex"><span>TOTAL PROPINAS:</span><span class="bold">$${totals.total_propinas.toLocaleString()}</span></div>
+
+        <div class="divider"></div>
+
+        <div class="center bold" style="font-size: 12px; margin-bottom: 4px;">METROS & PRODUCTOS VENDIDOS</div>
+        <div class="flex"><span>Metros de Pizza:</span><span class="bold">${totalMetros} mts</span></div>
+        <div class="flex"><span>Pizzetas / Porciones:</span><span class="bold">${totalPizzetas} u.</span></div>
+        <div class="flex"><span>Porciones de Fainá:</span><span class="bold">${totalFainas} u.</span></div>
+        <div class="flex"><span>Bebidas & Refrescos:</span><span class="bold">${totalBebidas} u.</span></div>
+
+        <div class="double-divider"></div>
+
+        <div class="center bold" style="font-size: 12px; margin-bottom: 4px;">DESGLOSE DE MEDIOS DE PAGO</div>
+        <div class="flex"><span>Caja Base Inicial:</span><span>$${baseNum.toLocaleString()}</span></div>
+        <div class="flex"><span>Ingreso Efectivo Turno:</span><span>$${totals.efectivo.toLocaleString()}</span></div>
+        <div class="kpi-row" style="background: #eee; padding: 3px;">
+          <span>EFECTIVO FÍSICO EN CAJÓN:</span>
+          <span>$${efectivoTotalFisico.toLocaleString()}</span>
+        </div>
+        
+        <div class="divider"></div>
+        <div class="flex"><span>Tarjeta Débito (POS):</span><span class="bold">$${totals.debito.toLocaleString()}</span></div>
+        <div class="flex"><span>Tarjeta Crédito (POS):</span><span class="bold">$${totals.credito.toLocaleString()}</span></div>
+        <div class="flex"><span>Transferencias / QR:</span><span class="bold">$${totals.transferencia.toLocaleString()}</span></div>
+        ${totals.a_confirmar > 0 ? `<div class="flex"><span>A Confirmar (Mesas):</span><span class="bold">$${totals.a_confirmar.toLocaleString()}</span></div>` : ''}
+
+        <div class="double-divider"></div>
+
+        <div class="sig-line">
+          Firma Cajero/a: <strong>${cajero || 'Admin'}</strong>
+        </div>
+        <div class="sig-line" style="margin-top: 25px;">
+          Firma Responsable / Auditoría
+        </div>
+
+        <p class="center sub" style="margin-top: 15px;">*** SOFTWARE GASTRONÓMICO NEXT CRM ***</p>
+
+        <script>
+          window.onload = function() {
+            window.focus();
+            window.print();
+            window.close();
+          };
+        </script>
+      </body>
+    </html>
+  `;
+
+  printWindow.document.write(html);
+  printWindow.document.close();
 };
 
 export const printMonthlyClosingStatement = (closing: MonthlyClosing) => {

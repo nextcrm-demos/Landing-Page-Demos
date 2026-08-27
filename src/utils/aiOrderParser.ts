@@ -192,20 +192,24 @@ export function parseOrderLocally(
     });
   }
 
-  // 8. Product Detection with Smart Keyword Aliases
+  // 8. Product Detection with Smart Keyword Aliases & Common Misspellings
   const productAliases = [
-    { keywords: ['1 metro', 'un metro', 'metro', 'muzza', 'musa', 'mozzarella', 'muzzarela'], defaultName: '1 METRO PIZZA MUZZARELLA', defaultCat: 'Pizzas', defaultPrice: 1250 },
-    { keywords: ['medio metro', '1/2 metro', 'media pizza'], defaultName: '1/2 METRO PIZZA MUZZARELLA', defaultCat: 'Pizzas', defaultPrice: 680 },
-    { keywords: ['napolitana', 'napo'], defaultName: 'PIZZETA NAPOLITANA', defaultCat: 'Pizzetas', defaultPrice: 550 },
-    { keywords: ['calabresa', 'calabreza'], defaultName: 'PIZZETA CALABRESA', defaultCat: 'Pizzetas', defaultPrice: 530 },
-    { keywords: ['cuatro quesos', '4 quesos'], defaultName: 'PIZZETA 4 QUESOS', defaultCat: 'Pizzetas', defaultPrice: 580 },
-    { keywords: ['fugazzeta', 'fugazeta', 'figazza'], defaultName: 'FIGAZZA CON MUZZARELLA', defaultCat: 'figazza', defaultPrice: 390 },
-    { keywords: ['faina con queso'], defaultName: 'FAINÁ CON QUESO', defaultCat: 'fainas', defaultPrice: 160 },
-    { keywords: ['faina', 'fainas'], defaultName: 'FAINÁ COMÚN', defaultCat: 'fainas', defaultPrice: 130 },
-    { keywords: ['coca cola', 'coca', 'refresco', 'gaseosa'], defaultName: 'REFRESCO 1.5 L', defaultCat: 'bebidas', defaultPrice: 160 },
-    { keywords: ['cerveza', 'pilsen', 'patricia', 'stella'], defaultName: 'CERVEZA PATRICIA 1L', defaultCat: 'bebidas', defaultPrice: 210 },
-    { keywords: ['sandwich', 'sanduich', 'caliente'], defaultName: 'SÁNDWICH CALIENTE CON MUZZARELLA', defaultCat: 'sandwiches', defaultPrice: 400 },
-    { keywords: ['postre', 'chaja', 'flan'], defaultName: 'PROMO 2 PIZZETAS + POSTRE CHAJÁ', defaultCat: 'promos', defaultPrice: 1050 },
+    { keywords: ['1 metro', 'un metro', 'metro', 'muzza', 'musa', 'muza', 'mozzarella', 'muzzarela'], defaultName: '1 METRO PIZZA MUZZARELLA', defaultCat: 'pizzas', defaultPrice: 1250 },
+    { keywords: ['medio metro', '1/2 metro', 'media pizza'], defaultName: '1/2 METRO PIZZA MUZZARELLA', defaultCat: 'pizzas', defaultPrice: 680 },
+    { keywords: ['porcion de muzza', 'porcion muzza', 'porcion pizza'], defaultName: '(PORCIÓN) MUZZARELLA', defaultCat: 'pizzas', defaultPrice: 250 },
+    { keywords: ['napolitana', 'napo'], defaultName: 'PIZZETA NAPOLITANA', defaultCat: 'pizzetas', defaultPrice: 550 },
+    { keywords: ['calabresa', 'calabreza', 'peperoni'], defaultName: 'PIZZETA CALABRESA', defaultCat: 'pizzetas', defaultPrice: 530 },
+    { keywords: ['cuatro quesos', '4 quesos'], defaultName: 'PIZZETA 4 QUESOS', defaultCat: 'pizzetas', defaultPrice: 580 },
+    { keywords: ['pizzeta comun', 'pizeta comun'], defaultName: 'PIZZETA COMÚN', defaultCat: 'pizzetas', defaultPrice: 380 },
+    { keywords: ['pizzeta muzza', 'pizeta muzza', 'pizzeta'], defaultName: 'PIZZETA MUZZARELLA', defaultCat: 'pizzetas', defaultPrice: 480 },
+    { keywords: ['fugazzeta', 'fugazeta', 'figazza con muzza', 'figazza con queso'], defaultName: 'FIGAZZA CON MUZZARELLA', defaultCat: 'figazza', defaultPrice: 390 },
+    { keywords: ['figazza comun', 'figaza'], defaultName: 'FIGAZZA COMÚN', defaultCat: 'figazza', defaultPrice: 290 },
+    { keywords: ['faina con queso', 'faena con queso', 'fayna con queso'], defaultName: 'FAINÁ CON QUESO', defaultCat: 'fainas', defaultPrice: 160 },
+    { keywords: ['faina', 'fainas', 'faena', 'faenas', 'fayna'], defaultName: 'FAINÁ COMÚN', defaultCat: 'fainas', defaultPrice: 130 },
+    { keywords: ['coca cola', 'coca', 'refresco', 'gaseosa', 'pepsi', 'sprite', 'fanta'], defaultName: 'REFRESCO 1.5 L', defaultCat: 'bebidas', defaultPrice: 160 },
+    { keywords: ['cerveza', 'pilsen', 'patricia', 'stella', 'birra'], defaultName: 'CERVEZA PATRICIA 1L', defaultCat: 'bebidas', defaultPrice: 210 },
+    { keywords: ['sandwich caliente', 'sanduich caliente', 'tostado'], defaultName: 'SÁNDWICH CALIENTE CON MUZZARELLA', defaultCat: 'sandwiches', defaultPrice: 400 },
+    { keywords: ['postre', 'chaja', 'flan', 'tiramisu'], defaultName: 'PROMO 2 PIZZETAS + POSTRE CHAJÁ', defaultCat: 'promos', defaultPrice: 1050 },
   ];
 
   // Try matching against real menuItems list first
@@ -232,7 +236,7 @@ export function parseOrderLocally(
         const isPizza = itemNorm.includes('pizza') || itemNorm.includes('pizzeta') || itemNorm.includes('metro') || itemNorm.includes('muzza') || itemNorm.includes('musa');
         const gustosForThis = isPizza ? [...foundGlobalGustos] : [];
         const gustosTotal = gustosForThis.reduce((s, g) => s + (g.precio || 30), 0);
-        const itemPrice = (item.precio && item.precio > 10 ? item.precio : 1250) + gustosTotal;
+        const itemPrice = (item.precio && item.precio >= 50 ? item.precio : 1250) + gustosTotal;
 
         if (!cart.some(c => c.productoId === item.id)) {
           cart.push({
@@ -242,7 +246,7 @@ export function parseOrderLocally(
             precio: itemPrice,
             precioUnitario: itemPrice,
             cantidad: cant,
-            categoria: item.categoria || 'Pizzas',
+            categoria: item.categoria || 'pizzas',
             gustos: gustosForThis,
             notas: gustosForThis.length > 0 ? `+ ${gustosForThis.map(g => `${g.nombre} (+$${g.precio || 30})`).join(', ')}` : '',
           });
@@ -273,10 +277,10 @@ export function parseOrderLocally(
           cant = SPANISH_NUMBERS[rawNum] || parseInt(rawNum, 10) || 1;
         }
 
-        const isPizza = alias.defaultCat === 'Pizzas' || alias.defaultCat === 'Pizzetas' || alias.defaultName.toLowerCase().includes('muzza');
+        const isPizza = alias.defaultCat === 'pizzas' || alias.defaultCat === 'pizzetas' || alias.defaultName.toLowerCase().includes('muzza');
         const gustosForThis = isPizza ? [...foundGlobalGustos] : [];
         const gustosTotal = gustosForThis.reduce((s, g) => s + (g.precio || 30), 0);
-        const itemPrice = (existing.precio || alias.defaultPrice) + gustosTotal;
+        const itemPrice = (existing.precio && existing.precio >= 50 ? existing.precio : alias.defaultPrice) + gustosTotal;
 
         if (!cart.some(c => c.nombre === existing.nombre)) {
           cart.push({
@@ -296,23 +300,25 @@ export function parseOrderLocally(
   }
 
   // Fallback if user said pizza or something general
-  if (cart.length === 0 && (normalized.includes('pizza') || normalized.includes('muzza') || normalized.includes('quiero pedir'))) {
+  if (cart.length === 0 && (normalized.includes('pizza') || normalized.includes('muzza') || normalized.includes('musa') || normalized.includes('quiero pedir'))) {
     const muzzaProduct = menuItems.find(m => normalizeSpanish(m.nombre).includes('muzza')) || {
-      id: 'prod-muzza-default',
-      nombre: '1 Metro Pizza Muzzarella',
-      precio: 850,
-      categoria: 'Pizzas',
+      id: 'p5',
+      nombre: '1 METRO PIZZA MUZZARELLA',
+      precio: 1250,
+      categoria: 'pizzas',
     };
 
     const gustosTotal = foundGlobalGustos.reduce((s, g) => s + (g.precio || 30), 0);
+    const realPrice = (muzzaProduct.precio && muzzaProduct.precio >= 50 ? muzzaProduct.precio : 1250) + gustosTotal;
+
     cart.push({
       id: `cart-${Date.now()}`,
       productoId: muzzaProduct.id,
       nombre: muzzaProduct.nombre,
-      precio: (muzzaProduct.precio || 850) + gustosTotal,
-      precioUnitario: (muzzaProduct.precio || 850) + gustosTotal,
+      precio: realPrice,
+      precioUnitario: realPrice,
       cantidad: 1,
-      categoria: 'Pizzas',
+      categoria: 'pizzas',
       gustos: foundGlobalGustos,
       notas: foundGlobalGustos.length > 0 ? `+ ${foundGlobalGustos.map(g => `${g.nombre} (+$${g.precio || 30})`).join(', ')}` : '',
     });

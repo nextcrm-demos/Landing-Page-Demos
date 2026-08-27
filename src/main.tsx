@@ -1,28 +1,89 @@
-import {StrictMode} from 'react';
-import {createRoot} from 'react-dom/client';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
-// Protecciones contra inspección y copia de código
-if (typeof window !== 'undefined') {
-  // Deshabilitar menú contextual (click derecho)
-  document.addEventListener('contextmenu', (e) => e.preventDefault());
+interface ErrorBoundaryProps {
+  children: ReactNode;
+}
 
-  // Bloquear atajos comunes para abrir DevTools (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U)
-  document.addEventListener('keydown', (e) => {
-    if (
-      e.key === 'F12' ||
-      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
-      (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's'))
-    ) {
-      e.preventDefault();
-      e.stopPropagation();
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('ErrorBoundary caught an error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{
+          backgroundColor: '#050505',
+          color: '#fff',
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontFamily: 'system-ui, sans-serif',
+          padding: '20px',
+          textAlign: 'center'
+        }}>
+          <div style={{
+            background: '#0a0f1c',
+            border: '1px solid rgba(255,255,255,0.15)',
+            borderRadius: '24px',
+            padding: '32px',
+            maxWidth: '500px',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.8)'
+          }}>
+            <h2 style={{ fontSize: '20px', fontWeight: '900', color: '#60a5fa', marginBottom: '12px' }}>
+              NEXT CRM — Recuperación Automática
+            </h2>
+            <p style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '20px', lineHeight: '1.5' }}>
+              Se detectó una actualización en la interfaz. Haz clic en el botón de abajo para recargar la aplicación limpiamente.
+            </p>
+            <button
+              onClick={() => {
+                localStorage.removeItem('nextcrm_app_error');
+                window.location.reload();
+              }}
+              style={{
+                backgroundColor: '#2563eb',
+                color: '#fff',
+                fontWeight: 'bold',
+                fontSize: '13px',
+                padding: '12px 24px',
+                borderRadius: '12px',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              🔄 Recargar Sistema
+            </button>
+          </div>
+        </div>
+      );
     }
-  });
+
+    return this.props.children;
+  }
 }
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  <ErrorBoundary>
     <App />
-  </StrictMode>,
+  </ErrorBoundary>
 );

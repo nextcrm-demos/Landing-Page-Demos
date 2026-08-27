@@ -51,7 +51,7 @@ export function SoporteModule() {
         'Todo lo incluido en el Plan Básico',
         'Monitor KDS de Cocina en Tiempo Real',
         'Bandeja de Entrada WhatsApp Integrada',
-        'Toma de Pedidos por Voz con IA Paso a Paso',
+        'Toma de Pedidos por Voz con IA (API Cloud incluida)',
         'Control de Stock e Insumos Críticos',
         'Reportes de Ventas y Productos Estrella',
         'Garantía Compra Única: 6 Meses incluidos',
@@ -96,7 +96,7 @@ export function SoporteModule() {
       color: 'border-purple-500/60 bg-gradient-to-b from-purple-950/30 to-black ring-2 ring-purple-500/40',
       badgeColor: 'bg-purple-600 text-white font-black animate-pulse',
       features: [
-        'TODO el CRM Full (POS, KDS, WhatsApp, Voz IA, DGI)',
+        'TODO el CRM Full (POS, KDS, WhatsApp, Voz IA con API incluida, DGI)',
         'Tu propia Web App de Pedidos (tu-pizzeria.nextcrm.uy)',
         'Tus clientes piden desde su celular con GPS y sin comisiones',
         'Menú Digital QR interactivo para mesas',

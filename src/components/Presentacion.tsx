@@ -947,7 +947,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
-                      <span><strong>WhatsApp & Pedido por Voz:</strong> IA paso a paso.</span>
+                      <span><strong>WhatsApp & Pedido por Voz:</strong> API de IA 100% incluida.</span>
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-blue-400 shrink-0" />

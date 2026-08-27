@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Clock, MapPin, PhoneCall, Home, Sparkles, User, LogOut, Check, X, ShieldCheck, Truck, UtensilsCrossed } from 'lucide-react';
+import { ShoppingBag, Clock, MapPin, PhoneCall, Phone, Mail, Home, Sparkles, User, LogOut, Check, X, ShieldCheck, Truck, UtensilsCrossed } from 'lucide-react';
 import { OrderClient } from '../../types';
 
 interface ClientHeaderProps {

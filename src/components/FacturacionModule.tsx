@@ -3,7 +3,7 @@ import {
   FileText, ShieldCheck, CheckCircle2, AlertCircle, RefreshCw, 
   Send, Download, Printer, Plus, Search, ExternalLink, Settings, 
   Check, Building2, CreditCard, DollarSign, QrCode, Sparkles, HelpCircle, ArrowRight,
-  Code2, Database, Key, Server, Laptop, MessageSquare, ShieldAlert, Cpu
+  Code2, Database, Key, Server, Laptop, MessageSquare, ShieldAlert, Cpu, Trash2
 } from 'lucide-react';
 import { CFEInvoice, FacturandoConfig, Order } from '../types';
 import { 
@@ -22,8 +22,8 @@ interface FacturacionModuleProps {
 const DEFAULT_FACTURANDO_CONFIG: FacturandoConfig = {
   proveedor: 'Facturando',
   rut: '219876540019',
-  razonSocial: 'EL ÁRBOL GASTRONOMÍA S.R.L.',
-  nombreFantasia: 'Pizzería Gourmet POS',
+  razonSocial: 'NEXTCRM GASTRONÓMICO S.A.S.',
+  nombreFantasia: 'NextCRM Pizzería Gourmet POS',
   ambiente: 'produccion',
   apiToken: 'fact_live_sec_89dfa98b21c448a3e990c7d3129',
   serieETicket: 'A',
@@ -31,8 +31,8 @@ const DEFAULT_FACTURANDO_CONFIG: FacturandoConfig = {
   serieEFactura: 'B',
   proximoEFactura: 218,
   autoEmitirAlCobrar: true,
-  sucursalDGI: 'Casa Central (001)',
-  puntoVentaDGI: 'POS 01 - Caja Mostrador',
+  sucursalDGI: 'Casa Central (001) - Montevideo',
+  puntoVentaDGI: 'POS 01 - Caja Principal',
   activo: true,
 };
 
@@ -48,7 +48,7 @@ const INITIAL_CFE_LIST: CFEInvoice[] = [
     timestamp: Date.now() - 15 * 60 * 1000,
     proveedor: 'Facturando',
     emisorRUT: '219876540019',
-    emisorRazonSocial: 'EL ÁRBOL GASTRONOMÍA S.R.L.',
+    emisorRazonSocial: 'NEXTCRM GASTRONÓMICO S.A.S.',
     receptorNombre: 'Consumidor Final',
     montoNeto: 868.85,
     montoIVA: 191.15,
@@ -75,7 +75,7 @@ const INITIAL_CFE_LIST: CFEInvoice[] = [
     timestamp: Date.now() - 75 * 60 * 1000,
     proveedor: 'Facturando',
     emisorRUT: '219876540019',
-    emisorRazonSocial: 'EL ÁRBOL GASTRONOMÍA S.R.L.',
+    emisorRazonSocial: 'NEXTCRM GASTRONÓMICO S.A.S.',
     receptorNombre: 'Mariana Silva',
     receptorCI: '4.892.112-9',
     montoNeto: 434.43,
@@ -102,7 +102,7 @@ const INITIAL_CFE_LIST: CFEInvoice[] = [
     timestamp: Date.now() - 140 * 60 * 1000,
     proveedor: 'Facturando',
     emisorRUT: '219876540019',
-    emisorRazonSocial: 'EL ÁRBOL GASTRONOMÍA S.R.L.',
+    emisorRazonSocial: 'NEXTCRM GASTRONÓMICO S.A.S.',
     receptorRUT: '214589320018',
     receptorNombre: 'AGENCIA DE SERVICIOS S.A.',
     receptorDireccion: '18 de Julio 1450',
@@ -162,6 +162,19 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
     localStorage.setItem('nextcrm_facturando_config', JSON.stringify(newCfg));
   };
 
+  const handleDeleteCFE = (id: string) => {
+    const updated = cfeList.filter(c => c.id !== id);
+    setCfeList(updated);
+    localStorage.setItem('nextcrm_cfe_list', JSON.stringify(updated));
+  };
+
+  const handleClearAllCFE = () => {
+    if (window.confirm('¿Deseas limpiar todos los comprobantes de prueba emitidos?')) {
+      setCfeList([]);
+      localStorage.setItem('nextcrm_cfe_list', JSON.stringify([]));
+    }
+  };
+
   const handleEmitirCFE = async (e: React.FormEvent) => {
     e.preventDefault();
     const monto = parseFloat(manualMontoTotal);
@@ -200,7 +213,7 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
       const iva = requestPayload.totales.montoIVABasico22 + requestPayload.totales.montoIVAMinimo10;
 
       const newInvoice: CFEInvoice = {
-        id: `cfe-${response.cfe.numero}`,
+        id: `cfe-${response.cfe.numero}-${Date.now()}`,
         numeroCFE: response.cfe.codigoCompleto,
         tipoCFE: manualTipo,
         tipoNombre: response.cfe.tipoNombre,
@@ -274,7 +287,7 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
         <body>
           <div class="text-center bold" style="font-size: 13px;">${inv.emisorRazonSocial}</div>
           <div class="text-center">RUT: ${inv.emisorRUT}</div>
-          <div class="text-center">${config.sucursalDGI}</div>
+          <div class="text-center">Tel: 098 356 320 • ${config.sucursalDGI}</div>
           <div class="divider"></div>
           
           <div class="text-center bold" style="font-size: 14px;">${inv.tipoNombre.toUpperCase()}</div>
@@ -315,7 +328,7 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
             <strong>CAE:</strong> ${inv.codigoCAE}<br/>
             <strong>Vto. CAE:</strong> ${inv.vencimientoCAE}<br/>
             <strong>Rango Autorizado:</strong> 1 al 100000<br/>
-            I.V.A. al día • Facturando.uy
+            I.V.A. al día • NextCRM Integración
           </div>
         </body>
       </html>
@@ -341,7 +354,7 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-mono px-2.5 py-0.5 rounded-full font-bold uppercase flex items-center gap-1">
-                <ShieldCheck size={12} /> Facturación Electrónica DGI • Partner Facturando.uy
+                <ShieldCheck size={12} /> Facturación Electrónica DGI • Integración Homologada
               </span>
               <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold uppercase ${
                 config.ambiente === 'produccion' ? 'bg-blue-600/30 text-blue-300 border border-blue-500/40' : 'bg-amber-600/30 text-amber-300 border border-amber-500/40'
@@ -353,7 +366,7 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
               Facturación Electrónica & CFE DGI
             </h1>
             <p className="text-xs text-slate-400 mt-1">
-              Emisión de e-Tickets (101) y e-Facturas (111), firma digital CAE, código QR oficial y sincronización con Facturando.uy.
+              Emisión de e-Tickets (101) y e-Facturas (111), firma digital CAE, código QR oficial y sincronización con tu proveedor de facturación.
             </p>
           </div>
 
@@ -420,11 +433,21 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
                 />
               </div>
 
-              <div className="flex items-center gap-2 text-xs text-slate-400 font-mono">
-                <span>Total Facturado:</span>
-                <strong className="text-emerald-400 font-black text-sm">
-                  ${cfeList.reduce((acc, it) => acc + it.montoTotal, 0).toLocaleString('es-UY')} UYU
-                </strong>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleClearAllCFE}
+                  className="text-[10px] font-mono text-red-400 hover:text-white hover:bg-red-600/30 border border-red-500/30 px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 cursor-pointer"
+                  title="Limpiar comprobantes de demostración"
+                >
+                  <Trash2 size={11} /> Limpiar Historial
+                </button>
+
+                <div className="flex items-center gap-2 text-xs text-slate-400 font-mono">
+                  <span>Total Facturado:</span>
+                  <strong className="text-emerald-400 font-black text-sm">
+                    ${cfeList.reduce((acc, it) => acc + it.montoTotal, 0).toLocaleString('es-UY')} UYU
+                  </strong>
+                </div>
               </div>
             </div>
 
@@ -445,59 +468,75 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/5 font-sans">
-                    {filteredCFEs.map((cfe) => (
-                      <tr key={cfe.id} className="hover:bg-white/5 transition-colors">
-                        <td className="py-3 px-4 font-mono font-bold text-white flex items-center gap-1.5">
-                          <span className={`w-2 h-2 rounded-full ${cfe.tipoCFE === '111' ? 'bg-purple-400' : 'bg-emerald-400'}`}></span>
-                          <span>{cfe.numeroCFE}</span>
-                          <span className="text-[9px] text-slate-400">({cfe.tipoNombre})</span>
-                        </td>
-                        <td className="py-3 px-4 text-slate-400 font-mono text-[11px]">{cfe.fechaEmision}</td>
-                        <td className="py-3 px-4">
-                          <div className="font-semibold text-white truncate max-w-[180px]">{cfe.receptorNombre}</div>
-                          <div className="text-[10px] text-slate-400 font-mono">
-                            {cfe.receptorRUT ? `RUT: ${cfe.receptorRUT}` : cfe.receptorCI ? `CI: ${cfe.receptorCI}` : 'Consumidor Final'}
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-right font-mono text-slate-300">${cfe.montoNeto.toFixed(2)}</td>
-                        <td className="py-3 px-4 text-right font-mono text-emerald-400 font-medium">${cfe.montoIVA.toFixed(2)}</td>
-                        <td className="py-3 px-4 text-right font-mono font-black text-white text-sm">${cfe.montoTotal}</td>
-                        <td className="py-3 px-4 text-center">
-                          <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[9px] font-mono font-bold px-2 py-0.5 rounded-full">
-                            ✓ {cfe.estadoDGI}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 text-center">
-                          <div className="flex items-center justify-center gap-1.5">
-                            <button
-                              onClick={() => handlePrintCFE(cfe)}
-                              title="Imprimir Ticket Térmico con CAE y QR"
-                              className="p-1.5 bg-white/5 hover:bg-white/15 text-slate-200 hover:text-white rounded-lg border border-white/10 cursor-pointer transition-all"
-                            >
-                              <Printer size={13} />
-                            </button>
-
-                            <a
-                              href={buildWhatsAppInvoiceShareUrl('098356320', cfe)}
-                              target="_blank"
-                              rel="noreferrer"
-                              title="Compartir Comprobante por WhatsApp"
-                              className="p-1.5 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white rounded-lg border border-emerald-500/30 cursor-pointer transition-all flex items-center justify-center"
-                            >
-                              <MessageSquare size={13} />
-                            </a>
-
-                            <button
-                              onClick={() => setSelectedCFE(cfe)}
-                              title="Ver Ficha Detallada"
-                              className="p-1.5 bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white rounded-lg border border-blue-500/30 cursor-pointer transition-all"
-                            >
-                              <ExternalLink size={13} />
-                            </button>
-                          </div>
+                    {filteredCFEs.length === 0 ? (
+                      <tr>
+                        <td colSpan={8} className="text-center py-10 text-slate-500 font-mono text-xs">
+                          No hay comprobantes fiscales emitidos. Pulsa "Emitir CFE Manual" o realiza cobros en el POS.
                         </td>
                       </tr>
-                    ))}
+                    ) : (
+                      filteredCFEs.map((cfe) => (
+                        <tr key={cfe.id} className="hover:bg-white/5 transition-colors">
+                          <td className="py-3 px-4 font-mono font-bold text-white flex items-center gap-1.5">
+                            <span className={`w-2 h-2 rounded-full ${cfe.tipoCFE === '111' ? 'bg-purple-400' : 'bg-emerald-400'}`}></span>
+                            <span>{cfe.numeroCFE}</span>
+                            <span className="text-[9px] text-slate-400">({cfe.tipoNombre})</span>
+                          </td>
+                          <td className="py-3 px-4 text-slate-400 font-mono text-[11px]">{cfe.fechaEmision}</td>
+                          <td className="py-3 px-4">
+                            <div className="font-semibold text-white truncate max-w-[180px]">{cfe.receptorNombre}</div>
+                            <div className="text-[10px] text-slate-400 font-mono">
+                              {cfe.receptorRUT ? `RUT: ${cfe.receptorRUT}` : cfe.receptorCI ? `CI: ${cfe.receptorCI}` : 'Consumidor Final'}
+                            </div>
+                          </td>
+                          <td className="py-3 px-4 text-right font-mono text-slate-300">${cfe.montoNeto.toFixed(2)}</td>
+                          <td className="py-3 px-4 text-right font-mono text-emerald-400 font-medium">${cfe.montoIVA.toFixed(2)}</td>
+                          <td className="py-3 px-4 text-right font-mono font-black text-white text-sm">${cfe.montoTotal}</td>
+                          <td className="py-3 px-4 text-center">
+                            <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[9px] font-mono font-bold px-2 py-0.5 rounded-full">
+                              ✓ {cfe.estadoDGI}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 text-center">
+                            <div className="flex items-center justify-center gap-1.5">
+                              <button
+                                onClick={() => handlePrintCFE(cfe)}
+                                title="Imprimir Ticket Térmico con CAE y QR"
+                                className="p-1.5 bg-white/5 hover:bg-white/15 text-slate-200 hover:text-white rounded-lg border border-white/10 cursor-pointer transition-all"
+                              >
+                                <Printer size={13} />
+                              </button>
+
+                              <a
+                                href={buildWhatsAppInvoiceShareUrl('098356320', cfe)}
+                                target="_blank"
+                                rel="noreferrer"
+                                title="Compartir Comprobante por WhatsApp"
+                                className="p-1.5 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white rounded-lg border border-emerald-500/30 cursor-pointer transition-all flex items-center justify-center"
+                              >
+                                <MessageSquare size={13} />
+                              </a>
+
+                              <button
+                                onClick={() => setSelectedCFE(cfe)}
+                                title="Ver Ficha Detallada"
+                                className="p-1.5 bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white rounded-lg border border-blue-500/30 cursor-pointer transition-all"
+                              >
+                                <ExternalLink size={13} />
+                              </button>
+
+                              <button
+                                onClick={() => handleDeleteCFE(cfe.id)}
+                                title="Eliminar Comprobante"
+                                className="p-1.5 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white rounded-lg border border-red-500/30 cursor-pointer transition-all"
+                              >
+                                <Trash2 size={13} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -531,7 +570,7 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
                 </div>
                 <h4 className="font-black text-sm text-white">Consumo de la API</h4>
                 <p className="text-[11px] text-slate-300 leading-relaxed">
-                  NextCRM envía la solicitud mediante HTTP POST al endpoint seguro de Facturando.uy con autenticación por Bearer Token.
+                  NextCRM envía la solicitud mediante HTTP POST al endpoint seguro de tu proveedor con autenticación por Bearer Token.
                 </p>
               </div>
 
@@ -542,7 +581,7 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
                 </div>
                 <h4 className="font-black text-sm text-white">Respuesta & Almacén</h4>
                 <p className="text-[11px] text-slate-300 leading-relaxed">
-                  Facturando valida con DGI, firma el CFE y devuelve el número de CAE, vencimiento, QR fiscal y link directo al PDF.
+                  El proveedor valida con DGI, firma el CFE y devuelve el número de CAE, vencimiento, QR fiscal y link directo al PDF.
                 </p>
               </div>
 
@@ -568,7 +607,7 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
                   <div className="flex items-center gap-2">
                     <Code2 size={16} className="text-blue-400" />
                     <span className="font-bold text-white text-xs uppercase font-mono">
-                      Request JSON Payload (Hacia Facturando / DGI)
+                      Request JSON Payload (Hacia Proveedor / DGI)
                     </span>
                   </div>
                   <span className="text-[9px] font-mono bg-blue-600/20 text-blue-300 px-2 py-0.5 rounded border border-blue-500/30 font-bold">
@@ -587,7 +626,7 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
                   <div className="flex items-center gap-2">
                     <Database size={16} className="text-emerald-400" />
                     <span className="font-bold text-white text-xs uppercase font-mono">
-                      Response JSON Payload (Desde Facturando / DGI)
+                      Response JSON Payload (Desde Proveedor / DGI)
                     </span>
                   </div>
                   <span className="text-[9px] font-mono bg-emerald-600/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30 font-bold">
@@ -614,19 +653,21 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
           </div>
         )}
 
-        {/* TAB 3: EMISIÓN MANUAL */}
+        {/* TAB 3: EMISIÓN MANUAL (WIDE FULL-WIDTH LAYOUT NO-SCROLL) */}
         {activeTab === 'emitir_manual' && (
-          <div className="max-w-2xl mx-auto bg-[#0a0f1c] border border-white/10 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl animate-in fade-in duration-200">
-            <div>
-              <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-                Emisión Inmediata de Comprobante Fiscal
+          <div className="w-full bg-[#0a0f1c] border border-white/10 rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl animate-in fade-in duration-200">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-white/10">
+              <div>
+                <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                  Emisión Inmediata de Comprobante Fiscal
+                </span>
+                <h3 className="text-xl font-black text-white mt-1">
+                  Emitir e-Ticket o e-Factura CFE
+                </h3>
+              </div>
+              <span className="text-xs text-slate-400">
+                Firma electrónica CAE en tiempo real ante DGI
               </span>
-              <h3 className="text-xl font-black text-white mt-1.5">
-                Emitir e-Ticket o e-Factura CFE
-              </h3>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Ingresa los datos del comprobante para firmarlo y registrarlo ante DGI.
-              </p>
             </div>
 
             {manualSuccessMsg && (
@@ -670,8 +711,8 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
                 </div>
               </div>
 
-              {/* RECEPTOR */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* GRID DE CAMPOS WIDE */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 <div>
                   <label className="block text-slate-300 font-bold uppercase mb-1 text-[11px]">
                     Nombre o Razón Social:
@@ -697,10 +738,7 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
                     className="w-full bg-black border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500 font-mono"
                   />
                 </div>
-              </div>
 
-              {/* CONCEPTO Y MONTO */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-slate-300 font-bold uppercase mb-1 text-[11px]">
                     Concepto / Producto:
@@ -730,28 +768,32 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
                 </div>
               </div>
 
-              <div>
-                <label className="block text-slate-300 font-bold uppercase mb-1 text-[11px]">
-                  WhatsApp del Cliente (para envío de comprobante):
-                </label>
-                <input
-                  type="text"
-                  value={manualTelefono}
-                  onChange={(e) => setManualTelefono(e.target.value)}
-                  placeholder="098356320"
-                  className="w-full bg-black border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500 font-mono"
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div>
+                  <label className="block text-slate-300 font-bold uppercase mb-1 text-[11px]">
+                    WhatsApp del Cliente (para envío de comprobante):
+                  </label>
+                  <input
+                    type="text"
+                    value={manualTelefono}
+                    onChange={(e) => setManualTelefono(e.target.value)}
+                    placeholder="098356320"
+                    className="w-full bg-black border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500 font-mono"
+                  />
+                </div>
+
+                <div className="flex items-end">
+                  <button
+                    type="submit"
+                    disabled={isSubmittingManual}
+                    className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold uppercase tracking-wider rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  >
+                    <ShieldCheck size={16} />
+                    <span>{isSubmittingManual ? 'Firmando en DGI...' : `Emitir ${manualTipo === '101' ? 'e-Ticket' : 'e-Factura'} Ahora`}</span>
+                  </button>
+                </div>
               </div>
 
-              {/* SUBMIT BUTTON */}
-              <button
-                type="submit"
-                disabled={isSubmittingManual}
-                className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold uppercase tracking-wider rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-2"
-              >
-                <ShieldCheck size={16} />
-                <span>{isSubmittingManual ? 'Firmando y Transmitiendo a DGI...' : `Emitir ${manualTipo === '101' ? 'e-Ticket' : 'e-Factura'} Ahora`}</span>
-              </button>
             </form>
           </div>
         )}
@@ -762,7 +804,7 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
               <div>
                 <h3 className="text-xl font-bold text-white">Parámetros del Proveedor de Facturación</h3>
-                <p className="text-xs text-slate-400">Credenciales del partner homologado Facturando.uy y series fiscales</p>
+                <p className="text-xs text-slate-400">Credenciales del proveedor homologado ante DGI y series fiscales</p>
               </div>
 
               <div className="flex items-center gap-2">
@@ -802,7 +844,7 @@ export function FacturacionModule({ orders, onEmitCFE }: FacturacionModuleProps)
               </div>
 
               <div>
-                <label className="block text-slate-300 font-bold uppercase mb-1">Token de API / API Secret (Facturando.uy):</label>
+                <label className="block text-slate-300 font-bold uppercase mb-1">Token de API / API Secret:</label>
                 <input
                   type="password"
                   value={config.apiToken}

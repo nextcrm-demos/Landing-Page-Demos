@@ -60,21 +60,24 @@ export const defaultMenuList: MenuItem[] = [
 ];
 
 export const gustosAdicionales: Gusto[] = [
-  { id: 'g1', nombre: 'Panceta', precio: 70 },
-  { id: 'g2', nombre: 'Aceitunas', precio: 50 },
-  { id: 'g3', nombre: 'Morrones', precio: 50 },
-  { id: 'g4', nombre: 'Huevo Duro', precio: 40 },
-  { id: 'g5', nombre: 'Extra Muzzarella', precio: 80 },
-  { id: 'g6', nombre: 'Roquefort', precio: 75 },
-  { id: 'g7', nombre: 'Palmitos', precio: 70 },
-  { id: 'g8', nombre: 'Tomate en Rodajas', precio: 40 },
-  { id: 'g9', nombre: 'Provolone', precio: 70 },
-  { id: 'g10', nombre: 'Cheddar', precio: 70 },
-  { id: 'g11', nombre: 'Salamín', precio: 65 },
-  { id: 'g12', nombre: 'Pesto Casero', precio: 50 },
-  { id: 'g13', nombre: 'Ananá', precio: 60 },
-  { id: 'g14', nombre: 'Cebolla Salteada', precio: 40 },
-  { id: 'g15', nombre: 'Champiñones', precio: 75 }
+  { id: 'g1', nombre: 'Jamón Cocido', precio: 30 },
+  { id: 'g2', nombre: 'Panceta Ahumada', precio: 30 },
+  { id: 'g3', nombre: 'Cebolla Salteada', precio: 30 },
+  { id: 'g4', nombre: 'Champiñones', precio: 30 },
+  { id: 'g5', nombre: 'Roquefort / Queso Azul', precio: 30 },
+  { id: 'g6', nombre: 'Aceitunas Verdes / Negras', precio: 30 },
+  { id: 'g7', nombre: 'Morrones Asados', precio: 30 },
+  { id: 'g8', nombre: 'Huevo Duro', precio: 30 },
+  { id: 'g9', nombre: 'Extra Muzzarella', precio: 30 },
+  { id: 'g10', nombre: 'Palmitos', precio: 30 },
+  { id: 'g11', nombre: 'Tomate en Rodajas', precio: 30 },
+  { id: 'g12', nombre: 'Provolone', precio: 30 },
+  { id: 'g13', nombre: 'Cheddar', precio: 30 },
+  { id: 'g14', nombre: 'Salamín / Longaniza', precio: 30 },
+  { id: 'g15', nombre: 'Ananá', precio: 30 },
+  { id: 'g16', nombre: 'Albahaca Fresca', precio: 30 },
+  { id: 'g17', nombre: 'Choclo Dulce', precio: 30 },
+  { id: 'g18', nombre: 'Cuatro Quesos', precio: 30 }
 ];
 
 export const defaultClients: Client[] = [

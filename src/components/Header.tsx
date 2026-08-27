@@ -127,7 +127,7 @@ export function Header({
       </div>
       
       {/* SCROLLABLE / FLEXIBLE TABS BAR */}
-      <div className="flex gap-1 h-full items-center flex-1 justify-end overflow-x-auto custom-scrollbar px-1">
+      <div className="flex gap-1 h-full items-center flex-1 justify-end overflow-x-auto custom-scrollbar px-1 min-w-0">
         {tabs.map(tab => {
           const badgeCount = getPendingBadgeCount(tab);
           const locked = isTabLocked(tab);

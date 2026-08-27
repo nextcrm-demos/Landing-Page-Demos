@@ -207,40 +207,42 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         </div>
 
         {/* BADGE DELICADO Y FINO */}
-        <div className="inline-flex items-center gap-2 border border-blue-500/20 text-blue-300 text-[10px] sm:text-[11px] font-mono tracking-[0.22em] uppercase px-3.5 py-1 rounded-full mb-6 bg-blue-500/5 backdrop-blur-sm">
-          <Sparkles size={11} className="text-blue-400" /> Software Gastronómico Premium + Pedidos por Voz con IA
+        <div className="inline-flex items-center gap-2 border border-purple-500/30 text-purple-300 text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase px-4 py-1.5 rounded-full mb-5 bg-purple-500/10 backdrop-blur-md shadow-sm">
+          <Sparkles size={12} className="text-cyan-300" /> Software Gastronómico Premium • Pedidos por Voz con IA
         </div>
 
-        {/* TÍTULO PRINCIPAL GRANDE E IMPONENTE */}
-        <h1 className="text-5xl sm:text-7xl md:text-8xl font-black text-center mb-6 tracking-tight leading-[1.05] max-w-5xl text-white">
+        {/* TÍTULO PRINCIPAL REFINADO Y ELEGANTE */}
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-center mb-5 tracking-tight leading-[1.1] max-w-4xl text-white">
           El caos tiene<br/>
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-300">los días contados.</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-purple-400">
+            los días contados.
+          </span>
         </h1>
 
-        {/* BAJADA CON TIPOGRAFÍA ELEGANTE ESTILO NEXTCRM (FINA, ESPACIADA Y MODERNA) */}
-        <p className="font-light tracking-[0.06em] sm:tracking-[0.1em] text-slate-300 text-xs sm:text-sm md:text-base text-center max-w-2xl mb-8 leading-relaxed uppercase">
-          Centraliza mostrador, delivery, mesas, monitor KDS, stock, cierre de caja con desglose de tarjetas e impresión en ticketera preconfigurada.
+        {/* BAJADA CON TIPOGRAFÍA ELEGANTE ESTILO NEXTCRM */}
+        <p className="font-normal text-slate-300 text-xs sm:text-sm md:text-base text-center max-w-2xl mb-8 leading-relaxed">
+          Centraliza mostrador, delivery, mesas, monitor KDS de cocina, stock, arqueo de caja con desglose de tarjetas e impresión térmica preconfigurada.
         </p>
 
         {/* BOTONES DIRECTOS PARA LAS DOS DEMOS */}
-        <div className="flex flex-wrap items-center justify-center gap-3 z-10">
+        <div className="flex flex-wrap items-center justify-center gap-3.5 z-10">
           <button 
             onClick={() => handleLaunchDemo('crm')}
-            className="bg-blue-600 hover:bg-blue-500 text-white font-bold tracking-wide px-5 py-3 rounded-2xl flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:scale-105 cursor-pointer text-xs sm:text-sm uppercase"
+            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold tracking-wider px-6 py-3.5 rounded-2xl flex items-center gap-2.5 transition-all shadow-[0_0_25px_rgba(59,130,246,0.35)] hover:scale-103 cursor-pointer text-xs sm:text-sm uppercase border border-blue-400/30"
           >
             <Rocket size={16} /> Probar Demo CRM / POS
           </button>
 
           <button 
             onClick={() => handleLaunchDemo('client_app')}
-            className="bg-purple-600/30 hover:bg-purple-600 text-purple-200 hover:text-white font-bold tracking-wide px-5 py-3 rounded-2xl flex items-center gap-2 border border-purple-500/40 transition-all shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:scale-105 cursor-pointer text-xs sm:text-sm uppercase"
+            className="bg-gradient-to-r from-purple-600/30 via-purple-900/20 to-purple-600/30 hover:bg-purple-600 text-purple-200 hover:text-white font-bold tracking-wider px-6 py-3.5 rounded-2xl flex items-center gap-2.5 border border-purple-500/40 transition-all shadow-[0_0_25px_rgba(168,85,247,0.25)] hover:scale-103 cursor-pointer text-xs sm:text-sm uppercase"
           >
-            <Smartphone size={16} /> Probar Demo App Clientes
+            <Smartphone size={16} className="text-purple-300" /> Probar Demo App Clientes
           </button>
 
           <button 
             onClick={() => document.getElementById('seccion-voz-ia')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-medium tracking-wide px-4 py-3 rounded-2xl flex items-center gap-1.5 border border-white/10 transition-all hover:scale-105 cursor-pointer text-xs sm:text-sm"
+            className="bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-medium px-4 py-3.5 rounded-2xl flex items-center gap-1.5 border border-white/10 transition-all hover:scale-103 cursor-pointer text-xs sm:text-sm"
           >
             Explorar Módulos <ArrowDown size={13} />
           </button>
@@ -748,7 +750,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
               </div>
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 size={16} className="text-purple-400 shrink-0" />
-                <span><strong>Menú QR para Salón:</strong> El comensal escanea, pide y la comanda llega al chef.</span>
+                <span><strong>Menú QR para Salón:</strong> El comensal escanea desde su mesa y la comanda llega directo al chef.</span>
               </div>
             </div>
 

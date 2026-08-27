@@ -62,23 +62,23 @@ export function ClientHeader({
   };
 
   return (
-    <header className="bg-[#080d1a]/95 backdrop-blur-xl text-slate-200 font-sans border-b border-white/10 z-30 sticky top-0 shadow-lg select-none">
+    <header className="bg-[#070b16]/95 backdrop-blur-xl text-slate-200 font-sans z-30 sticky top-0 shadow-lg select-none">
       
       {/* TOP ANNOUNCEMENT BAR */}
-      <div className="bg-gradient-to-r from-blue-950/60 via-blue-900/30 to-purple-950/60 border-b border-blue-500/20 text-blue-300 text-[10px] px-3 py-1 flex flex-wrap items-center justify-between gap-1.5 font-mono">
+      <div className="bg-gradient-to-r from-blue-950/40 via-purple-950/30 to-indigo-950/40 text-blue-300 text-[10px] px-3 py-1 flex flex-wrap items-center justify-between gap-1.5 font-mono">
         <div className="flex items-center gap-2.5 mx-auto sm:mx-0">
           <span className="flex items-center gap-1 bg-emerald-500/20 text-emerald-400 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30 text-[9px]">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> ABIERTO • HORNO ENCENDIDO
           </span>
           <span className="hidden sm:inline-flex items-center gap-1 text-slate-300">
-            <Clock size={11} className="text-blue-400" /> Horarios: 19:30 - 01:00 hs
+            <Clock size={11} className="text-purple-400" /> Horarios: 19:30 - 01:00 hs
           </span>
           <span className="hidden md:inline-flex items-center gap-1 text-slate-300">
-            <MapPin size={11} className="text-blue-400" /> Envíos a Domicilio y Retiro
+            <MapPin size={11} className="text-cyan-400" /> Envíos a Domicilio y Retiro
           </span>
         </div>
         <div className="flex items-center gap-2 mx-auto sm:mx-0 text-[10px] text-slate-400">
-          <span>Demora promedio: <strong className="text-blue-300 font-bold">25-35 min</strong></span>
+          <span>Demora promedio: <strong className="text-cyan-300 font-bold">25-35 min</strong></span>
         </div>
       </div>
 
@@ -87,13 +87,13 @@ export function ClientHeader({
         
         {/* BRAND LOGO */}
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-blue-600/30 border border-blue-500/40 flex items-center justify-center text-white text-base shadow-sm">
+          <div className="w-8 h-8 rounded-xl bg-purple-600/30 border border-purple-500/40 flex items-center justify-center text-white text-base shadow-sm">
             🍕
           </div>
           <div>
             <div className="flex items-center gap-1.5">
               <span className="font-extrabold text-white text-sm tracking-tight">Pizzería Gourmet</span>
-              <span className="text-[9px] text-blue-400 font-bold uppercase tracking-wider bg-blue-500/10 border border-blue-500/30 px-2 py-0.5 rounded-full">
+              <span className="text-[9px] text-purple-300 font-bold uppercase tracking-wider bg-purple-500/15 border border-purple-500/30 px-2 py-0.5 rounded-full">
                 App Clientes
               </span>
             </div>
@@ -104,9 +104,9 @@ export function ClientHeader({
         <div className="flex items-center gap-1">
           <button
             onClick={() => setActiveTab('menu')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               activeTab === 'menu'
-                ? 'bg-blue-600 text-white shadow-md'
+                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white hover:bg-white/5'
             }`}
           >
@@ -115,13 +115,13 @@ export function ClientHeader({
 
           <button
             onClick={() => setActiveTab('tracking')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 relative ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 relative ${
               activeTab === 'tracking'
-                ? 'bg-blue-600 text-white shadow-md'
+                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white hover:bg-white/5'
             }`}
           >
-            <Truck size={13} className="text-blue-400" />
+            <Truck size={13} className="text-cyan-400" />
             <span>Seguimiento</span>
             {activeOrdersCount > 0 && (
               <span className="w-4 h-4 bg-emerald-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">
@@ -132,9 +132,9 @@ export function ClientHeader({
 
           <button
             onClick={() => setActiveTab('info')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               activeTab === 'info'
-                ? 'bg-blue-600 text-white shadow-md'
+                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-white hover:bg-white/5'
             }`}
           >

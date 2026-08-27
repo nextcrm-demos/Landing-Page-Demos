@@ -676,7 +676,42 @@ export default function App() {
     );
   }
 
+  const demoSession = getLocalDemoSession();
+
+  // 1. Strict 24-Hour Expiration Check (locks entire system if trial expired)
+  if ((demoSession.isExpired || isExpiredLocked) && !demoSession.isAdmin) {
+    return (
+      <ExpiredDemoLockScreen
+        clientName={demoSession.clientName}
+        onUnlocked={() => {
+          setIsExpiredLocked(false);
+        }}
+        onGoToLanding={() => {
+          setIsExpiredLocked(false);
+          setShowPresentation(true);
+        }}
+      />
+    );
+  }
+
+  // 2. Client App Container (Only accessible if Plan Full or Admin)
   if (appMode === 'client_app') {
+    if (!demoSession.isAdmin && demoSession.plan && demoSession.plan !== 'plan_full') {
+      return (
+        <div className="flex flex-col h-screen overflow-hidden bg-[#050505] text-white">
+          <ModuleLockScreen
+            moduleName="Módulo 4: App Web de Clientes & Menú QR"
+            requiredPlan="plan_full"
+            currentPlan={demoSession.plan}
+            onUpgradeSuccess={(newPlan) => {
+              handlePlanUpgrade(newPlan);
+              setAppMode('client_app');
+            }}
+          />
+        </div>
+      );
+    }
+
     return (
       <ClientAppContainer
         menuItems={menuItems}
@@ -693,6 +728,7 @@ export default function App() {
     );
   }
 
+  // 3. POS Cash Register Opening
   if (isLocked) {
     return (
       <AperturaCaja
@@ -710,24 +746,6 @@ export default function App() {
         menuItems={menuItems}
         onOpenRegister={handleOpenRegister}
         onGoToPresentation={() => setShowPresentation(true)}
-      />
-    );
-  }
-
-  const demoSession = getLocalDemoSession();
-
-  // If expired and not admin, lock out
-  if ((demoSession.isExpired || isExpiredLocked) && !demoSession.isAdmin) {
-    return (
-      <ExpiredDemoLockScreen
-        clientName={demoSession.clientName}
-        onUnlocked={() => {
-          setIsExpiredLocked(false);
-        }}
-        onGoToLanding={() => {
-          setIsExpiredLocked(false);
-          setShowPresentation(true);
-        }}
       />
     );
   }

@@ -79,6 +79,27 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
   };
 
   const [verifiedAccountData, setVerifiedAccountData] = useState<any>(null);
+  const [targetLaunchMode, setTargetLaunchMode] = useState<'crm' | 'client_app'>('crm');
+  const [showPlan4RequiredModal, setShowPlan4RequiredModal] = useState(false);
+
+  const handleLaunchDemo = (mode: 'crm' | 'client_app') => {
+    const session = getLocalDemoSession();
+
+    // 1. If no active session or expired, require demo access gate
+    if (!session.isValid || session.isExpired) {
+      setTargetLaunchMode(mode);
+      setShowDemoAccessModal(true);
+      return;
+    }
+
+    // 2. If requesting App Clientes but account does not have Plan 4 and is not Admin
+    if (mode === 'client_app' && !session.isAdmin && session.plan && session.plan !== 'plan_full') {
+      setShowPlan4RequiredModal(true);
+      return;
+    }
+
+    onStartDemo(mode);
+  };
 
   const handleVerifyDemo = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,6 +120,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
           clienteNombre: 'Cliente Demo',
           negocioNombre: 'Pizzería Gourmet',
           duracionHoras: 24,
+          plan: result.account?.plan || 'plan_full'
         });
       } else {
         setDemoAuthError(result.message);
@@ -193,14 +215,14 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         {/* BOTONES DIRECTOS PARA LAS DOS DEMOS */}
         <div className="flex flex-wrap items-center justify-center gap-3 z-10">
           <button 
-            onClick={() => onStartDemo('crm')}
+            onClick={() => handleLaunchDemo('crm')}
             className="bg-blue-600 hover:bg-blue-500 text-white font-bold tracking-wide px-5 py-3 rounded-2xl flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:scale-105 cursor-pointer text-xs sm:text-sm uppercase"
           >
             <Rocket size={16} /> Probar Demo CRM / POS
           </button>
 
           <button 
-            onClick={() => onStartDemo('client_app')}
+            onClick={() => handleLaunchDemo('client_app')}
             className="bg-purple-600/30 hover:bg-purple-600 text-purple-200 hover:text-white font-bold tracking-wide px-5 py-3 rounded-2xl flex items-center gap-2 border border-purple-500/40 transition-all shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:scale-105 cursor-pointer text-xs sm:text-sm uppercase"
           >
             <Smartphone size={16} /> Probar Demo App Clientes
@@ -1158,16 +1180,29 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                     <Rocket size={15} /> Ingresar a Demo CRM / POS
                   </button>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowDemoAccessModal(false);
-                      onStartDemo('client_app');
-                    }}
-                    className="w-full bg-purple-600/30 hover:bg-purple-600 text-purple-200 hover:text-white font-extrabold py-3 px-4 rounded-xl text-xs uppercase tracking-wider border border-purple-500/40 shadow flex items-center justify-center gap-2 transition-all cursor-pointer"
-                  >
-                    <Smartphone size={15} /> Ingresar a Demo App Clientes
-                  </button>
+                  {(verifiedAccountData?.plan === 'plan_full' || verifiedAccountData?.isAdmin || !verifiedAccountData?.plan) ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowDemoAccessModal(false);
+                        onStartDemo('client_app');
+                      }}
+                      className="w-full bg-purple-600/30 hover:bg-purple-600 text-purple-200 hover:text-white font-extrabold py-3 px-4 rounded-xl text-xs uppercase tracking-wider border border-purple-500/40 shadow flex items-center justify-center gap-2 transition-all cursor-pointer"
+                    >
+                      <Smartphone size={15} /> Ingresar a Demo App Clientes
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowDemoAccessModal(false);
+                        setShowPlan4RequiredModal(true);
+                      }}
+                      className="w-full bg-black/50 hover:bg-purple-950/60 text-slate-400 hover:text-purple-300 font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider border border-white/10 shadow flex items-center justify-center gap-2 transition-all cursor-pointer"
+                    >
+                      <Lock size={14} className="text-amber-400" /> App Clientes (Requiere Plan Full)
+                    </button>
+                  )}
                 </div>
               </div>
             ) : (
@@ -1381,7 +1416,6 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                   >
                     <MessageSquare size={14} /> Abrir WhatsApp con mi Solicitud (098 356 320)
                   </a>
-                  
                   <button
                     onClick={() => setShowModal(false)}
                     className="w-full bg-white/10 hover:bg-white/20 text-slate-300 font-semibold py-2 rounded-xl text-xs cursor-pointer"
@@ -1391,6 +1425,65 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* MODAL PLAN 4 REQUERIDO PARA APP CLIENTES */}
+      {showPlan4RequiredModal && (
+        <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-[#0a0f1c] border border-purple-500/40 rounded-3xl p-6 max-w-md w-full shadow-2xl relative text-center text-white">
+            <button
+              onClick={() => setShowPlan4RequiredModal(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10"
+            >
+              <X size={18} />
+            </button>
+
+            <div className="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center mx-auto mb-3 border border-purple-500/30">
+              <Smartphone size={24} />
+            </div>
+
+            <h3 className="text-lg font-black text-white uppercase tracking-wider mb-1">
+              Módulo 4: App Web de Clientes
+            </h3>
+            <p className="text-xs text-slate-300 mb-4 leading-relaxed">
+              Tu prueba demo actual corresponde al CRM (Planes 1, 2 o 3). La aplicación web de clientes para pedidos directos sin comisión requiere habilitación del <strong>Plan 4 Full Omnicanal</strong>.
+            </p>
+
+            <div className="bg-black/60 border border-white/10 p-3.5 rounded-2xl text-left text-xs text-slate-300 space-y-2 mb-4">
+              <div className="flex items-center gap-2 text-purple-300 font-bold">
+                <Sparkles size={14} /> ¿Qué incluye la App Web de Clientes?
+              </div>
+              <ul className="space-y-1 text-[11px] text-slate-400 pl-4 list-disc">
+                <li>Catálogo digital propio sin comisiones a terceros</li>
+                <li>Geolocalización GPS automática para envíos</li>
+                <li>Seguimiento de pedidos en tiempo real</li>
+                <li>Menú QR para mesas en salón</li>
+              </ul>
+            </div>
+
+            <div className="space-y-2">
+              <a
+                href="https://api.whatsapp.com/send?phone=59898356320&text=Hola%20JPZ,%20quiero%20solicitar%20la%20prueba%20o%20cotización%20del%20Módulo%204%20(Plan%20Full%20Omnicanal%20con%20App%20Clientes)."
+                target="_blank"
+                rel="noreferrer"
+                className="w-full bg-purple-600 hover:bg-purple-500 text-white font-extrabold py-3.5 px-4 rounded-xl text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
+              >
+                <MessageSquare size={15} /> Solicitar Demo Plan 4 por WhatsApp
+              </a>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setShowPlan4RequiredModal(false);
+                  onStartDemo('crm');
+                }}
+                className="w-full bg-white/10 hover:bg-white/15 text-slate-300 font-bold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider transition-colors cursor-pointer"
+              >
+                Continuar a la Demo CRM / POS
+              </button>
+            </div>
           </div>
         </div>
       )}

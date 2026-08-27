@@ -287,7 +287,7 @@ export async function verifyDemoAccess(identifier: string, passwordInput?: strin
       const remainingHours = Math.max(0, Math.floor(remainingMs / (1000 * 60 * 60)));
       const remainingMinutes = Math.max(0, Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60)));
 
-      saveLocalDemoSession(acc.emailOrUser, expiraTimestamp || (now + 86400000), acc.clienteNombre || acc.emailOrUser, false);
+      saveLocalDemoSession(acc.emailOrUser, expiraTimestamp || (now + 86400000), acc.clienteNombre || acc.emailOrUser, false, (acc.plan as any) || 'plan_full');
 
       return {
         allowed: true,
@@ -330,7 +330,7 @@ export async function verifyDemoAccess(identifier: string, passwordInput?: strin
 
       const remainingMs = expiresAt - Date.now();
       const remainingHours = Math.max(1, Math.round(remainingMs / (1000 * 60 * 60)));
-      saveLocalDemoSession(cleanId, expiresAt, data.nombre || data.email, false);
+      saveLocalDemoSession(cleanId, expiresAt, data.nombre || data.email, false, 'plan_full');
       return {
         allowed: true,
         message: `¡Bienvenido ${data.nombre || ''}! Acceso de prueba verificado.`,
@@ -349,13 +349,20 @@ export async function verifyDemoAccess(identifier: string, passwordInput?: strin
   };
 }
 
-export function saveLocalDemoSession(identifier: string, expiresAt: number, clientName?: string, isAdmin: boolean = false) {
+export function saveLocalDemoSession(
+  identifier: string, 
+  expiresAt: number, 
+  clientName?: string, 
+  isAdmin: boolean = false,
+  plan: 'plan_basico' | 'plan_pro' | 'plan_vip' | 'plan_full' = 'plan_full'
+) {
   try {
     localStorage.setItem('nextcrm_demo_session', JSON.stringify({
       identifier,
       expiresAt,
       clientName: clientName || identifier,
       isAdmin,
+      plan,
       authorizedAt: Date.now()
     }));
   } catch (_) {}
@@ -369,10 +376,11 @@ export function getLocalDemoSession(): {
   clientName?: string;
   isAdmin?: boolean;
   isExpired?: boolean;
+  plan?: 'plan_basico' | 'plan_pro' | 'plan_vip' | 'plan_full';
 } {
   try {
     const raw = localStorage.getItem('nextcrm_demo_session');
-    if (!raw) return { isValid: false, remainingHours: 0, remainingMinutes: 0, isExpired: false };
+    if (!raw) return { isValid: false, remainingHours: 0, remainingMinutes: 0, isExpired: false, plan: 'plan_basico' };
     const session = JSON.parse(raw);
     const now = Date.now();
 
@@ -384,7 +392,8 @@ export function getLocalDemoSession(): {
         identifier: session.identifier,
         clientName: session.clientName || 'Administrador (JPZ)',
         isAdmin: true,
-        isExpired: false
+        isExpired: false,
+        plan: 'plan_full'
       };
     }
 
@@ -399,7 +408,8 @@ export function getLocalDemoSession(): {
         identifier: session.identifier,
         clientName: session.clientName,
         isAdmin: false,
-        isExpired: false
+        isExpired: false,
+        plan: session.plan || 'plan_full'
       };
     }
 
@@ -409,10 +419,11 @@ export function getLocalDemoSession(): {
       remainingMinutes: 0, 
       identifier: session.identifier,
       clientName: session.clientName,
-      isExpired: true 
+      isExpired: true,
+      plan: session.plan || 'plan_basico'
     };
   } catch (_) {
-    return { isValid: false, remainingHours: 0, remainingMinutes: 0, isExpired: false };
+    return { isValid: false, remainingHours: 0, remainingMinutes: 0, isExpired: false, plan: 'plan_basico' };
   }
 }
 

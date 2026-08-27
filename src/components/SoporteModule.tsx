@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { 
   Info, BookOpen, Download, Users, MessageSquare, ShieldCheck, Key, 
   FileText, CheckCircle2, DollarSign, Building, Cpu, Sparkles, Mic, 
-  Headphones, HelpCircle, Check, CreditCard, Smartphone, Globe, ArrowRight, Zap, Star
+  Headphones, HelpCircle, Check, CreditCard, Smartphone, Globe, ArrowRight, Zap, Star, Clock, AlertTriangle, ShieldAlert
 } from 'lucide-react';
 
 export function SoporteModule() {
+  const [activeTab, setActiveTab] = useState<'planes' | 'garantia' | 'manual' | 'contacto'>('planes');
   const [copiedPlan, setCopiedPlan] = useState<string | null>(null);
 
   const plans = [
@@ -14,30 +15,35 @@ export function SoporteModule() {
       numero: 'Módulo 1',
       nombre: 'Plan Básico',
       precio: '$1.490',
-      periodo: '/mes',
+      periodo: 'UYU / mes',
+      compraDefinitiva: '$190 USD (hasta en 6 cuotas)',
+      garantiaCompraUnica: '3 Meses de Garantía y Soporte Inicial',
       descripcion: 'Ideal para pizzerías que inician y gestionan mostrador y delivery directo.',
-      solicitudes: '1 solicitud de soporte/cambios al mes',
+      solicitudes: '1 solicitud mensual (o 3 meses de garantía en compra única)',
       destacado: false,
       color: 'border-white/10 bg-white/5',
       badgeColor: 'bg-white/10 text-slate-300',
       features: [
         'Punto de Venta POS Touch rápido',
         'Gestión de Mostrador (Take Away) y Delivery',
+        'Impresión Térmica (impresora no incluida en hardware)',
+        'Carga Inicial de Menú (por única vez)',
         'Base de Datos de Clientes y Direcciones',
-        'Control de Menú, Precios y Gustos',
         'Arqueo de Caja y Cierre de Turno',
-        '1 solicitud de cambio/soporte mensual',
+        'Garantía Compra Única: 3 Meses incluidos',
       ],
-      whatsappText: 'Hola, quisiera contratar el Plan Básico de NextCRM ($1.490/mes) para mi pizzería.',
+      whatsappText: 'Hola JPZ, quisiera consultar por el Plan Básico de NextCRM ($1.490 UYU/mes ó $190 USD compra definitiva).',
     },
     {
       id: 'plan_pro',
       numero: 'Módulo 2',
       nombre: 'Plan Pro',
       precio: '$2.490',
-      periodo: '/mes',
+      periodo: 'UYU / mes',
+      compraDefinitiva: '$290 USD (hasta en 6 cuotas)',
+      garantiaCompraUnica: '6 Meses de Garantía y Soporte Técnico',
       descripcion: 'Agiliza la cocina y la atención al cliente con Inteligencia Artificial.',
-      solicitudes: '2 solicitudes de soporte/cambios al mes',
+      solicitudes: '2 solicitudes mensuales (o 6 meses de garantía en compra única)',
       destacado: false,
       color: 'border-blue-500/30 bg-blue-950/20',
       badgeColor: 'bg-blue-600/30 text-blue-300 border-blue-500/40',
@@ -45,21 +51,23 @@ export function SoporteModule() {
         'Todo lo incluido en el Plan Básico',
         'Monitor KDS de Cocina en Tiempo Real',
         'Bandeja de Entrada WhatsApp Integrada',
-        'Toma de Pedidos por Voz con IA',
+        'Toma de Pedidos por Voz con IA Paso a Paso',
         'Control de Stock e Insumos Críticos',
         'Reportes de Ventas y Productos Estrella',
-        '2 solicitudes de cambios/soporte mensuales',
+        'Garantía Compra Única: 6 Meses incluidos',
       ],
-      whatsappText: 'Hola, quisiera contratar el Plan Pro con KDS y WhatsApp de NextCRM ($2.490/mes).',
+      whatsappText: 'Hola JPZ, quisiera consultar por el Plan Pro con KDS y Voz IA de NextCRM ($2.490 UYU/mes ó $290 USD compra definitiva).',
     },
     {
       id: 'plan_vip',
       numero: 'Módulo 3',
       nombre: 'Plan VIP DGI',
       precio: '$3.490',
-      periodo: '/mes',
+      periodo: 'UYU / mes',
+      compraDefinitiva: '$390 USD (hasta en 6 cuotas)',
+      garantiaCompraUnica: '6 Meses de Garantía y Soporte Fiscal DGI',
       descripcion: 'Facturación Electrónica oficial DGI con Facturando Partner Homologado.',
-      solicitudes: 'Solicitudes ILIMITADAS (Atención VIP)',
+      solicitudes: 'Solicitudes ILIMITADAS (o 6 meses de soporte fiscal en compra única)',
       destacado: false,
       color: 'border-emerald-500/40 bg-emerald-950/20',
       badgeColor: 'bg-emerald-600 text-white font-bold',
@@ -70,31 +78,33 @@ export function SoporteModule() {
         'Emisión de e-Tickets (101) y e-Facturas (111)',
         'Firma digital CAE y envío automático',
         'Auditoría y Acta de Cierre General de Mes',
-        'Solicitudes ILIMITADAS y soporte 24/7',
+        'Garantía Compra Única: 6 Meses incluidos',
       ],
-      whatsappText: 'Hola, quisiera contratar el Plan VIP con Facturación DGI de NextCRM ($3.490/mes).',
+      whatsappText: 'Hola JPZ, quisiera consultar por el Plan VIP con Facturación DGI de NextCRM ($3.490 UYU/mes ó $390 USD compra definitiva).',
     },
     {
       id: 'plan_full',
       numero: 'Módulo 4',
       nombre: 'Plan Full Omnicanal',
       precio: '$4.490',
-      periodo: '/mes',
+      periodo: 'UYU / mes',
+      compraDefinitiva: '$490 USD (hasta en 6 cuotas)',
+      garantiaCompraUnica: '12 Meses (1 Año) de Garantía Total + Cloud App Clientes',
       descripcion: 'El ecosistema completo: CRM + Tu propia Web App para pedidos online de clientes.',
-      solicitudes: 'Solicitudes ILIMITADAS + Carga de Menú Bonificada',
+      solicitudes: 'Solicitudes ILIMITADAS + Carga Bonificada (o 1 año de garantía y cloud en compra única)',
       destacado: true,
       color: 'border-purple-500/60 bg-gradient-to-b from-purple-950/30 to-black ring-2 ring-purple-500/40',
       badgeColor: 'bg-purple-600 text-white font-black animate-pulse',
       features: [
         'TODO el CRM Full (POS, KDS, WhatsApp, Voz IA, DGI)',
         'Tu propia Web App de Pedidos (tu-pizzeria.nextcrm.uy)',
-        'Tus clientes piden desde su celular sin pagar comisiones',
+        'Tus clientes piden desde su celular con GPS y sin comisiones',
         'Menú Digital QR interactivo para mesas',
         'Pedidos web caen automático en POS y Cocina',
         'Carga y actualización de menú bonificada por NextCRM',
-        'Atención VIP Prioritaria y Solicitudes ILIMITADAS',
+        'Garantía Compra Única: 12 Meses (1 Año) de Servidor y Soporte VIP',
       ],
-      whatsappText: 'Hola, quisiera contratar el Plan Full Omnicanal con Web App de Clientes de NextCRM ($4.490/mes).',
+      whatsappText: 'Hola JPZ, quisiera consultar por el Plan Full Omnicanal con Web App Clientes de NextCRM ($4.490 UYU/mes ó $490 USD compra definitiva).',
     },
   ];
 
@@ -118,181 +128,411 @@ export function SoporteModule() {
         </head>
         <body>
           <h1>NEXT CRM — Manual Integral de Operabilidad</h1>
-          <p>Guía de uso oficial para terminales POS, KDS Cocina, WhatsApp Inbox, Pedidos por Voz con IA, Facturación DGI y App Web de Clientes.</p>
-          
-          <h2>1. Punto de Venta POS & Toma de Pedidos</h2>
-          <p>Permite registrar ventas táctiles en 3 pasos: (1) Menú & Gustos, (2) Destino & Cliente, (3) Pago & Confirmar.</p>
-          
-          <h2>2. Pedidos por Voz con IA</h2>
-          <p>Presiona el botón de micrófono en el POS y dicta libremente el pedido. La IA reconocerá los productos, gustos, cliente y medio de pago.</p>
-          
-          <h2>3. Monitor KDS de Cocina</h2>
-          <p>Gestiona los pedidos organizados por Canales (Retiro, Mesas, Delivery) o por Estaciones con alertas de tiempo demorado (+30m).</p>
+          <p><strong>Pizzería & Restaurantes</strong> — Versión Oficial 2026</p>
 
-          <h2>4. Facturación Electrónica DGI (Facturando Partner Oficial)</h2>
-          <p>Emisión instantánea de e-Tickets y e-Facturas homologadas ante DGI Uruguay.</p>
+          <div class="box">
+            <strong>📞 Soporte Directo y Guardia Técnica:</strong> WhatsApp 098 356 320 (+598 98 356 320)<br/>
+            <strong>🏢 Proveedor Oficial Facturación DGI:</strong> Facturando.uy Homologado
+          </div>
 
-          <h2>5. Módulo Web App de Clientes</h2>
-          <p>Tus clientes ordenan desde su celular a través de tu link o código QR sin intermediarios ni comisiones abusivas.</p>
+          <h2>1. Apertura de Turno y Arqueo de Caja</h2>
+          <p>Al iniciar la jornada, el cajero debe ingresar el efectivo inicial en caja. Durante el turno, el sistema registrará los cobros en efectivo, tarjetas de débito/crédito y transferencias. Al cerrar el turno, se genera el arqueo ciego con el desglose de ventas.</p>
+
+          <h2>2. Operación de Mostrador (POS Touch)</h2>
+          <p>Selecciona los productos del menú por categorías. Para pizzas y pizzetas puedes agregar gustos extras. Presiona 'Confirmar Cobro' para imprimir el ticket en ticketera térmica de 80mm.</p>
+
+          <h2>3. Monitor KDS de Cocina en Tiempo Real</h2>
+          <p>Los pedidos confirmados entran automáticamente a la pantalla de cocina divididos en 4 estados: Nuevos en Cola, En Preparación, Listos para Entrega y Demorados. El cocinero puede avanzar el estado con un toque.</p>
+
+          <h2>4. Pedido por Voz con IA Paso a Paso</h2>
+          <p>Presiona el micrófono y dicta producto por producto. El sistema detecta el ítem, gustos y precio. Pulsa 'Agregar a la Comanda' y repite con el siguiente producto.</p>
+
+          <h2>5. Facturación Electrónica DGI (Facturando.uy)</h2>
+          <p>Los tickets emitidos en el POS se envían de forma segura a los servidores de Facturando.uy, obteniendo el CAE oficial y código QR fiscal de DGI.</p>
+
+          <h2>6. Póliza de Garantía y Soporte en Compra Definitiva</h2>
+          <p>En modalidad de compra definitiva, el software es de propiedad perpetua del cliente. Incluye garantía inicial sin costo (3 a 12 meses según el plan). Pasado dicho plazo, las asistencias técnicas se cotizan por evento ($490 UYU) o mediante abono opcional de mantenimiento ($790 UYU/mes).</p>
 
           <div class="footer">
-            <p>NEXT CRM — Soporte Oficial por WhatsApp: 098 356 320</p>
+            NEXT CRM Pizzería • Desarrollado por JPZ • Montevideo, Uruguay
           </div>
-          <script>window.onload = function() { window.print(); window.close(); };</script>
         </body>
       </html>
     `;
     printWindow.document.write(html);
     printWindow.document.close();
+    printWindow.print();
   };
 
   return (
-    <div className="flex-1 bg-[#050505] p-4 md:p-6 overflow-y-auto relative custom-scrollbar">
-      <div className="max-w-7xl mx-auto space-y-6">
-        
-        {/* HEADER BAR */}
-        <div className="bg-[#0a0f1c]/90 backdrop-blur-md rounded-2xl p-5 border border-white/10 flex flex-wrap items-center justify-between gap-4 shadow-xl">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
-              <Headphones size={24} />
+    <div className="flex-1 flex flex-col h-full bg-[#050505] text-slate-100 overflow-y-auto custom-scrollbar p-4 md:p-8 font-sans">
+      
+      {/* HEADER SECTION */}
+      <div className="max-w-7xl mx-auto w-full mb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="bg-blue-600/20 text-blue-400 border border-blue-500/40 text-[10px] font-mono px-2.5 py-0.5 rounded-full font-bold uppercase">
+                Centro de Atención & Licenciamiento
+              </span>
             </div>
-            <div>
-              <h2 className="text-base font-black text-white uppercase tracking-wider flex items-center gap-2">
-                Centro de Soporte, Manuales & Planes NextCRM
-              </h2>
-              <p className="text-xs text-slate-400 font-mono">
-                Atención directa vía WhatsApp oficial • Tel: <strong className="text-white">098 356 320</strong>
-              </p>
-            </div>
+            <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
+              Soporte, Garantía & Módulos Comerciales
+            </h1>
+            <p className="text-xs text-slate-400 mt-1">
+              Consulta las coberturas de garantía, tiempo de vigencia, soporte técnico post-venta y solicita cambios de plan.
+            </p>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          {/* ACTION BUTTONS */}
+          <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={handleDownloadManual}
-              className="px-4 py-2.5 bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white rounded-xl text-xs font-bold transition-all border border-white/10 flex items-center gap-2 cursor-pointer shadow-sm"
+              className="bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border border-white/10 cursor-pointer shadow-sm"
             >
-              <Download size={15} />
-              <span>Descargar Manual de Usuario (PDF)</span>
+              <Download size={14} className="text-blue-400" />
+              <span>Manual de Usuario</span>
             </button>
 
             <a
-              href="https://api.whatsapp.com/send?phone=59898356320&text=Hola,%20necesito%20soporte%20t%C3%A9cnico%20para%20NextCRM."
+              href="https://api.whatsapp.com/send?phone=59898356320&text=Hola%20JPZ,%20necesito%20soporte%20t%C3%A9cnico%20para%20NextCRM%20Pizzer%C3%ADa."
               target="_blank"
               rel="noreferrer"
-              className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-lg cursor-pointer"
+              className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-lg cursor-pointer"
             >
-              <MessageSquare size={15} />
-              <span>WhatsApp Directo (098 356 320)</span>
+              <MessageSquare size={14} />
+              <span>Soporte WhatsApp (098 356 320)</span>
             </a>
           </div>
         </div>
 
-        {/* SECTION: 4 COMMERCIAL MODULES & PLANS GRID */}
-        <div>
-          <div className="text-center max-w-2xl mx-auto mb-6">
-            <span className="text-[10px] font-mono font-bold bg-blue-600/20 text-blue-400 border border-blue-500/30 px-3 py-1 rounded-full uppercase tracking-widest">
-              Planes Comerciales & Habilitaciones
-            </span>
-            <h3 className="text-xl font-black text-white uppercase tracking-wider mt-2">
-              4 Módulos Diseñados para Escalar tu Negocio
-            </h3>
-            <p className="text-xs text-slate-400 mt-1">
-              Todos los planes funcionan sobre la misma plataforma. Puedes desbloquear nuevos módulos al instante sin reinstalar nada.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {plans.map((plan) => (
-              <div
-                key={plan.id}
-                className={`rounded-3xl p-5 border flex flex-col justify-between transition-all relative shadow-xl ${plan.color}`}
+        {/* TABS NAVIGATION */}
+        <div className="flex gap-2 mt-4 border-b border-white/5 pb-2">
+          {[
+            { id: 'planes', label: '1. Planes y Módulos', icon: DollarSign },
+            { id: 'garantia', label: '2. Garantía y Compra Definitiva', icon: ShieldCheck },
+            { id: 'manual', label: '3. Guía de Operaciones', icon: BookOpen },
+          ].map((tab) => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  activeTab === tab.id
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                }`}
               >
-                {plan.destacado && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-[10px] font-black uppercase px-3 py-0.5 rounded-full shadow-lg border border-purple-400">
-                    ★ Más Completo
-                  </div>
-                )}
+                <Icon size={14} />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-mono font-bold text-slate-400 uppercase">
-                      {plan.numero}
-                    </span>
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase border ${plan.badgeColor}`}>
-                      {plan.nombre}
-                    </span>
-                  </div>
+      {/* CONTENT SECTIONS */}
+      <div className="max-w-7xl mx-auto w-full space-y-6">
 
-                  <div className="my-3">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-black text-white font-mono">{plan.precio}</span>
-                      <span className="text-xs text-slate-400 font-mono">{plan.periodo}</span>
+        {/* TAB 1: PLANES Y MÓDULOS */}
+        {activeTab === 'planes' && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {plans.map((plan) => (
+                <div
+                  key={plan.id}
+                  className={`rounded-3xl p-5 border flex flex-col justify-between transition-all relative shadow-xl ${plan.color}`}
+                >
+                  {plan.destacado && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-[10px] font-black uppercase px-3 py-0.5 rounded-full shadow-lg border border-purple-400">
+                      ★ Más Completo
                     </div>
-                    <p className="text-[11px] text-slate-300 mt-1 leading-relaxed">{plan.descripcion}</p>
+                  )}
+
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-mono font-bold text-slate-400 uppercase">
+                        {plan.numero}
+                      </span>
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase border ${plan.badgeColor}`}>
+                        {plan.nombre}
+                      </span>
+                    </div>
+
+                    <div className="my-2.5 pb-2.5 border-b border-white/10">
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-2xl font-black text-white font-mono">{plan.precio}</span>
+                        <span className="text-[10px] text-slate-400 font-mono">{plan.periodo}</span>
+                      </div>
+                      <span className="text-[10px] text-blue-300 font-bold block mt-1">
+                        O Compra Única: {plan.compraDefinitiva}
+                      </span>
+                    </div>
+
+                    <p className="text-[11px] text-slate-300 mb-3 leading-relaxed">{plan.descripcion}</p>
+
+                    {/* GARANTIA BADGE */}
+                    <div className="bg-black/50 border border-white/10 p-2 rounded-xl mb-3 text-[10px] font-mono text-emerald-300 flex items-center gap-1.5">
+                      <ShieldCheck size={13} className="text-emerald-400 shrink-0" />
+                      <span>{plan.garantiaCompraUnica}</span>
+                    </div>
+
+                    {/* FEATURES LIST */}
+                    <ul className="space-y-1.5 text-xs text-slate-300 mb-6">
+                      {plan.features.map((feat, i) => (
+                        <li key={i} className="flex items-start gap-1.5">
+                          <Check size={13} className="text-blue-400 shrink-0 mt-0.5" />
+                          <span className="leading-tight text-[11px]">{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
 
-                  {/* SOLICITUDES BADGE */}
-                  <div className="bg-black/50 border border-white/10 p-2 rounded-xl mb-4 text-[10px] font-mono text-emerald-300 flex items-center gap-1.5">
-                    <Zap size={13} className="text-emerald-400 shrink-0" />
-                    <span>{plan.solicitudes}</span>
-                  </div>
+                  {/* WHATSAPP CTA BUTTON */}
+                  <a
+                    href={`https://api.whatsapp.com/send?phone=59898356320&text=${encodeURIComponent(plan.whatsappText)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={`w-full py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md ${
+                      plan.destacado
+                        ? 'bg-purple-600 hover:bg-purple-500 text-white shadow-purple-600/30'
+                        : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'
+                    }`}
+                  >
+                    <MessageSquare size={14} />
+                    <span>Pedir / Cotizar por WhatsApp</span>
+                  </a>
+                </div>
+              ))}
+            </div>
 
-                  {/* FEATURES LIST */}
-                  <ul className="space-y-2 text-xs text-slate-300 mb-6">
-                    {plan.features.map((feat, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <Check size={14} className="text-emerald-400 shrink-0 mt-0.5" />
-                        <span className="leading-tight">{feat}</span>
-                      </li>
-                    ))}
+            {/* SECTION: FACTURANDO PARTNER OFICIAL DGI */}
+            <div className="bg-gradient-to-r from-emerald-950/40 via-[#0a1410] to-[#040c08] border border-emerald-500/30 rounded-3xl p-6 shadow-xl flex flex-wrap items-center justify-between gap-6">
+              <div className="max-w-2xl">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-mono px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1">
+                    <ShieldCheck size={12} /> Facturando Partner Oficial DGI
+                  </span>
+                </div>
+                <h4 className="text-lg font-black text-white uppercase tracking-wider">
+                  Facturación Electrónica Integrada con Facturando.uy
+                </h4>
+                <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                  NextCRM cuenta con integración nativa con <strong>Facturando</strong>, proveedor homologado oficial ante la Dirección General Impositiva (DGI Uruguay). Emite e-Tickets y e-Facturas al instante en cada cobro del POS sin necesidad de sistemas externos.
+                </p>
+              </div>
+
+              <a
+                href="https://api.whatsapp.com/send?phone=59898356320&text=Hola,%20quisiera%20activar%20la%20Facturaci%C3%B3n%20Electr%C3%B3nica%20DGI%20con%20Facturando%20en%20NextCRM."
+                target="_blank"
+                rel="noreferrer"
+                className="px-5 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 shadow-lg shrink-0"
+              >
+                <ShieldCheck size={16} />
+                <span>Homologar con DGI</span>
+              </a>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 2: POLÍTICAS DE GARANTÍA Y COMPRA DEFINITIVA */}
+        {activeTab === 'garantia' && (
+          <div className="space-y-6 animate-in fade-in duration-200">
+            <div className="bg-[#0a0f1c] border border-blue-500/30 rounded-3xl p-6 md:p-8 shadow-2xl space-y-6">
+              
+              <div>
+                <span className="text-xs font-mono font-bold text-blue-400 uppercase bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">
+                  Transparencia Total • Marco de Garantías Oficial
+                </span>
+                <h3 className="text-2xl font-black text-white mt-2">
+                  Póliza de Garantía, Vigencia y Soporte Post-Venta
+                </h3>
+                <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                  Para brindar tranquilidad y seguridad a tu inversión, definimos con precisión qué cubre cada modalidad y qué sucede al vencer el tiempo de garantía.
+                </p>
+              </div>
+
+              {/* COMPARATIVE CARDS: MENSUAL VS COMPRA DEFINITIVA */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                {/* MODALIDAD MENSUAL */}
+                <div className="bg-black/60 border border-white/10 rounded-2xl p-5 space-y-3">
+                  <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                    <h4 className="font-bold text-sm text-white flex items-center gap-2">
+                      <Clock size={16} className="text-blue-400" /> Modalidad Mensual (Suscripción)
+                    </h4>
+                    <span className="text-[10px] font-mono bg-blue-600/20 text-blue-300 px-2 py-0.5 rounded-full font-bold">
+                      Servicio Continuo
+                    </span>
+                  </div>
+                  <ul className="space-y-2 text-xs text-slate-300">
+                    <li className="flex items-start gap-2">
+                      <Check size={14} className="text-emerald-400 shrink-0 mt-0.5" />
+                      <span><strong>Soporte Técnico Continuo:</strong> Cubierto mes a mes mientras el abono esté activo.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check size={14} className="text-emerald-400 shrink-0 mt-0.5" />
+                      <span><strong>Actualizaciones de Software:</strong> Acceso a mejoras y parches de seguridad automáticos.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check size={14} className="text-emerald-400 shrink-0 mt-0.5" />
+                      <span><strong>Backups y Nube:</strong> Sincronización continua de datos e historial de caja.</span>
+                    </li>
                   </ul>
                 </div>
 
-                {/* WHATSAPP CTA BUTTON */}
-                <a
-                  href={`https://api.whatsapp.com/send?phone=59898356320&text=${encodeURIComponent(plan.whatsappText)}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`w-full py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md ${
-                    plan.destacado
-                      ? 'bg-purple-600 hover:bg-purple-500 text-white shadow-purple-600/30'
-                      : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'
-                  }`}
-                >
-                  <MessageSquare size={14} />
-                  <span>Solicitar por WhatsApp</span>
-                </a>
+                {/* MODALIDAD COMPRA DEFINITIVA */}
+                <div className="bg-gradient-to-b from-blue-950/20 to-black border border-blue-500/40 rounded-2xl p-5 space-y-3">
+                  <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                    <h4 className="font-bold text-sm text-white flex items-center gap-2">
+                      <ShieldCheck size={16} className="text-emerald-400" /> Compra Definitiva (Pago Único)
+                    </h4>
+                    <span className="text-[10px] font-mono bg-emerald-600/20 text-emerald-300 px-2 py-0.5 rounded-full font-bold">
+                      Licencia Perpetua
+                    </span>
+                  </div>
+                  <ul className="space-y-2 text-xs text-slate-300">
+                    <li className="flex items-start gap-2">
+                      <Check size={14} className="text-emerald-400 shrink-0 mt-0.5" />
+                      <span><strong>Propiedad Perpetua:</strong> El software es 100% tuyo. No caduca ni se bloquea.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check size={14} className="text-emerald-400 shrink-0 mt-0.5" />
+                      <span><strong>Financiación Flexible:</strong> Puedes abonarlo en hasta 6 pagos.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <Check size={14} className="text-emerald-400 shrink-0 mt-0.5" />
+                      <span><strong>Garantía Inicial Bonificada:</strong> De 3 a 12 meses de soporte técnico cubierto según el módulo.</span>
+                    </li>
+                  </ul>
+                </div>
+
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* SECTION: FACTURANDO PARTNER OFICIAL DGI */}
-        <div className="bg-gradient-to-r from-emerald-950/40 via-[#0a1410] to-[#040c08] border border-emerald-500/30 rounded-3xl p-6 shadow-xl flex flex-wrap items-center justify-between gap-6">
-          <div className="max-w-2xl">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-mono px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1">
-                <ShieldCheck size={12} /> Facturando Partner Oficial DGI
-              </span>
+              {/* TIMELINE OF WARRANTY PER MODULE */}
+              <div>
+                <h4 className="font-bold text-sm text-white uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <Zap size={15} className="text-amber-400" /> Tiempo de Garantía y Soporte Incluido por Módulo (Compra Única):
+                </h4>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  
+                  <div className="bg-[#0e1629] border border-white/10 p-4 rounded-2xl space-y-1.5">
+                    <span className="text-[10px] font-mono text-slate-400 uppercase font-bold">Módulo 1: Básico ($190 USD)</span>
+                    <h5 className="font-black text-base text-white">3 Meses de Garantía</h5>
+                    <p className="text-[11px] text-slate-300 leading-relaxed">
+                      Puesta en marcha, configuración inicial de impresora térmica e inducción al cajero.
+                    </p>
+                  </div>
+
+                  <div className="bg-[#0e1629] border border-blue-500/30 p-4 rounded-2xl space-y-1.5">
+                    <span className="text-[10px] font-mono text-blue-300 uppercase font-bold">Módulo 2: Pro ($290 USD)</span>
+                    <h5 className="font-black text-base text-white">6 Meses de Garantía</h5>
+                    <p className="text-[11px] text-slate-300 leading-relaxed">
+                      Asistencia técnica en Monitor KDS de Cocina, enlace de WhatsApp y configuración de voz IA.
+                    </p>
+                  </div>
+
+                  <div className="bg-[#06140e] border border-emerald-500/30 p-4 rounded-2xl space-y-1.5">
+                    <span className="text-[10px] font-mono text-emerald-300 uppercase font-bold">Módulo 3: VIP DGI ($390 USD)</span>
+                    <h5 className="font-black text-base text-white">6 Meses de Garantía Fiscal</h5>
+                    <p className="text-[11px] text-slate-300 leading-relaxed">
+                      Soporte de homologación ante DGI, vinculación con Facturando.uy y resolución de firmas CAE.
+                    </p>
+                  </div>
+
+                  <div className="bg-purple-950/20 border border-purple-500/40 p-4 rounded-2xl space-y-1.5">
+                    <span className="text-[10px] font-mono text-purple-300 uppercase font-bold">Módulo 4: Full ($490 USD)</span>
+                    <h5 className="font-black text-base text-white">12 Meses (1 Año) Total</h5>
+                    <p className="text-[11px] text-slate-300 leading-relaxed">
+                      Alojamiento en la nube de la App Web Clientes cubierto por 1 año, carga inicial de menú y soporte VIP.
+                    </p>
+                  </div>
+
+                </div>
+              </div>
+
+              {/* WHAT HAPPENS AFTER WARRANTY EXPIRES */}
+              <div className="bg-black/50 border border-amber-500/30 rounded-2xl p-5 space-y-3">
+                <div className="flex items-center gap-2 text-amber-400">
+                  <HelpCircle size={18} />
+                  <h4 className="font-bold text-sm text-white uppercase tracking-wide">
+                    ¿Qué sucede una vez finalizado el tiempo de garantía en Compra Definitiva?
+                  </h4>
+                </div>
+                
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  El sistema <strong>continúa funcionando de por vida en tu local</strong> sin cobros automáticos ni bloqueos. Si con el tiempo necesitas asistencia técnica por cambio de computadora o formateo, puedes elegir entre:
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1 text-xs">
+                  <div className="bg-[#0a0f1c] border border-white/10 p-3.5 rounded-xl space-y-1">
+                    <span className="text-emerald-400 font-black text-xs block">Opción A: Soporte Puntual por Evento</span>
+                    <p className="text-slate-300">
+                      <strong>$490 UYU por intervención:</strong> Pagas únicamente si solicitas asistencia puntual (ej: reinstalación de ticketera por formateo o cambio de PC).
+                    </p>
+                  </div>
+
+                  <div className="bg-[#0a0f1c] border border-white/10 p-3.5 rounded-xl space-y-1">
+                    <span className="text-blue-400 font-black text-xs block">Opción B: Abono de Mantenimiento Opcional</span>
+                    <p className="text-slate-300">
+                      <strong>$790 UYU / mes (opcional):</strong> Cubre soporte ilimitado por WhatsApp, resguardo diario de base de datos en la nube y nuevas actualizaciones.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
             </div>
-            <h4 className="text-lg font-black text-white uppercase tracking-wider">
-              Facturación Electrónica Integrada con Facturando.uy
-            </h4>
-            <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-              NextCRM cuenta con integración nativa con <strong>Facturando</strong>, proveedor homologado oficial ante la Dirección General Impositiva (DGI Uruguay). Emite e-Tickets y e-Facturas al instante en cada cobro del POS sin necesidad de sistemas externos.
-            </p>
           </div>
+        )}
 
-          <a
-            href="https://api.whatsapp.com/send?phone=59898356320&text=Hola,%20quisiera%20activar%20la%20Facturaci%C3%B3n%20Electr%C3%B3nica%20DGI%20con%20Facturando%20en%20NextCRM."
-            target="_blank"
-            rel="noreferrer"
-            className="px-5 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 shadow-lg shrink-0"
-          >
-            <ShieldCheck size={16} />
-            <span>Homologar con DGI</span>
-          </a>
-        </div>
+        {/* TAB 3: GUIA DE OPERACIONES */}
+        {activeTab === 'manual' && (
+          <div className="bg-[#0a0f1c] border border-white/10 rounded-3xl p-6 md:p-8 space-y-6 animate-in fade-in duration-200">
+            <div className="flex items-center justify-between pb-4 border-b border-white/10">
+              <div>
+                <h3 className="text-xl font-bold text-white">Guía Rápida de Operaciones</h3>
+                <p className="text-xs text-slate-400">Instrucciones clave para el personal de mostrador y cocina</p>
+              </div>
+              <button
+                onClick={handleDownloadManual}
+                className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-md"
+              >
+                <Download size={13} /> Imprimir Manual PDF
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-300">
+              <div className="bg-black/40 border border-white/5 p-4 rounded-2xl space-y-2">
+                <h4 className="font-bold text-white text-sm flex items-center gap-2">
+                  <CreditCard size={15} className="text-blue-400" /> 1. Cobro en Mostrador
+                </h4>
+                <p>
+                  Ingresa al módulo Mostrador/POS, selecciona la categoría, pulsa el producto y elige 'Confirmar Cobro'. Puedes imprimir ticket térmico o enviar ticket digital.
+                </p>
+              </div>
+
+              <div className="bg-black/40 border border-white/5 p-4 rounded-2xl space-y-2">
+                <h4 className="font-bold text-white text-sm flex items-center gap-2">
+                  <Cpu size={15} className="text-emerald-400" /> 2. Monitor KDS Cocina
+                </h4>
+                <p>
+                  Visualiza los pedidos entrantes clasificados por tiempo. Toca 'En Preparación' al meter al horno y 'Listo para Entrega' al empaquetar la pizza.
+                </p>
+              </div>
+
+              <div className="bg-black/40 border border-white/5 p-4 rounded-2xl space-y-2">
+                <h4 className="font-bold text-white text-sm flex items-center gap-2">
+                  <Mic size={15} className="text-purple-400" /> 3. Pedido por Voz
+                </h4>
+                <p>
+                  Presiona el micrófono y dicta ítem por ítem. Revisa que el gusto esté correcto, pulsa 'Agregar a la Comanda' y confirma el envío a cocina.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
       </div>
     </div>

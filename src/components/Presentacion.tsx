@@ -878,9 +878,9 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
                       <span><strong>Caja y Clientes:</strong> Arqueo diario de turno.</span>
                     </li>
-                    <li className="flex items-center gap-1.5 text-blue-300">
-                      <ShieldCheck size={13} className="text-blue-400 shrink-0" />
-                      <span><strong>1 Consulta Mensual:</strong> Soporte cubierto.</span>
+                    <li className="flex items-center gap-1.5 text-emerald-300 font-medium">
+                      <ShieldCheck size={13} className="text-emerald-400 shrink-0" />
+                      <span><strong>Garantía Compra Única:</strong> 3 Meses incluidos.</span>
                     </li>
                  </ul>
                </div>
@@ -933,9 +933,9 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
                       <span><strong>Control de Stock:</strong> Insumos críticos.</span>
                     </li>
-                    <li className="flex items-center gap-1.5 text-blue-300">
-                      <ShieldCheck size={13} className="text-blue-400 shrink-0" />
-                      <span><strong>2 Consultas Mensuales:</strong> Soporte directo.</span>
+                    <li className="flex items-center gap-1.5 text-emerald-300 font-medium">
+                      <ShieldCheck size={13} className="text-emerald-400 shrink-0" />
+                      <span><strong>Garantía Compra Única:</strong> 6 Meses incluidos.</span>
                     </li>
                  </ul>
                </div>
@@ -988,9 +988,9 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
                       <span><strong>Reportes Avanzados:</strong> Cierres mensuales.</span>
                     </li>
-                    <li className="flex items-center gap-1.5 text-emerald-300 font-semibold">
-                      <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
-                      <span><strong>Solicitudes ILIMITADAS:</strong> Soporte VIP.</span>
+                    <li className="flex items-center gap-1.5 text-emerald-300 font-medium">
+                      <ShieldCheck size={13} className="text-emerald-400 shrink-0" />
+                      <span><strong>Garantía Compra Única:</strong> 6 Meses de Soporte Fiscal.</span>
                     </li>
                  </ul>
                </div>
@@ -1047,9 +1047,9 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       <CheckCircle2 size={13} className="text-purple-400 shrink-0" />
                       <span><strong>Seguimiento de Envíos en Tiempo Real.</strong></span>
                     </li>
-                    <li className="flex items-center gap-1.5 text-purple-300 font-semibold">
-                      <CheckCircle2 size={13} className="text-purple-400 shrink-0" />
-                      <span><strong>Carga de Menú Bonificada + Soporte VIP.</strong></span>
+                    <li className="flex items-center gap-1.5 text-emerald-300 font-medium">
+                      <ShieldCheck size={13} className="text-emerald-400 shrink-0" />
+                      <span><strong>Garantía Compra Única:</strong> 12 Meses (1 Año) Total + Cloud.</span>
                     </li>
                  </ul>
                </div>
@@ -1063,14 +1063,27 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
             </div>
          </div>
 
-         {/* Compact Support Policy Banner */}
-         <div className="max-w-7xl mx-auto bg-[#0a0f1c] border border-blue-500/30 rounded-2xl p-2.5 text-left text-[11px] text-slate-300 flex items-center justify-between gap-3">
-           <div className="flex items-center gap-1.5 font-bold text-blue-400 uppercase text-[11px] shrink-0">
-             <ShieldCheck size={14} /> Soporte y Garantía Oficial:
+         {/* Detailed Support & Warranty Policy Banner */}
+         <div className="max-w-7xl mx-auto bg-[#0a0f1c] border border-blue-500/30 rounded-2xl p-3 text-left text-[11px] text-slate-300 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+           <div className="flex items-center gap-2">
+             <ShieldCheck size={16} className="text-emerald-400 shrink-0" />
+             <div>
+               <span className="font-bold text-white uppercase text-[11px] block">
+                 Póliza de Garantía en Compra Definitiva:
+               </span>
+               <span className="text-slate-400 text-[10px]">
+                 Licencia perpetua de por vida. Garantía de 3 a 12 meses incluida. Pasado el plazo: asistencia técnica puntual a $490 UYU/evento o abono opcional de mantenimiento por $790 UYU/mes con backups cloud.
+               </span>
+             </div>
            </div>
-           <p className="text-slate-300 truncate text-[11px]">
-             1 año de garantía ante fallos. Planes Básico (1 consulta/mes), Pro (2 consultas/mes), VIP y Full (Consultas ILIMITADAS y carga bonificada).
-           </p>
+           <a
+             href="https://api.whatsapp.com/send?phone=59898356320&text=Hola%20JPZ,%20tengo%20consultas%20sobre%20la%20garantía%20y%20soporte%20en%20compra%20definitiva%20de%20NextCRM."
+             target="_blank"
+             rel="noreferrer"
+             className="bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white px-3 py-1.5 rounded-xl border border-blue-500/30 text-[10px] font-bold uppercase shrink-0 transition-all flex items-center gap-1"
+           >
+             <MessageSquare size={12} /> Consultar Garantía
+           </a>
          </div>
          
          <div 

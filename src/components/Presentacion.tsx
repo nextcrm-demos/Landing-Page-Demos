@@ -159,60 +159,59 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
   return (
     <div className="h-screen w-full bg-[#050505] text-white font-sans overflow-x-hidden overflow-y-auto snap-y snap-mandatory selection:bg-blue-600 selection:text-white scroll-smooth relative">
       
-      {/* BARRA SUPERIOR FIJA / HEADER AUTHENTIC NEXTCRM */}
-      <header className="fixed top-0 left-0 w-full z-40 px-4 sm:px-8 py-3.5 flex items-center justify-between bg-black/95 backdrop-blur-md border-b border-white/10">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400">
-            <Layers size={18} />
+      {/* BARRA SUPERIOR FIJA / HEADER AUTHENTIC NEXTCRM (SIN RAYA DIVISORIA) */}
+      <header className="fixed top-0 left-0 w-full z-40 px-4 sm:px-8 py-4 flex items-center justify-between bg-gradient-to-b from-black/90 via-black/40 to-transparent backdrop-blur-sm select-none">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-purple-600/25 border border-purple-500/40 flex items-center justify-center text-cyan-300 shadow-sm">
+            <Layers size={17} />
           </div>
           <div>
-            <span className="font-light tracking-[0.2em] text-sm sm:text-base text-white uppercase">
-              NEXT <span className="font-bold text-blue-400">CRM</span>
+            <span className="font-light tracking-[0.2em] text-sm text-white uppercase flex items-center gap-1">
+              NEXT <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">CRM</span>
             </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           <button
             onClick={() => setShowDemoAccessModal(true)}
-            className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-bold px-4 py-2 rounded-full shadow-lg transition-all hover:scale-105 cursor-pointer"
+            className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-md transition-all hover:scale-103 cursor-pointer"
           >
-            <Rocket size={14} className="stroke-[2.5]" /> Acceso a Demo
+            <Rocket size={13} className="stroke-[2.5]" /> Acceso a Demo
           </button>
 
           <button
             onClick={() => setShowClientAccessModal(true)}
-            className="bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white font-semibold text-xs sm:text-sm px-3.5 py-2 rounded-full border border-white/10 transition-all cursor-pointer flex items-center gap-1.5"
+            className="bg-white/5 hover:bg-white/15 text-slate-200 hover:text-white font-medium text-xs px-3.5 py-2 rounded-xl border border-white/10 transition-all cursor-pointer flex items-center gap-1.5"
           >
-            <LogIn size={14} /> Acceso Clientes
+            <LogIn size={13} /> Acceso Clientes
           </button>
         </div>
       </header>
 
-      {/* PANTALLA 1: HERO - TEMA NEGRO ORIGINAL CON LOGO NEXTCRM 3D */}
+      {/* PANTALLA 1: HERO - TEMA NEGRO CON LOGO NEXTCRM 3D REPARADO */}
       <section id="seccion-hero" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col items-center justify-center relative px-6 text-center bg-[#050505]">
         
-        {/* LOGO ISOMÉTRICO 3D NEXTCRM */}
-        <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center mb-5 [perspective:1000px] shrink-0">
-          <div className="absolute top-2 w-18 h-18 sm:w-22 sm:h-22 bg-transparent border-[2.5px] border-slate-700/50 rounded-2xl flex items-center justify-center z-20 [transform:rotateX(60deg)_rotateZ(45deg)] shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
-            <div className="[transform:rotateZ(-45deg)_rotateX(-60deg)]">
-              <Layers size={26} className="text-[#00d8ff]" />
+        {/* LOGO EMBLEMA ISOMÉTRICO 3D NEXTCRM (IMPECABLE Y NÍTIDO) */}
+        <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center mb-4 shrink-0 group">
+          <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/30 via-cyan-500/20 to-purple-600/30 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-500"></div>
+          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-[#121c38] to-[#080d1a] border border-blue-500/40 rounded-2xl flex items-center justify-center shadow-[0_15px_35px_rgba(59,130,246,0.35)] rotate-6 group-hover:rotate-0 transition-transform duration-500 relative">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-950/60 to-blue-950/80 border border-purple-500/40 rounded-xl flex items-center justify-center shadow-inner -rotate-3 group-hover:rotate-0 transition-transform duration-500">
+              <Layers size={22} className="text-cyan-300 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
             </div>
-          </div>
-          <div className="absolute bottom-2 w-18 h-18 sm:w-22 sm:h-22 bg-[#1a233a] border-[2.5px] border-blue-500/50 rounded-2xl flex items-center justify-center z-10 [transform:rotateX(60deg)_rotateZ(45deg)] shadow-[0_20px_50px_rgba(59,130,246,0.4)]">
-            <div className="[transform:rotateZ(-45deg)_rotateX(-60deg)]">
-              <Zap size={20} className="text-blue-400" />
+            <div className="absolute -top-1.5 -right-1.5 w-4.5 h-4.5 bg-gradient-to-tr from-purple-600 to-indigo-500 rounded-full border border-purple-300 flex items-center justify-center shadow-md">
+              <Sparkles size={9} className="text-white" />
             </div>
           </div>
         </div>
 
         {/* BADGE DELICADO Y FINO */}
-        <div className="inline-flex items-center gap-2 border border-purple-500/30 text-purple-300 text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase px-4 py-1.5 rounded-full mb-5 bg-purple-500/10 backdrop-blur-md shadow-sm">
-          <Sparkles size={12} className="text-cyan-300" /> Software Gastronómico Premium • Pedidos por Voz con IA
+        <div className="inline-flex items-center gap-2 border border-purple-500/30 text-purple-300 text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase px-3.5 py-1 rounded-full mb-4 bg-purple-500/10 backdrop-blur-md shadow-sm">
+          <Sparkles size={11} className="text-cyan-300" /> Software Gastronómico Premium • Pedidos por Voz con IA
         </div>
 
         {/* TÍTULO PRINCIPAL REFINADO Y ELEGANTE */}
-        <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-center mb-5 tracking-tight leading-[1.1] max-w-4xl text-white">
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-center mb-4 tracking-tight leading-[1.1] max-w-4xl text-white">
           El caos tiene<br/>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-purple-400">
             los días contados.
@@ -220,31 +219,31 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         </h1>
 
         {/* BAJADA CON TIPOGRAFÍA ELEGANTE ESTILO NEXTCRM */}
-        <p className="font-normal text-slate-300 text-xs sm:text-sm md:text-base text-center max-w-2xl mb-8 leading-relaxed">
+        <p className="font-normal text-slate-300 text-xs sm:text-sm md:text-base text-center max-w-2xl mb-7 leading-relaxed">
           Centraliza mostrador, delivery, mesas, monitor KDS de cocina, stock, arqueo de caja con desglose de tarjetas e impresión térmica preconfigurada.
         </p>
 
-        {/* BOTONES DIRECTOS PARA LAS DOS DEMOS */}
-        <div className="flex flex-wrap items-center justify-center gap-3.5 z-10">
+        {/* BOTONES DIRECTOS REFINADOS Y COMPACTOS */}
+        <div className="flex flex-wrap items-center justify-center gap-3 z-10">
           <button 
             onClick={() => handleLaunchDemo('crm')}
-            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold tracking-wider px-6 py-3.5 rounded-2xl flex items-center gap-2.5 transition-all shadow-[0_0_25px_rgba(59,130,246,0.35)] hover:scale-103 cursor-pointer text-xs sm:text-sm uppercase border border-blue-400/30"
+            className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4.5 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(59,130,246,0.35)] hover:scale-103 cursor-pointer text-xs uppercase tracking-wide border border-blue-400/30"
           >
-            <Rocket size={16} /> Probar Demo CRM / POS
+            <Rocket size={14} /> Probar Demo CRM / POS
           </button>
 
           <button 
             onClick={() => handleLaunchDemo('client_app')}
-            className="bg-gradient-to-r from-purple-600/30 via-purple-900/20 to-purple-600/30 hover:bg-purple-600 text-purple-200 hover:text-white font-bold tracking-wider px-6 py-3.5 rounded-2xl flex items-center gap-2.5 border border-purple-500/40 transition-all shadow-[0_0_25px_rgba(168,85,247,0.25)] hover:scale-103 cursor-pointer text-xs sm:text-sm uppercase"
+            className="bg-purple-600/30 hover:bg-purple-600 text-purple-200 hover:text-white font-semibold px-4.5 py-2.5 rounded-xl flex items-center gap-2 border border-purple-500/40 transition-all shadow-[0_0_20px_rgba(168,85,247,0.25)] hover:scale-103 cursor-pointer text-xs uppercase tracking-wide"
           >
-            <Smartphone size={16} className="text-purple-300" /> Probar Demo App Clientes
+            <Smartphone size={14} className="text-purple-300" /> Probar Demo App Clientes
           </button>
 
           <button 
             onClick={() => document.getElementById('seccion-voz-ia')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-medium px-4 py-3.5 rounded-2xl flex items-center gap-1.5 border border-white/10 transition-all hover:scale-103 cursor-pointer text-xs sm:text-sm"
+            className="bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-medium px-3.5 py-2.5 rounded-xl flex items-center gap-1.5 border border-white/10 transition-all hover:scale-103 cursor-pointer text-xs"
           >
-            Explorar Módulos <ArrowDown size={13} />
+            Explorar Módulos <ArrowDown size={12} />
           </button>
         </div>
         

@@ -189,61 +189,65 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         </div>
       </header>
 
-      {/* PANTALLA 1: HERO - TEMA NEGRO CON LOGO NEXTCRM 3D REPARADO */}
-      <section id="seccion-hero" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col items-center justify-center relative px-6 text-center bg-[#050505]">
+      {/* PANTALLA 1: HERO - TEMA OSCURO ESPACIOSO CON AMBIENT GLOW Y TIPOGRAFÍA EXPANDIDA */}
+      <section id="seccion-hero" className="w-full h-screen max-h-screen overflow-hidden snap-start snap-always flex flex-col items-center justify-center relative px-6 md:px-12 text-center bg-[#050505] selection:bg-blue-600">
         
-        {/* LOGO EMBLEMA ISOMÉTRICO 3D NEXTCRM (IMPECABLE Y NÍTIDO) */}
-        <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center mb-4 shrink-0 group">
-          <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/30 via-cyan-500/20 to-purple-600/30 rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-500"></div>
-          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-[#121c38] to-[#080d1a] border border-blue-500/40 rounded-2xl flex items-center justify-center shadow-[0_15px_35px_rgba(59,130,246,0.35)] rotate-6 group-hover:rotate-0 transition-transform duration-500 relative">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-950/60 to-blue-950/80 border border-purple-500/40 rounded-xl flex items-center justify-center shadow-inner -rotate-3 group-hover:rotate-0 transition-transform duration-500">
-              <Layers size={22} className="text-cyan-300 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+        {/* ATMOSPHERIC AMBIENT GLOW & SUBTLE GRID */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(59,130,246,0.2),rgba(147,51,234,0.15),transparent_75%)] pointer-events-none"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff04_1px,transparent_1px),linear-gradient(to_bottom,#ffffff04_1px,transparent_1px)] bg-[size:4.5rem_4.5rem] pointer-events-none opacity-60"></div>
+
+        {/* LOGO EMBLEMA ISOMÉTRICO 3D NEXTCRM */}
+        <div className="relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center mb-5 shrink-0 group z-10">
+          <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/40 via-cyan-400/20 to-purple-600/40 rounded-full blur-xl pointer-events-none group-hover:scale-125 transition-transform duration-700"></div>
+          <div className="w-13 h-13 sm:w-15 sm:h-15 bg-gradient-to-br from-[#121c38] to-[#080d1a] border border-blue-500/40 rounded-2xl flex items-center justify-center shadow-[0_15px_35px_rgba(59,130,246,0.35)] rotate-6 group-hover:rotate-0 transition-transform duration-500 relative">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 bg-gradient-to-br from-purple-950/60 to-blue-950/80 border border-purple-500/40 rounded-xl flex items-center justify-center shadow-inner -rotate-3 group-hover:rotate-0 transition-transform duration-500">
+              <Layers size={20} className="text-cyan-300 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
             </div>
-            <div className="absolute -top-1.5 -right-1.5 w-4.5 h-4.5 bg-gradient-to-tr from-purple-600 to-indigo-500 rounded-full border border-purple-300 flex items-center justify-center shadow-md">
-              <Sparkles size={9} className="text-white" />
+            <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-gradient-to-tr from-purple-600 to-indigo-500 rounded-full border border-purple-300 flex items-center justify-center shadow-md">
+              <Sparkles size={8} className="text-white" />
             </div>
           </div>
         </div>
 
-        {/* BADGE DELICADO Y FINO */}
-        <div className="inline-flex items-center gap-2 border border-purple-500/30 text-purple-300 text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase px-3.5 py-1 rounded-full mb-4 bg-purple-500/10 backdrop-blur-md shadow-sm">
+        {/* BADGE ELEGANTE CON TRACKING ESPACIOSO */}
+        <div className="inline-flex items-center gap-2 border border-purple-500/30 text-purple-300 text-[10px] sm:text-[11px] font-mono tracking-[0.25em] uppercase px-4 py-1.5 rounded-full mb-6 bg-purple-500/10 backdrop-blur-md shadow-sm z-10">
           <Sparkles size={11} className="text-cyan-300" /> Software Gastronómico Premium • Pedidos por Voz con IA
         </div>
 
-        {/* TÍTULO PRINCIPAL REFINADO Y ELEGANTE */}
-        <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-center mb-4 tracking-tight leading-[1.1] max-w-4xl text-white">
+        {/* TÍTULO PRINCIPAL ESPACIOSO Y ELEGANTE */}
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-center mb-6 tracking-tight md:tracking-normal leading-[1.15] max-w-5xl text-white z-10">
           El caos tiene<br/>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-purple-400">
             los días contados.
           </span>
         </h1>
 
-        {/* BAJADA CON TIPOGRAFÍA ELEGANTE ESTILO NEXTCRM */}
-        <p className="font-normal text-slate-300 text-xs sm:text-sm md:text-base text-center max-w-2xl mb-7 leading-relaxed">
+        {/* BAJADA CON ESPACIADO ELEGANTE */}
+        <p className="font-light tracking-[0.08em] sm:tracking-[0.12em] text-slate-300 text-xs sm:text-sm md:text-base text-center max-w-3xl mb-9 leading-relaxed uppercase z-10">
           Centraliza mostrador, delivery, mesas, monitor KDS de cocina, stock, arqueo de caja con desglose de tarjetas e impresión térmica preconfigurada.
         </p>
 
-        {/* BOTONES DIRECTOS REFINADOS Y COMPACTOS */}
+        {/* BOTONES SLIM, REFINADOS Y COMPACTOS */}
         <div className="flex flex-wrap items-center justify-center gap-3 z-10">
           <button 
             onClick={() => handleLaunchDemo('crm')}
-            className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4.5 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(59,130,246,0.35)] hover:scale-103 cursor-pointer text-xs uppercase tracking-wide border border-blue-400/30"
+            className="bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2 rounded-xl flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(59,130,246,0.35)] hover:scale-105 cursor-pointer text-xs uppercase tracking-wider border border-blue-400/40"
           >
-            <Rocket size={14} /> Probar Demo CRM / POS
+            <Rocket size={13} /> Probar Demo CRM / POS
           </button>
 
           <button 
             onClick={() => handleLaunchDemo('client_app')}
-            className="bg-purple-600/30 hover:bg-purple-600 text-purple-200 hover:text-white font-semibold px-4.5 py-2.5 rounded-xl flex items-center gap-2 border border-purple-500/40 transition-all shadow-[0_0_20px_rgba(168,85,247,0.25)] hover:scale-103 cursor-pointer text-xs uppercase tracking-wide"
+            className="bg-purple-600/30 hover:bg-purple-600 text-purple-200 hover:text-white font-medium px-4 py-2 rounded-xl flex items-center gap-2 border border-purple-500/40 transition-all shadow-[0_0_20px_rgba(168,85,247,0.25)] hover:scale-105 cursor-pointer text-xs uppercase tracking-wider"
           >
-            <Smartphone size={14} className="text-purple-300" /> Probar Demo App Clientes
+            <Smartphone size={13} className="text-purple-300" /> Probar Demo App Clientes
           </button>
 
           <button 
             onClick={() => document.getElementById('seccion-voz-ia')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-medium px-3.5 py-2.5 rounded-xl flex items-center gap-1.5 border border-white/10 transition-all hover:scale-103 cursor-pointer text-xs"
+            className="bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-normal px-3.5 py-2 rounded-xl flex items-center gap-1.5 border border-white/10 transition-all hover:scale-105 cursor-pointer text-xs tracking-wide"
           >
-            Explorar Módulos <ArrowDown size={12} />
+            Explorar Módulos <ArrowDown size={11} />
           </button>
         </div>
         
@@ -251,7 +255,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
            className="absolute bottom-5 animate-bounce cursor-pointer flex justify-center w-full z-10"
            onClick={() => document.getElementById('seccion-voz-ia')?.scrollIntoView({ behavior: 'smooth' })}
         >
-          <ChevronsDown size={24} className="text-slate-600 hover:text-slate-400 transition-colors" />
+          <ChevronsDown size={22} className="text-slate-500 hover:text-slate-300 transition-colors" />
         </div>
       </section>
 

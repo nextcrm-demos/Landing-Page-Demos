@@ -37,6 +37,7 @@ export function Header({
   onChangePlan,
 }: HeaderProps) {
   const tabs: TabType[] = [
+    'Toma de Pedidos',
     'Mostrador',
     'Mesas',
     'Delivery',
@@ -125,9 +126,12 @@ export function Header({
               className={`px-2.5 py-1.5 rounded-xl transition-all flex items-center gap-1 relative text-[11px] tracking-normal whitespace-nowrap cursor-pointer shrink-0 ${
                 activeTab === tab 
                   ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-black shadow-md ring-1 ring-purple-400/40' 
+                  : tab === 'Toma de Pedidos'
+                  ? 'bg-blue-600/15 hover:bg-blue-600/30 text-blue-300 hover:text-white border border-blue-500/30 font-bold'
                   : 'hover:bg-white/5 hover:text-white text-slate-400'
               }`}
             >
+              {tab === 'Toma de Pedidos' && <span className="text-xs">🍕</span>}
               {tab === 'Módulo Web' && <Globe size={11} className="text-purple-400 shrink-0" />}
               <span>{tab}</span>
               {locked && <Lock size={10} className="text-amber-400 shrink-0 ml-0.5" />}

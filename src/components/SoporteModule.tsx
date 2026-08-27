@@ -7,7 +7,31 @@ import {
 } from 'lucide-react';
 
 export function SoporteModule() {
-  const [activeTab, setActiveTab] = useState<'planes' | 'contenido' | 'garantia' | 'amedida' | 'manual'>('planes');
+  const [activeTab, setActiveTab] = useState<'planes' | 'contenido' | 'reportar_error' | 'garantia' | 'amedida' | 'manual'>('planes');
+
+  // Error reporting form state
+  const [errorLocalNombre, setErrorLocalNombre] = useState('Pizzería Gourmet');
+  const [errorTipo, setErrorTipo] = useState('Error en Pantalla / Bloqueo');
+  const [errorDetalle, setErrorDetalle] = useState('');
+  const [errorTelefono, setErrorTelefono] = useState('098356320');
+  const [errorSuccess, setErrorSuccess] = useState(false);
+
+  const handleSendErrorReport = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!errorDetalle.trim()) return;
+
+    const text = `🚨 *REPORTE DE INCIDENCIA NEXTCRM*\n\n` +
+      `🏢 *Local/Negocio:* ${errorLocalNombre}\n` +
+      `⚠️ *Tipo de Incidencia:* ${errorTipo}\n` +
+      `📞 *Teléfono Contacto:* ${errorTelefono}\n` +
+      `📝 *Detalle del Error:*\n${errorDetalle}\n\n` +
+      `⏰ *Fecha y Hora:* ${new Date().toLocaleString('es-UY')}`;
+
+    const url = `https://api.whatsapp.com/send?phone=59898356320&text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+    setErrorSuccess(true);
+    setTimeout(() => setErrorSuccess(false), 5000);
+  };
 
   const plans = [
     {
@@ -211,9 +235,10 @@ export function SoporteModule() {
           {[
             { id: 'planes', label: '1. Planes y Módulos', icon: DollarSign },
             { id: 'contenido', label: '2. Contenido del CRM', icon: Layers },
-            { id: 'garantia', label: '3. Garantía y Compra Única', icon: ShieldCheck },
-            { id: 'amedida', label: '4. Software a Medida / Otros Rubros', icon: Wrench },
-            { id: 'manual', label: '5. Manual de Operaciones', icon: BookOpen },
+            { id: 'reportar_error', label: '🚨 3. Reportar Error / Incidencia', icon: AlertTriangle, highlight: true },
+            { id: 'garantia', label: '4. Garantía y Compra Única', icon: ShieldCheck },
+            { id: 'amedida', label: '5. Software a Medida / Otros Rubros', icon: Wrench },
+            { id: 'manual', label: '6. Manual de Operaciones', icon: BookOpen },
           ].map((tab) => {
             const Icon = tab.icon;
             return (
@@ -223,10 +248,12 @@ export function SoporteModule() {
                 className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                   activeTab === tab.id
                     ? 'bg-blue-600 text-white shadow-md'
+                    : tab.highlight
+                    ? 'bg-red-600/20 text-red-300 hover:bg-red-600/30 border border-red-500/30'
                     : 'text-slate-400 hover:text-white hover:bg-white/5'
                 }`}
               >
-                <Icon size={14} />
+                <Icon size={14} className={tab.highlight ? 'text-red-400' : ''} />
                 <span>{tab.label}</span>
               </button>
             );
@@ -448,7 +475,158 @@ export function SoporteModule() {
           </div>
         )}
 
-        {/* TAB 3: POLÍTICAS DE GARANTÍA Y COMPRA DEFINITIVA */}
+        {/* TAB 3: REPORTAR ERROR / INCIDENCIA TECNICA */}
+        {activeTab === 'reportar_error' && (
+          <div className="space-y-6 animate-in fade-in duration-200">
+            
+            {/* HERO ALERT CARD */}
+            <div className="bg-gradient-to-r from-red-950/40 via-[#180909] to-black border-2 border-red-500/50 rounded-3xl p-6 md:p-8 shadow-2xl space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-red-400 animate-pulse"></span>
+                    <span className="text-[10px] font-mono font-bold text-red-300 uppercase tracking-widest bg-red-950/60 border border-red-500/40 px-3 py-0.5 rounded-full">
+                      Canal de Emergencias & Soporte Prioritario
+                    </span>
+                  </div>
+                  <h3 className="text-2xl sm:text-3xl font-black text-white mt-2 tracking-tight">
+                    🚨 Reportar Incidencia o Falla Técnica
+                  </h3>
+                  <p className="text-xs text-slate-300 mt-1 max-w-2xl leading-relaxed">
+                    Si experimentas algún error en pantalla, bloqueo, problema de impresión o de conexión, repórtalo de inmediato para que nuestro equipo técnico lo resuelva en tiempo récord.
+                  </p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-2 shrink-0">
+                  <a
+                    href="https://api.whatsapp.com/send?phone=59898356320&text=Hola%20JPZ,%20tengo%20una%20urgencia%20t%C3%A9cnica%20en%20NextCRM."
+                    target="_blank"
+                    rel="noreferrer"
+                    className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-3 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer"
+                  >
+                    <MessageSquare size={16} /> WhatsApp Urgente
+                  </a>
+
+                  <a
+                    href="tel:+59898356320"
+                    className="bg-white/10 hover:bg-white/20 text-white font-bold px-4 py-3 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 border border-white/10 transition-all cursor-pointer"
+                  >
+                    <Headphones size={16} className="text-blue-400" /> Llamar: 098 356 320
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* FORMULARIO DE REPORTE RAPIDO */}
+            <div className="bg-[#0a0f1c] border border-white/10 rounded-3xl p-6 md:p-8 space-y-6 shadow-xl">
+              <div className="pb-3 border-b border-white/10 flex items-center justify-between">
+                <div>
+                  <h4 className="text-lg font-bold text-white uppercase tracking-wide">
+                    Formulario de Notificación de Incidencias
+                  </h4>
+                  <p className="text-xs text-slate-400">
+                    Se envía directamente con los datos de tu local y el detalle técnico al WhatsApp de JPZ.
+                  </p>
+                </div>
+                <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
+                  ⚡ Respuesta Inmediata
+                </span>
+              </div>
+
+              {errorSuccess && (
+                <div className="bg-emerald-500/20 border border-emerald-500/40 p-4 rounded-2xl text-emerald-300 text-xs flex items-center gap-3 animate-in fade-in">
+                  <CheckCircle2 size={18} className="shrink-0" />
+                  <div>
+                    <strong>¡Reporte generado con éxito!</strong>
+                    <p className="text-[11px] text-emerald-400/80">Se ha abierto WhatsApp para transmitir los datos de la incidencia a soporte.</p>
+                  </div>
+                </div>
+              )}
+
+              <form onSubmit={handleSendErrorReport} className="space-y-4 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-slate-300 font-bold uppercase mb-1 text-[11px]">
+                      Nombre de tu Local / Negocio *:
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={errorLocalNombre}
+                      onChange={(e) => setErrorLocalNombre(e.target.value)}
+                      placeholder="Ej: Pizzería Gourmet"
+                      className="w-full bg-black border border-white/15 focus:border-red-500 rounded-xl px-3.5 py-2.5 text-white outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold uppercase mb-1 text-[11px]">
+                      Teléfono de Contacto *:
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={errorTelefono}
+                      onChange={(e) => setErrorTelefono(e.target.value)}
+                      placeholder="098 356 320"
+                      className="w-full bg-black border border-white/15 focus:border-red-500 rounded-xl px-3.5 py-2.5 text-white outline-none font-mono"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-300 font-bold uppercase mb-1 text-[11px]">
+                      Tipo de Falla o Módulo Afectado *:
+                    </label>
+                    <select
+                      value={errorTipo}
+                      onChange={(e) => setErrorTipo(e.target.value)}
+                      className="w-full bg-black border border-white/15 focus:border-red-500 rounded-xl px-3.5 py-2.5 text-white outline-none cursor-pointer"
+                    >
+                      <option value="Error en Pantalla / Bloqueo">Error en Pantalla / Bloqueo</option>
+                      <option value="Toma de Pedidos / Mostrador / POS">Toma de Pedidos / Mostrador / POS</option>
+                      <option value="Dictado por Voz / IA">Dictado por Voz / IA</option>
+                      <option value="Monitor KDS de Cocina">Monitor KDS de Cocina</option>
+                      <option value="Facturación DGI / CFE">Facturación DGI / CFE</option>
+                      <option value="Impresora Térmica / Vouchers">Impresora Térmica / Vouchers</option>
+                      <option value="App Web de Clientes / Envíos">App Web de Clientes / Envíos</option>
+                      <option value="Otro Problema">Otro Problema</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-slate-300 font-bold uppercase mb-1 text-[11px]">
+                    Descripción Detallada del Error o Mensaje que te aparece *:
+                  </label>
+                  <textarea
+                    required
+                    rows={4}
+                    value={errorDetalle}
+                    onChange={(e) => setErrorDetalle(e.target.value)}
+                    placeholder="Describe qué estabas haciendo cuando ocurrió el error, qué mensaje o pantalla te apareció, o pega aquí el texto del error..."
+                    className="w-full bg-black border border-white/15 focus:border-red-500 rounded-xl p-3.5 text-white outline-none custom-scrollbar"
+                  />
+                </div>
+
+                <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <span className="text-[11px] text-slate-400 font-mono">
+                    ⏰ Horario de Atención: Lunes a Viernes 09:00 a 17:00 hs (Guardias activas 24/7)
+                  </span>
+
+                  <button
+                    type="submit"
+                    className="w-full sm:w-auto px-8 py-3.5 bg-red-600 hover:bg-red-500 text-white font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Send size={15} /> Enviar Reporte Urgente por WhatsApp
+                  </button>
+                </div>
+              </form>
+            </div>
+
+          </div>
+        )}
+
+        {/* TAB 4: POLÍTICAS DE GARANTÍA Y COMPRA DEFINITIVA */}
         {activeTab === 'garantia' && (
           <div className="space-y-6 animate-in fade-in duration-200">
             <div className="bg-[#0a0f1c] border border-blue-500/30 rounded-3xl p-6 md:p-8 shadow-2xl space-y-6">

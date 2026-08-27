@@ -202,6 +202,20 @@ export interface WhatsAppChat {
   messages: WhatsAppMessage[];
 }
 
-
-
-
+export type TabType = 
+  | 'Toma de Pedidos'
+  | 'Mostrador'
+  | 'Mesas'
+  | 'Delivery'
+  | 'Finalizados'
+  | 'Cocina'
+  | 'WhatsApp'
+  | 'Módulo Web'
+  | 'Clientes'
+  | 'Menú'
+  | 'Stock'
+  | 'Facturación'
+  | 'Reportes'
+  | 'Historial'
+  | 'Caja'
+  | 'Soporte';

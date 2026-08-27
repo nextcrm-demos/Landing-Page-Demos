@@ -846,18 +846,19 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
-                      <span><strong>Impresión Térmica:</strong> Para 80mm/58mm <em>(Hardware no incluido)</em>.</span>
+                      <span><strong>Impresión Térmica:</strong> Impresora no incluida en el hardware.</span>
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
-                      <span><strong>Carga Inicial de Menú:</strong> 1 sola vez por única vez <em>(luego autogestionable)</em>.</span>
+                      <span><strong>Carga Inicial de Menú:</strong> Por única vez.</span>
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
                       <span><strong>Caja y Clientes:</strong> Arqueo diario de turno.</span>
                     </li>
-                    <li className="flex items-center gap-1.5 text-slate-500 line-through text-[10px]">
-                      <span>No incluye KDS, WhatsApp, Voz IA ni DGI.</span>
+                    <li className="flex items-center gap-1.5 text-blue-300">
+                      <ShieldCheck size={13} className="text-blue-400 shrink-0" />
+                      <span><strong>1 Consulta Mensual:</strong> Soporte cubierto.</span>
                     </li>
                  </ul>
                </div>
@@ -904,14 +905,15 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
-                      <span><strong>WhatsApp & Pedido por Voz:</strong> IA nativa.</span>
+                      <span><strong>WhatsApp & Pedido por Voz:</strong> IA paso a paso.</span>
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
-                      <span><strong>Stock e Insumos + 2 consultas/mes.</strong></span>
+                      <span><strong>Control de Stock:</strong> Insumos críticos.</span>
                     </li>
-                    <li className="flex items-center gap-1.5 text-slate-500 line-through text-[10px]">
-                      <span>No incluye Facturación DGI ni Web App.</span>
+                    <li className="flex items-center gap-1.5 text-blue-300">
+                      <ShieldCheck size={13} className="text-blue-400 shrink-0" />
+                      <span><strong>2 Consultas Mensuales:</strong> Soporte directo.</span>
                     </li>
                  </ul>
                </div>
@@ -960,12 +962,13 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                       <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
                       <span><strong>Partner Facturando.uy:</strong> CAE y QR fiscal.</span>
                     </li>
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
+                      <span><strong>Reportes Avanzados:</strong> Cierres mensuales.</span>
+                    </li>
                     <li className="flex items-center gap-1.5 text-emerald-300 font-semibold">
                       <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
                       <span><strong>Solicitudes ILIMITADAS:</strong> Soporte VIP.</span>
-                    </li>
-                    <li className="flex items-center gap-1.5 text-slate-500 line-through text-[10px]">
-                      <span>No incluye App Web de Clientes.</span>
                     </li>
                  </ul>
                </div>

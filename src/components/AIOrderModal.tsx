@@ -18,11 +18,13 @@ interface AIOrderModalProps {
   initialMode?: 'guided_voice' | 'voice' | 'whatsapp';
 }
 
-const QUICK_EXAMPLES = [
-  '1 metro de muzza mitad panceta y aceitunas con 2 fainás para enviar a 18 de Julio 1234 a nombre de Juan paga con 2000',
-  '2 pizzetas cuatro quesos y 1 coca cola de litro y medio para retirar acá',
-  '1 pizza muzzarella con fainá para mesa 4 paga con tarjeta débito',
-  '1/2 metro de calabresa con aceitunas para enviar a Jackson 1420',
+const VOICE_CHUNKS_EXAMPLES = [
+  '1 metro de muzza con panceta y aceitunas',
+  '2 fainás con queso',
+  '1 pizzeta cuatro quesos',
+  '1 coca cola de litro y medio',
+  '1 pizza napolitana para retirar acá',
+  '1 porción de fainá a caballo',
 ];
 
 export function AIOrderModal({
@@ -37,10 +39,13 @@ export function AIOrderModal({
   const [isParsing, setIsParsing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Extracted Comanda State
-  const [parsedCart, setParsedCart] = useState<CartItem[]>([]);
-  const [parsedClient, setParsedClient] = useState<OrderClient>({ nombre: '', mesa: '', telefono: '', direccion: '' });
-  const [parsedPayment, setParsedPayment] = useState<OrderPayment>({
+  // Current detected item from last dictation
+  const [detectedResult, setDetectedResult] = useState<ParsedOrderResult | null>(null);
+
+  // Accumulated comanda state
+  const [accumulatedCart, setAccumulatedCart] = useState<CartItem[]>([]);
+  const [orderClient, setOrderClient] = useState<OrderClient>({ nombre: '', mesa: '', telefono: '', direccion: '' });
+  const [orderPayment, setOrderPayment] = useState<OrderPayment>({
     tipo: 'local',
     metodo: 'efectivo',
     notas: '',
@@ -51,17 +56,18 @@ export function AIOrderModal({
     cadete: 'Samuel',
   });
 
-  // Client Search & DB Lookup
+  // Client search dropdown
   const [clientSearch, setClientSearch] = useState('');
   const [isClientDropdownOpen, setIsClientDropdownOpen] = useState(false);
 
-  // Speech Recognition Ref
   const recognitionRef = useRef<any>(null);
   const clientDropdownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!isOpen) {
       stopListening();
+      setTranscript('');
+      setDetectedResult(null);
     }
   }, [isOpen]);
 
@@ -75,11 +81,45 @@ export function AIOrderModal({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Parse voice text incrementally whenever transcript changes
+  useEffect(() => {
+    if (!transcript.trim()) {
+      setDetectedResult(null);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      const localParsed = parseOrderLocally(transcript, menuItems, clients);
+      setDetectedResult(localParsed);
+      
+      // If client detected, pre-fill if not set
+      if (localParsed.cliente.nombre && !orderClient.nombre) {
+        setOrderClient(prev => ({
+          ...prev,
+          nombre: localParsed.cliente.nombre || prev.nombre,
+          telefono: localParsed.cliente.telefono || prev.telefono,
+          direccion: localParsed.cliente.direccion || prev.direccion,
+          mesa: localParsed.cliente.mesa || prev.mesa,
+        }));
+      }
+      if (localParsed.pago.tipo && orderPayment.tipo === 'local' && localParsed.pago.tipo !== 'local') {
+        setOrderPayment(prev => ({
+          ...prev,
+          tipo: localParsed.pago.tipo,
+          metodo: localParsed.pago.metodo || prev.metodo,
+          abono: localParsed.pago.abono || prev.abono,
+        }));
+      }
+    }, 250);
+
+    return () => clearTimeout(timer);
+  }, [transcript, menuItems, clients]);
+
   const startListening = () => {
     setErrorMessage(null);
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      setErrorMessage('Tu navegador no soporta reconocimiento de voz nativo. Puedes escribir la frase abajo.');
+      setErrorMessage('Tu navegador no soporta reconocimiento de voz nativo. Puedes escribir la frase en el campo.');
       return;
     }
 
@@ -98,16 +138,14 @@ export function AIOrderModal({
         for (let i = 0; i < event.results.length; i++) {
           currentText += event.results[i][0].transcript + ' ';
         }
-        const clean = currentText.trim();
-        setTranscript(clean);
-        processTextWithAI(clean);
+        setTranscript(currentText.trim());
       };
 
       recognition.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
         if (event.error !== 'no-speech') {
           setErrorMessage(`Error de micrófono: ${event.error}`);
         }
-        setIsListening(false);
       };
 
       recognition.onend = () => {
@@ -117,7 +155,7 @@ export function AIOrderModal({
       recognitionRef.current = recognition;
       recognition.start();
     } catch (err: any) {
-      setErrorMessage('No se pudo iniciar el micrófono.');
+      setErrorMessage('No se pudo acceder al micrófono.');
       setIsListening(false);
     }
   };
@@ -126,422 +164,418 @@ export function AIOrderModal({
     if (recognitionRef.current) {
       try {
         recognitionRef.current.stop();
-      } catch (e) {}
+      } catch (_) {}
       recognitionRef.current = null;
     }
     setIsListening(false);
   };
 
-  const processTextWithAI = (text: string) => {
-    if (!text.trim()) return;
-    setIsParsing(true);
-    
-    // Parse locally first for instant real-time feedback
-    const parsed = parseOrderLocally(text, menuItems);
-    
-    if (parsed.cart && parsed.cart.length > 0) {
-      setParsedCart(parsed.cart);
-    }
-    if (parsed.client) {
-      setParsedClient(prev => ({ ...prev, ...parsed.client }));
-    }
-    if (parsed.payment) {
-      setParsedPayment(prev => ({ ...prev, ...parsed.payment }));
-    }
+  // Add detected items into the accumulated comanda
+  const handleAddDetectedToComanda = () => {
+    if (!detectedResult || detectedResult.items.length === 0) return;
 
-    setIsParsing(false);
+    setAccumulatedCart(prev => [...prev, ...detectedResult.items]);
+    setTranscript('');
+    setDetectedResult(null);
   };
 
-  const handleSelectClientFromDB = (c: Client) => {
-    setParsedClient({
+  const handleQuickDictateExample = (exampleText: string) => {
+    setTranscript(exampleText);
+    const parsed = parseOrderLocally(exampleText, menuItems, clients);
+    setDetectedResult(parsed);
+  };
+
+  const handleRemoveCartItem = (index: number) => {
+    setAccumulatedCart(prev => prev.filter((_, idx) => idx !== index));
+  };
+
+  const handleSelectClient = (c: Client) => {
+    setOrderClient({
       nombre: c.nombre,
       telefono: c.telefono,
-      direccion: c.direccion,
+      direccion: c.direccion || '',
       mesa: '',
     });
-    setParsedPayment(prev => ({ ...prev, tipo: 'envio' }));
+    if (c.direccion) {
+      setOrderPayment(prev => ({ ...prev, tipo: 'envio' }));
+    }
     setIsClientDropdownOpen(false);
+    setClientSearch('');
   };
 
-  const handleRemoveCartItem = (idx: number) => {
-    setParsedCart(parsedCart.filter((_, i) => i !== idx));
+  const totalComandaPrice = accumulatedCart.reduce((sum, item) => sum + (item.precioUnitario * item.cantidad), 0);
+
+  const handleSendToPOS = () => {
+    const finalResult: ParsedOrderResult = {
+      items: accumulatedCart,
+      cliente: orderClient,
+      pago: orderPayment,
+      total: totalComandaPrice,
+      notas: '',
+      confianza: 95
+    };
+    onApplyToOrder(finalResult, false);
+    onClose();
   };
 
-  const totalAmount = parsedCart.reduce((sum, it) => sum + (it.precioUnitario * it.cantidad), 0);
-
-  const filteredClients = clients.filter(c => {
-    const q = clientSearch.toLowerCase();
-    return c.nombre.toLowerCase().includes(q) || c.telefono.includes(q) || c.direccion.toLowerCase().includes(q);
-  });
+  const handleSendDirectToKitchen = () => {
+    const finalResult: ParsedOrderResult = {
+      items: accumulatedCart,
+      cliente: orderClient,
+      pago: orderPayment,
+      total: totalComandaPrice,
+      notas: '',
+      confianza: 95
+    };
+    onApplyToOrder(finalResult, true);
+    onClose();
+  };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-[120] flex items-center justify-center p-3 sm:p-5 animate-in fade-in duration-200">
-      <div className="bg-[#0a0f1c] border border-white/15 rounded-3xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/80 backdrop-blur-md animate-fadeIn">
+      <div className="bg-[#0a0f1c] border border-blue-500/40 rounded-3xl w-full max-w-5xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden text-white relative">
         
-        {/* MODAL TOP HEADER */}
-        <div className="p-4 px-6 border-b border-white/10 flex items-center justify-between bg-black/40 shrink-0">
+        {/* HEADER */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/40">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
-              <Sparkles size={20} />
+            <div className="w-10 h-10 rounded-2xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400">
+              <Mic size={20} />
             </div>
             <div>
-              <h3 className="text-base font-black text-white uppercase tracking-wider flex items-center gap-2">
-                Toma de Pedidos por Voz con IA
-              </h3>
-              <p className="text-xs text-slate-400 font-mono">
-                Dicta o pega el pedido y la IA armará la comanda automáticamente
+              <div className="flex items-center gap-2">
+                <h2 className="text-base sm:text-lg font-black tracking-wide">
+                  Toma de Pedidos por Voz — <span className="text-blue-400">Paso a Paso</span>
+                </h2>
+                <span className="text-[10px] bg-blue-500/20 text-blue-300 font-mono px-2 py-0.5 rounded-full border border-blue-500/30 font-bold uppercase">
+                  IA Gastronómica
+                </span>
+              </div>
+              <p className="text-xs text-slate-400">
+                Habla o escribe de a un producto y agrégalo a la comanda con 1 clic.
               </p>
             </div>
           </div>
 
           <button
-            type="button"
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
           >
-            <X size={20} />
+            <X size={16} />
           </button>
         </div>
 
-        {/* MODAL BODY (2-COLUMN INTERACTIVE WORKSPACE) */}
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-12 overflow-hidden min-h-0">
+        {/* MAIN BODY: 2 COLUMNS */}
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-y-auto custom-scrollbar divide-y lg:divide-y-0 lg:divide-x divide-white/10">
           
-          {/* LEFT COLUMN: HERO VOICE INPUT & TRANSCRIPT (5 COLUMNS) */}
-          <div className="md:col-span-5 p-5 border-r border-white/10 flex flex-col justify-between bg-[#060a14] overflow-y-auto custom-scrollbar">
-            
-            {/* MICROPHONE BUTTON & STATUS */}
-            <div className="flex flex-col items-center text-center my-auto py-4">
-              <button
-                type="button"
-                onClick={isListening ? stopListening : startListening}
-                className={`w-24 h-24 rounded-full flex flex-col items-center justify-center transition-all cursor-pointer shadow-2xl ${
-                  isListening
-                    ? 'bg-red-600 text-white animate-pulse ring-8 ring-red-500/30'
-                    : 'bg-emerald-600 hover:bg-emerald-500 text-white ring-8 ring-emerald-500/20 hover:scale-105'
-                }`}
-              >
-                {isListening ? <MicOff size={36} /> : <Mic size={36} />}
-              </button>
+          {/* LEFT COLUMN: DICTATION & RECOGNITION (COL 7) */}
+          <div className="lg:col-span-7 p-5 sm:p-6 flex flex-col justify-between space-y-4">
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                  <Volume2 size={15} className="text-blue-400" /> Dictar Producto Actual
+                </span>
+                <span className="text-[11px] text-slate-400">
+                  {isListening ? '🔴 Escuchando...' : '⚪ Micrófono en espera'}
+                </span>
+              </div>
 
-              <p className="font-bold text-sm text-white mt-4 uppercase tracking-wider">
-                {isListening ? '🔴 Escuchando en Vivo...' : 'Toca para Dictar Pedido'}
-              </p>
-              <p className="text-[11px] text-slate-400 mt-0.5">
-                {isListening ? 'Habla con naturalidad (productos, cliente, dirección)' : 'Micrófono activo en español'}
-              </p>
+              {/* VOICE RECORDER BIG BOX */}
+              <div className="bg-black/60 border border-white/15 rounded-2xl p-4 relative mb-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <button
+                    type="button"
+                    onClick={isListening ? stopListening : startListening}
+                    className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all cursor-pointer shadow-lg ${
+                      isListening
+                        ? 'bg-red-600 text-white animate-pulse shadow-red-600/40'
+                        : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/30 hover:scale-105'
+                    }`}
+                  >
+                    {isListening ? <MicOff size={24} /> : <Mic size={24} />}
+                  </button>
 
-              {errorMessage && (
-                <div className="mt-3 p-2 bg-red-500/20 border border-red-500/40 rounded-xl text-red-300 text-[11px] flex items-center gap-1.5">
-                  <AlertCircle size={14} className="shrink-0" />
-                  <span>{errorMessage}</span>
+                  <div className="flex-1">
+                    <input
+                      type="text"
+                      value={transcript}
+                      onChange={(e) => setTranscript(e.target.value)}
+                      placeholder="Habla o escribe: '1 metro de muzza con panceta'..."
+                      className="w-full bg-transparent border-none text-sm text-white placeholder:text-slate-500 outline-none font-medium"
+                    />
+                    <div className="flex items-center gap-2 mt-1 text-[11px] text-slate-400">
+                      <span>💡 Haz clic en el micrófono o escribe</span>
+                      {transcript && (
+                        <button
+                          onClick={() => setTranscript('')}
+                          className="text-red-400 hover:underline cursor-pointer ml-auto"
+                        >
+                          Limpiar
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {errorMessage && (
+                  <div className="p-2.5 bg-red-950/40 border border-red-500/30 rounded-xl text-red-300 text-xs flex items-center gap-2">
+                    <AlertCircle size={14} className="shrink-0" />
+                    <span>{errorMessage}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* DETECTED ITEM HIGHLIGHT CARD */}
+              {detectedResult && detectedResult.items.length > 0 ? (
+                <div className="bg-[#0e1b33] border-2 border-blue-500/70 rounded-2xl p-4 shadow-lg animate-fadeIn">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[11px] font-bold text-blue-300 uppercase tracking-wider flex items-center gap-1.5">
+                      <Sparkles size={14} className="text-blue-400" /> Producto Reconocido:
+                    </span>
+                    <span className="text-xs font-mono font-black text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
+                      ${detectedResult.items.reduce((s, i) => s + (i.precioUnitario * i.cantidad), 0)}
+                    </span>
+                  </div>
+
+                  <div className="space-y-2 mb-3">
+                    {detectedResult.items.map((item, idx) => (
+                      <div key={idx} className="flex justify-between items-center bg-black/40 p-2.5 rounded-xl border border-white/10">
+                        <div>
+                          <div className="flex items-center gap-2 font-bold text-sm text-white">
+                            <span className="text-blue-400">{item.cantidad}x</span>
+                            <span>{item.menuItem.nombre}</span>
+                          </div>
+                          {item.gustos && item.gustos.length > 0 && (
+                            <p className="text-xs text-amber-300 font-medium mt-0.5">
+                              + Gustos: {item.gustos.map(g => g.nombre).join(', ')}
+                            </p>
+                          )}
+                          {item.notas && (
+                            <p className="text-[11px] text-slate-400 italic mt-0.5">
+                              "{item.notas}"
+                            </p>
+                          )}
+                        </div>
+                        <span className="text-xs font-bold font-mono text-white">
+                          ${item.precioUnitario * item.cantidad}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* PROMINENT ADD TO COMANDA BUTTON */}
+                  <button
+                    type="button"
+                    onClick={handleAddDetectedToComanda}
+                    className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-3 px-4 rounded-xl text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(59,130,246,0.4)] flex items-center justify-center gap-2 transition-all cursor-pointer hover:scale-101"
+                  >
+                    <Plus size={16} /> ➕ Agregar este Producto a la Comanda
+                  </button>
+                </div>
+              ) : (
+                <div className="bg-white/5 border border-dashed border-white/10 rounded-2xl p-4 text-center text-slate-400 text-xs">
+                  <p className="mb-2">Prueba dictando uno de estos productos de ejemplo:</p>
+                  <div className="flex flex-wrap gap-1.5 justify-center">
+                    {VOICE_CHUNKS_EXAMPLES.map((ex, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => handleQuickDictateExample(ex)}
+                        className="bg-black/50 hover:bg-blue-600/30 text-slate-300 hover:text-white border border-white/10 hover:border-blue-500/40 px-2.5 py-1 rounded-lg text-[11px] transition-all cursor-pointer"
+                      >
+                        + {ex}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
 
-            {/* TRANSCRIPTION INPUT / TEXT AREA */}
-            <div className="mt-2 space-y-2">
-              <div className="flex justify-between items-center text-[10px] font-mono text-slate-400 uppercase">
-                <span>Texto Detectado en Vivo:</span>
-                {transcript && (
-                  <button 
-                    onClick={() => {
-                      setTranscript('');
-                      setParsedCart([]);
-                    }}
-                    className="text-red-400 hover:underline cursor-pointer"
+            {/* CLIENT & DESTINATION AUTOCOMPLETE */}
+            <div className="pt-3 border-t border-white/10 space-y-3">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                <User size={14} className="text-blue-400" /> Destino y Datos del Cliente
+              </span>
+
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { id: 'local', label: 'Retiro Local' },
+                  { id: 'envio', label: 'Delivery' },
+                  { id: 'mesa', label: 'Mesa Salón' },
+                ].map(t => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    onClick={() => setOrderPayment(prev => ({ ...prev, tipo: t.id as any }))}
+                    className={`py-2 rounded-xl text-xs font-bold uppercase transition-all cursor-pointer border ${
+                      orderPayment.tipo === t.id
+                        ? 'bg-blue-600 text-white border-blue-400 shadow-sm'
+                        : 'bg-black/40 text-slate-400 border-white/10 hover:bg-white/5'
+                    }`}
                   >
-                    Borrar
+                    {t.label}
                   </button>
-                )}
+                ))}
               </div>
 
-              <textarea
-                value={transcript}
-                onChange={(e) => {
-                  setTranscript(e.target.value);
-                  processTextWithAI(e.target.value);
-                }}
-                placeholder="Ejemplo: 1 metro de muzzarella con fainá para enviar a Jackson 1420 a nombre de Juan..."
-                rows={3}
-                className="w-full bg-black/60 border border-white/15 focus:border-emerald-500 rounded-xl p-3 text-xs text-white placeholder:text-slate-600 outline-none transition-colors font-mono resize-none"
-              />
-
-              {/* QUICK EXAMPLE CHIPS */}
-              <div>
-                <span className="text-[10px] font-mono text-slate-500 block mb-1">
-                  O prueba con un ejemplo en 1 clic:
-                </span>
-                <div className="flex flex-wrap gap-1.5">
-                  {QUICK_EXAMPLES.map((ex, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => {
-                        setTranscript(ex);
-                        processTextWithAI(ex);
-                      }}
-                      className="px-2 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-[10px] text-slate-300 text-left hover:text-white transition-all cursor-pointer truncate max-w-full"
-                    >
-                      💡 {ex.substring(0, 45)}...
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          {/* RIGHT COLUMN: INTERACTIVE VISUAL COMANDA (7 COLUMNS) */}
-          <div className="md:col-span-7 p-5 flex flex-col justify-between bg-[#0a0f1c] overflow-y-auto custom-scrollbar">
-            
-            <div className="space-y-4">
-              
-              {/* SECTION 1: DETECTED PRODUCTS */}
-              <div>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
-                    <ShoppingBag size={14} className="text-emerald-400" />
-                    Productos en Comanda ({parsedCart.length})
-                  </span>
-                  <span className="text-xs font-mono font-bold text-emerald-400">
-                    Total: ${totalAmount}
-                  </span>
-                </div>
-
-                {parsedCart.length === 0 ? (
-                  <div className="p-6 bg-black/30 border border-dashed border-white/10 rounded-2xl text-center text-slate-500 text-xs">
-                    <span>Aún no hay productos detectados. Dicta tu pedido para armar la comanda.</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {orderPayment.tipo === 'mesa' ? (
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Número de Mesa (Ej: Mesa 4)"
+                      value={orderClient.mesa}
+                      onChange={(e) => setOrderClient(prev => ({ ...prev, mesa: e.target.value }))}
+                      className="w-full bg-black/60 border border-white/15 p-2 rounded-xl text-xs text-white outline-none focus:border-blue-400"
+                    />
                   </div>
                 ) : (
-                  <div className="space-y-2">
-                    {parsedCart.map((item, idx) => (
-                      <div 
-                        key={idx} 
-                        className="bg-black/50 border border-emerald-500/30 rounded-xl p-2.5 flex items-center justify-between text-xs"
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <span className="w-6 h-6 rounded-lg bg-emerald-600 text-white font-mono font-bold flex items-center justify-center text-xs">
-                            {item.cantidad}x
-                          </span>
-                          <div>
-                            <p className="font-bold text-white">{item.nombre}</p>
-                            {item.notas && (
-                              <p className="text-[10px] text-amber-300 font-mono">
-                                + {item.notas}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                          <span className="font-mono font-bold text-white">
-                            ${item.precioUnitario * item.cantidad}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveCartItem(idx)}
-                            className="text-slate-500 hover:text-red-400 p-1 cursor-pointer"
-                          >
-                            <Trash2 size={13} />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* SECTION 2: CLIENT & DESTINATION */}
-              <div className="bg-black/40 border border-white/10 rounded-2xl p-3.5 space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-xs font-bold text-slate-300 uppercase flex items-center gap-1.5">
-                    <User size={13} className="text-blue-400" />
-                    Cliente & Destino
-                  </span>
-
-                  {/* DESTINATION PILLS */}
-                  <div className="flex gap-1">
-                    {[
-                      { id: 'local', label: 'Mostrador' },
-                      { id: 'envio', label: 'Delivery' },
-                      { id: 'mesa', label: 'Mesa' },
-                    ].map(d => (
-                      <button
-                        key={d.id}
-                        type="button"
-                        onClick={() => setParsedPayment({ ...parsedPayment, tipo: d.id as any })}
-                        className={`px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase transition-all cursor-pointer ${
-                          parsedPayment.tipo === d.id
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-white/5 text-slate-400 hover:text-white'
-                        }`}
-                      >
-                        {d.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* CLIENT SEARCH / DROPDOWN FROM DB */}
-                <div className="relative" ref={clientDropdownRef}>
-                  <div className="relative">
-                    <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <div className="relative" ref={clientDropdownRef}>
                     <input
                       type="text"
-                      placeholder="Vincular con Cliente de Base de Datos..."
-                      value={clientSearch}
-                      onFocus={() => setIsClientDropdownOpen(true)}
+                      placeholder="Nombre del Cliente (o buscar en BD)"
+                      value={orderClient.nombre || clientSearch}
                       onChange={(e) => {
                         setClientSearch(e.target.value);
+                        setOrderClient(prev => ({ ...prev, nombre: e.target.value }));
                         setIsClientDropdownOpen(true);
                       }}
-                      className="w-full bg-black/60 border border-white/15 focus:border-blue-500 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder:text-slate-500 outline-none font-mono"
+                      onFocus={() => setIsClientDropdownOpen(true)}
+                      className="w-full bg-black/60 border border-white/15 p-2 rounded-xl text-xs text-white outline-none focus:border-blue-400"
                     />
+                    {isClientDropdownOpen && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-[#0c1322] border border-white/20 rounded-xl shadow-2xl max-h-36 overflow-y-auto z-50 custom-scrollbar">
+                        {clients
+                          .filter(c => c.nombre.toLowerCase().includes((orderClient.nombre || clientSearch).toLowerCase()))
+                          .map(c => (
+                            <button
+                              key={c.id}
+                              type="button"
+                              onClick={() => handleSelectClient(c)}
+                              className="w-full text-left p-2 hover:bg-blue-600/30 text-xs border-b border-white/5 transition-colors flex justify-between items-center cursor-pointer"
+                            >
+                              <span className="font-bold text-white">{c.nombre}</span>
+                              <span className="text-[10px] text-slate-400">{c.telefono}</span>
+                            </button>
+                          ))}
+                      </div>
+                    )}
                   </div>
+                )}
 
-                  {isClientDropdownOpen && (
-                    <div className="absolute top-full left-0 w-full mt-1 bg-[#0e1626] border border-blue-500/40 rounded-xl shadow-2xl max-h-40 overflow-y-auto z-30 divide-y divide-white/5 custom-scrollbar">
-                      {filteredClients.map(c => (
-                        <div
-                          key={c.id}
-                          onClick={() => handleSelectClientFromDB(c)}
-                          className="p-2 hover:bg-blue-600/20 cursor-pointer flex justify-between items-center text-xs"
-                        >
-                          <div>
-                            <p className="font-bold text-white">{c.nombre}</p>
-                            <p className="text-[10px] text-slate-400 font-mono">{c.direccion} • {c.telefono}</p>
-                          </div>
-                          <span className="text-[10px] text-blue-300 font-bold bg-blue-950 px-1.5 py-0.5 rounded">
-                            Seleccionar
-                          </span>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Teléfono / WhatsApp"
+                    value={orderClient.telefono}
+                    onChange={(e) => setOrderClient(prev => ({ ...prev, telefono: e.target.value }))}
+                    className="w-full bg-black/60 border border-white/15 p-2 rounded-xl text-xs text-white outline-none focus:border-blue-400"
+                  />
+                </div>
+              </div>
+
+              {orderPayment.tipo === 'envio' && (
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Dirección de Envío (Calle, número, apartamento)"
+                    value={orderClient.direccion}
+                    onChange={(e) => setOrderClient(prev => ({ ...prev, direccion: e.target.value }))}
+                    className="w-full bg-black/60 border border-white/15 p-2 rounded-xl text-xs text-white outline-none focus:border-blue-400"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN: ACCUMULATED COMANDA & ACTIONS (COL 5) */}
+          <div className="lg:col-span-5 p-5 sm:p-6 bg-black/30 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                  <ShoppingBag size={15} className="text-emerald-400" /> Comanda Acumulada ({accumulatedCart.reduce((s, i) => s + i.cantidad, 0)})
+                </span>
+                <span className="text-base font-mono font-black text-white">
+                  ${totalComandaPrice}
+                </span>
+              </div>
+
+              {/* ITEMS LIST */}
+              <div className="space-y-2 max-h-[320px] overflow-y-auto custom-scrollbar pr-1">
+                {accumulatedCart.length === 0 ? (
+                  <div className="p-8 text-center border border-dashed border-white/10 rounded-2xl text-slate-500 text-xs">
+                    <ShoppingBag size={28} className="mx-auto mb-2 opacity-30 text-blue-400" />
+                    <p>La comanda está vacía.</p>
+                    <p className="text-[11px] text-slate-600 mt-1">
+                      Dicta un producto a la izquierda y presiona "➕ Agregar".
+                    </p>
+                  </div>
+                ) : (
+                  accumulatedCart.map((item, idx) => (
+                    <div key={idx} className="bg-[#0a0f1c] border border-white/10 p-3 rounded-xl flex items-center justify-between shadow-sm group">
+                      <div className="flex-1 pr-2">
+                        <div className="flex items-center gap-1.5 font-bold text-xs text-white">
+                          <span className="text-blue-400 font-mono">{item.cantidad}x</span>
+                          <span>{item.menuItem.nombre}</span>
                         </div>
-                      ))}
+                        {item.gustos && item.gustos.length > 0 && (
+                          <p className="text-[11px] text-amber-300 mt-0.5">
+                            + {item.gustos.map(g => g.nombre).join(', ')}
+                          </p>
+                        )}
+                        {item.notas && (
+                          <p className="text-[10px] text-slate-400 italic mt-0.5">
+                            "{item.notas}"
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-mono font-bold text-white">
+                          ${item.precioUnitario * item.cantidad}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveCartItem(idx)}
+                          className="text-slate-500 hover:text-red-400 transition-colors p-1 cursor-pointer"
+                          title="Eliminar producto"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
                     </div>
-                  )}
-                </div>
-
-                {/* CLIENT DATA INPUTS */}
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <input
-                    type="text"
-                    placeholder="Nombre del Cliente"
-                    value={parsedClient.nombre}
-                    onChange={(e) => setParsedClient({ ...parsedClient, nombre: e.target.value })}
-                    className="bg-black/60 border border-white/10 rounded-xl px-3 py-1.5 text-white outline-none"
-                  />
-                  {parsedPayment.tipo === 'mesa' ? (
-                    <input
-                      type="text"
-                      placeholder="Nº de Mesa (ej: Mesa 4)"
-                      value={parsedClient.mesa}
-                      onChange={(e) => setParsedClient({ ...parsedClient, mesa: e.target.value })}
-                      className="bg-black/60 border border-white/10 rounded-xl px-3 py-1.5 text-white outline-none font-mono"
-                    />
-                  ) : (
-                    <input
-                      type="text"
-                      placeholder="Teléfono"
-                      value={parsedClient.telefono}
-                      onChange={(e) => setParsedClient({ ...parsedClient, telefono: e.target.value })}
-                      className="bg-black/60 border border-white/10 rounded-xl px-3 py-1.5 text-white outline-none font-mono"
-                    />
-                  )}
-                </div>
-
-                {parsedPayment.tipo === 'envio' && (
-                  <input
-                    type="text"
-                    placeholder="Dirección de Entrega (ej: 18 de Julio 1234 esq. Cuareim)"
-                    value={parsedClient.direccion}
-                    onChange={(e) => setParsedClient({ ...parsedClient, direccion: e.target.value })}
-                    className="w-full bg-black/60 border border-white/10 rounded-xl px-3 py-1.5 text-xs text-white outline-none"
-                  />
+                  ))
                 )}
               </div>
-
-              {/* SECTION 3: PAYMENT METHOD & NOTES */}
-              <div className="bg-black/40 border border-white/10 rounded-2xl p-3.5 space-y-2.5">
-                <div className="flex justify-between items-center">
-                  <span className="text-xs font-bold text-slate-300 uppercase flex items-center gap-1.5">
-                    <CreditCard size={13} className="text-amber-400" />
-                    Medio de Pago & Abono
-                  </span>
-
-                  <div className="flex gap-1">
-                    {['efectivo', 'debito', 'credito', 'transferencia'].map(m => (
-                      <button
-                        key={m}
-                        type="button"
-                        onClick={() => setParsedPayment({ ...parsedPayment, metodo: m as any })}
-                        className={`px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase transition-all cursor-pointer ${
-                          parsedPayment.metodo === m
-                            ? 'bg-amber-600 text-white'
-                            : 'bg-white/5 text-slate-400 hover:text-white'
-                        }`}
-                      >
-                        {m}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <input
-                    type="text"
-                    placeholder="Abona con $ (ej: 2000)"
-                    value={parsedPayment.abono}
-                    onChange={(e) => setParsedPayment({ ...parsedPayment, abono: e.target.value })}
-                    className="bg-black/60 border border-white/10 rounded-xl px-3 py-1.5 text-white font-mono outline-none"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Notas / Aclaraciones"
-                    value={parsedPayment.notas}
-                    onChange={(e) => setParsedPayment({ ...parsedPayment, notas: e.target.value })}
-                    className="bg-black/60 border border-white/10 rounded-xl px-3 py-1.5 text-white outline-none"
-                  />
-                </div>
-              </div>
-
             </div>
 
-            {/* ACTION BUTTONS (APPLY TO POS OR SEND DIRECT TO KITCHEN) */}
-            <div className="pt-4 border-t border-white/10 flex flex-wrap gap-2.5 mt-4">
-              <button
-                type="button"
-                disabled={parsedCart.length === 0}
-                onClick={() => {
-                  onApplyToOrder({
-                    cart: parsedCart,
-                    client: parsedClient,
-                    payment: parsedPayment,
-                    rawTranscript: transcript,
-                  }, false);
-                  onClose();
-                }}
-                className="flex-1 bg-white/10 hover:bg-white/20 disabled:opacity-40 text-white font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer border border-white/10"
-              >
-                <ShoppingBag size={15} /> Cargar en POS
-              </button>
+            {/* ACTIONS FOOTER */}
+            <div className="pt-4 border-t border-white/10 space-y-2.5 mt-4">
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-slate-400">Total a Cobrar:</span>
+                <span className="text-xl font-mono font-black text-emerald-400">${totalComandaPrice}</span>
+              </div>
 
-              <button
-                type="button"
-                disabled={parsedCart.length === 0}
-                onClick={() => {
-                  onApplyToOrder({
-                    cart: parsedCart,
-                    client: parsedClient,
-                    payment: parsedPayment,
-                    rawTranscript: transcript,
-                  }, true);
-                  onClose();
-                }}
-                className="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white font-black py-3 px-4 rounded-xl text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <Zap size={15} /> Confirmar y Enviar a Cocina
-              </button>
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  disabled={accumulatedCart.length === 0}
+                  onClick={handleSendToPOS}
+                  className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
+                >
+                  <ShoppingBag size={15} /> 🛒 Cargar Todo en el Carrito del POS
+                </button>
+
+                <button
+                  type="button"
+                  disabled={accumulatedCart.length === 0}
+                  onClick={handleSendDirectToKitchen}
+                  className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
+                >
+                  <CheckCircle size={15} /> 🚀 Confirmar y Enviar Directo a Cocina
+                </button>
+              </div>
             </div>
 
           </div>

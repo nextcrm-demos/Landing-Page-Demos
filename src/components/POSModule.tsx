@@ -56,6 +56,9 @@ export function POSModule({
   printTicketFn,
   onOpenAIModal,
 }: POSModuleProps) {
+  const payment = currentOrderPayment || { tipo: 'local', metodo: 'efectivo', notas: '', programado: false, horaProgramada: '', abono: '', propina: '', cadete: 'Samuel' };
+  const client = currentOrderClient || { nombre: '', mesa: '', telefono: '', direccion: '' };
+
   const [selectedGustosList, setSelectedGustosList] = useState<Gusto[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -179,7 +182,7 @@ export function POSModule({
                 <span className="w-5 h-5 rounded-full bg-black/40 text-emerald-300 flex items-center justify-center text-[10px] font-bold">2</span>
                 <span>2. DESTINO & CLIENTE</span>
                 <span className="text-[9px] bg-black/50 px-1.5 py-0.5 rounded border border-emerald-500/30 text-emerald-300 uppercase">
-                  {currentOrderPayment.tipo}
+                  {payment.tipo}
                 </span>
               </button>
 
@@ -197,7 +200,7 @@ export function POSModule({
                 <span className="w-5 h-5 rounded-full bg-black/40 text-emerald-300 flex items-center justify-center text-[10px] font-bold">3</span>
                 <span>3. PAGO & CONFIRMAR</span>
                 <span className="text-[9px] bg-black/50 px-1.5 py-0.5 rounded border border-emerald-500/30 text-emerald-300 uppercase">
-                  {currentOrderPayment.metodo}
+                  {payment.metodo}
                 </span>
               </button>
             </div>
@@ -312,9 +315,9 @@ export function POSModule({
                       <button
                         key={t.id}
                         type="button"
-                        onClick={() => setCurrentOrderPayment({...currentOrderPayment, tipo: t.id as any})}
+                        onClick={() => setCurrentOrderPayment({...payment, tipo: t.id as any})}
                         className={`p-3.5 rounded-2xl border font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
-                          currentOrderPayment.tipo === t.id
+                          payment.tipo === t.id
                             ? 'bg-blue-600 text-white border-blue-400 shadow-md'
                             : 'bg-black/40 text-slate-400 border-white/10 hover:bg-white/5'
                         }`}
@@ -328,7 +331,7 @@ export function POSModule({
                 {/* FORM FIELDS */}
                 <div className="space-y-3 bg-black/40 p-4 rounded-2xl border border-white/10">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {currentOrderPayment.tipo === 'mesa' ? (
+                    {payment.tipo === 'mesa' ? (
                       <div>
                         <label className="text-[10px] font-mono tracking-widest text-slate-400 uppercase block mb-1">
                           Número de Mesa *
@@ -336,21 +339,21 @@ export function POSModule({
                         <input 
                           type="text" 
                           placeholder="Ej: Mesa 4" 
-                          value={currentOrderClient.mesa} 
-                          onChange={e => setCurrentOrderClient({...currentOrderClient, mesa: e.target.value})} 
+                          value={client.mesa} 
+                          onChange={e => setCurrentOrderClient({...client, mesa: e.target.value})} 
                           className={`w-full bg-black/60 border p-2.5 rounded-xl outline-none font-sans text-sm text-white ${formErrors.mesa ? 'border-red-500' : 'border-white/15 focus:border-blue-400'}`} 
                         />
                       </div>
                     ) : (
                       <div>
                         <label className="text-[10px] font-mono tracking-widest text-slate-400 uppercase block mb-1">
-                          Nombre del Cliente {currentOrderPayment.tipo === 'envio' ? '*' : ''}
+                          Nombre del Cliente {payment.tipo === 'envio' ? '*' : ''}
                         </label>
                         <input 
                           type="text" 
                           placeholder="Ej: Juan Pérez" 
-                          value={currentOrderClient.nombre} 
-                          onChange={e => setCurrentOrderClient({...currentOrderClient, nombre: e.target.value})} 
+                          value={client.nombre} 
+                          onChange={e => setCurrentOrderClient({...client, nombre: e.target.value})} 
                           className={`w-full bg-black/60 border p-2.5 rounded-xl outline-none font-sans text-sm text-white ${formErrors.nombre ? 'border-red-500' : 'border-white/15 focus:border-blue-400'}`} 
                         />
                       </div>
@@ -358,19 +361,19 @@ export function POSModule({
 
                     <div>
                       <label className="text-[10px] font-mono tracking-widest text-slate-400 uppercase block mb-1">
-                        Teléfono / WhatsApp {currentOrderPayment.tipo === 'envio' ? '*' : ''}
+                        Teléfono / WhatsApp {payment.tipo === 'envio' ? '*' : ''}
                       </label>
                       <input 
                         type="tel" 
                         placeholder="Ej: 098 123 456" 
-                        value={currentOrderClient.telefono} 
-                        onChange={e => setCurrentOrderClient({...currentOrderClient, telefono: e.target.value})} 
+                        value={client.telefono} 
+                        onChange={e => setCurrentOrderClient({...client, telefono: e.target.value})} 
                         className={`w-full bg-black/60 border p-2.5 rounded-xl outline-none font-sans text-sm text-white ${formErrors.telefono ? 'border-red-500' : 'border-white/15 focus:border-blue-400'}`} 
                       />
                     </div>
                   </div>
 
-                  {currentOrderPayment.tipo === 'envio' && (
+                  {payment.tipo === 'envio' && (
                     <div>
                       <label className="text-[10px] font-mono tracking-widest text-slate-400 uppercase block mb-1">
                         Dirección de Entrega *
@@ -474,8 +477,8 @@ export function POSModule({
                     <span className="text-2xl font-black text-white font-mono">${cartTotal}</span>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs text-slate-300 font-bold uppercase">{currentOrderClient.nombre || 'Consumidor Final'}</span>
-                    <span className="text-[10px] text-blue-400 font-mono block">Destino: {currentOrderPayment.tipo.toUpperCase()}</span>
+                    <span className="text-xs text-slate-300 font-bold uppercase">{client.nombre || 'Consumidor Final'}</span>
+                    <span className="text-[10px] text-blue-400 font-mono block">Destino: {payment.tipo.toUpperCase()}</span>
                   </div>
                 </div>
 
@@ -549,10 +552,10 @@ export function POSModule({
 
           <div className="flex items-center gap-1.5">
             <span className="text-[10px] font-mono font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded">
-              📍 {currentOrderPayment.tipo.toUpperCase()}
+              📍 {payment.tipo.toUpperCase()}
             </span>
             <span className="text-[10px] font-mono bg-black/60 text-slate-300 border border-white/10 px-1.5 py-0.5 rounded">
-              {currentOrderPayment.metodo.toUpperCase()}
+              {payment.metodo.toUpperCase()}
             </span>
           </div>
         </div>

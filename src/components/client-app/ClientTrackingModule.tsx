@@ -102,42 +102,45 @@ export function ClientTrackingModule({
           ) : (
             filteredOrders.map(order => {
               const stepIndex = getStatusStepIndex(order.estado);
-              const totalItemsCount = order.cart.reduce((sum, it) => sum + it.cantidad, 0);
+              const orderCart = order.cart || [];
+              const totalItemsCount = orderCart.reduce((sum, it) => sum + (it.cantidad || 1), 0);
+              const orderTipo = order.pago?.tipo || 'local';
+              const orderIdStr = order.id ? String(order.id) : '0000';
 
               const steps = [
                 { id: 1, title: 'Recibido', desc: 'Comanda ingresada al sistema', icon: Package },
                 { id: 2, title: 'En Cocina', desc: 'Elaborándose en el horno a leña', icon: ChefHat },
-                { id: 3, title: order.pago.tipo === 'envio' ? 'En Camino' : 'Listo para Retirar', desc: order.pago.tipo === 'envio' ? 'Cadete en viaje a tu domicilio' : 'Embalado y listo en mostrador', icon: Truck },
+                { id: 3, title: orderTipo === 'envio' ? 'En Camino' : 'Listo para Retirar', desc: orderTipo === 'envio' ? 'Cadete en viaje a tu domicilio' : 'Embalado y listo en mostrador', icon: Truck },
                 { id: 4, title: 'Entregado', desc: '¡Que disfrutes tu pizza!', icon: CheckCircle2 },
               ];
 
               return (
                 <div 
-                  key={order.id} 
+                  key={orderIdStr} 
                   className="bg-[#0a0f1c] border border-white/10 hover:border-blue-500/40 rounded-3xl p-5 md:p-6 shadow-xl transition-all space-y-5"
                 >
                   {/* ORDER CARD HEADER */}
                   <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-2xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400 font-mono font-black text-sm">
-                        #{order.id.slice(-4)}
+                        #{orderIdStr.slice(-4)}
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <h4 className="font-bold text-white text-sm">Pedido #{order.id}</h4>
+                          <h4 className="font-bold text-white text-sm">Pedido #{orderIdStr}</h4>
                           <span className="text-[10px] bg-blue-500/20 text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded-full font-bold uppercase">
-                            {order.pago.tipo}
+                            {orderTipo}
                           </span>
                         </div>
                         <p className="text-xs text-slate-400 font-mono mt-0.5">
-                          {order.horaPedido || 'Hora no reg.'} • {order.cliente?.nombre || 'Cliente'}
+                          {order.horaPedido || order.fecha || 'Hora no reg.'} • {order.cliente?.nombre || 'Cliente'}
                         </p>
                       </div>
                     </div>
 
                     <div className="text-right">
                       <span className="text-xs text-slate-400 block font-mono">Total a Pagar</span>
-                      <span className="font-black text-lg text-emerald-400 font-mono">${order.total}</span>
+                      <span className="font-black text-lg text-emerald-400 font-mono">${order.total || 0}</span>
                     </div>
                   </div>
 
@@ -184,16 +187,20 @@ export function ClientTrackingModule({
                       Detalle de Productos ({totalItemsCount} ítems):
                     </span>
                     <div className="divide-y divide-white/5">
-                      {order.cart.map((item, idx) => (
-                        <div key={idx} className="py-1.5 flex items-center justify-between text-xs">
-                          <div>
-                            <span className="font-bold text-blue-400 font-mono mr-1.5">{item.cantidad}x</span>
-                            <span className="text-white font-medium">{item.nombre}</span>
-                            {item.notas && <p className="text-[10px] text-amber-300 font-mono">+ {item.notas}</p>}
+                      {orderCart.map((item, idx) => {
+                        const unitPrice = item.precioUnitario ?? item.precio ?? 0;
+                        const qty = item.cantidad || 1;
+                        return (
+                          <div key={idx} className="py-1.5 flex items-center justify-between text-xs">
+                            <div>
+                              <span className="font-bold text-blue-400 font-mono mr-1.5">{qty}x</span>
+                              <span className="text-white font-medium">{item.nombre}</span>
+                              {item.notas && <p className="text-[10px] text-amber-300 font-mono">+ {item.notas}</p>}
+                            </div>
+                            <span className="font-mono font-bold text-slate-300">${unitPrice * qty}</span>
                           </div>
-                          <span className="font-mono font-bold text-slate-300">${item.precioUnitario * item.cantidad}</span>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
 
                     {order.cliente?.direccion && (

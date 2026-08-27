@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { 
   ArrowDown, ChevronsDown, Pointer, Zap, Wallet, Heart, Download, 
   Package, Users, MessageSquare, CheckCircle, Info, Rocket, X, Mail, User, Building, Send, Clock, Sparkles, LogIn, ExternalLink, ShieldCheck, KeyRound, Copy, Check, Lock, AlertCircle,
-  Mic, Cpu, Layers, Database, Globe, Code2, Headphones, HelpCircle, Flame, CheckCircle2, ChevronRight, DollarSign, RotateCcw, CreditCard, Printer, FileText, BarChart3, Receipt, Box
+  Mic, Cpu, Layers, Database, Globe, Code2, Headphones, HelpCircle, Flame, CheckCircle2, ChevronRight, DollarSign, RotateCcw, CreditCard, Printer, FileText, BarChart3, Receipt, Box, Smartphone
 } from 'lucide-react';
 import { saveDemoRequest, verifyDemoAccess, getLocalDemoSession } from '../lib/firebase';
 
 interface PresentacionProps {
-  onStartDemo: () => void;
+  onStartDemo: (initialMode?: 'crm' | 'client_app') => void;
 }
 
 export function Presentacion({ onStartDemo }: PresentacionProps) {

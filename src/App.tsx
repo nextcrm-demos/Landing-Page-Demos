@@ -676,6 +676,23 @@ export default function App() {
     );
   }
 
+  if (appMode === 'client_app') {
+    return (
+      <ClientAppContainer
+        menuItems={menuItems}
+        orders={dailyOrders}
+        currentTime={currentTime}
+        onNewClientOrder={(newOrder) => {
+          setKitchenOrders(prev => [newOrder, ...prev]);
+          setDailyOrders(prev => [newOrder, ...prev]);
+          saveOrder(newOrder);
+        }}
+        onSwitchToCRM={() => setAppMode('crm')}
+        onGoToPresentation={() => setShowPresentation(true)}
+      />
+    );
+  }
+
   if (isLocked) {
     return (
       <AperturaCaja
@@ -711,23 +728,6 @@ export default function App() {
           setIsExpiredLocked(false);
           setShowPresentation(true);
         }}
-      />
-    );
-  }
-
-  if (appMode === 'client_app') {
-    return (
-      <ClientAppContainer
-        menuItems={menuItems}
-        orders={dailyOrders}
-        currentTime={currentTime}
-        onNewClientOrder={(newOrder) => {
-          setKitchenOrders(prev => [newOrder, ...prev]);
-          setDailyOrders(prev => [newOrder, ...prev]);
-          saveOrder(newOrder);
-        }}
-        onSwitchToCRM={() => setAppMode('crm')}
-        onGoToPresentation={() => setShowPresentation(true)}
       />
     );
   }

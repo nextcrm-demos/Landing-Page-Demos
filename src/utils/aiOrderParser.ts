@@ -39,7 +39,7 @@ export function normalizeSpanish(str: string | undefined | null): string {
 }
 
 /**
- * Intelligent Keyword & Synonym Matcher for Pizzería Menu Items
+ * Supercharged POS Order Parser with Exact Disambiguation for Sizes, Pizzas & Beverages
  */
 export function parseOrderLocally(
   text: string,
@@ -160,7 +160,7 @@ export function parseOrderLocally(
     pago.abono = abonoMatch[1];
   }
 
-  // 7. Detect Gustos / Toppings mentioned in speech ($30 each)
+  // 7. Detect Gustos / Toppings ($30 each)
   const foundGlobalGustos: Gusto[] = [];
   if (Array.isArray(gustosList)) {
     gustosList.forEach((g) => {
@@ -192,40 +192,98 @@ export function parseOrderLocally(
     });
   }
 
-  // 8. Product Detection with Smart Keyword Aliases & Common Misspellings
-  const productAliases = [
-    { keywords: ['1 metro', 'un metro', 'metro', 'muzza', 'musa', 'muza', 'mozzarella', 'muzzarela'], defaultName: '1 METRO PIZZA MUZZARELLA', defaultCat: 'pizzas', defaultPrice: 1250 },
-    { keywords: ['medio metro', '1/2 metro', 'media pizza'], defaultName: '1/2 METRO PIZZA MUZZARELLA', defaultCat: 'pizzas', defaultPrice: 680 },
-    { keywords: ['porcion de muzza', 'porcion muzza', 'porcion pizza'], defaultName: '(PORCIÓN) MUZZARELLA', defaultCat: 'pizzas', defaultPrice: 250 },
-    { keywords: ['napolitana', 'napo'], defaultName: 'PIZZETA NAPOLITANA', defaultCat: 'pizzetas', defaultPrice: 550 },
-    { keywords: ['calabresa', 'calabreza', 'peperoni'], defaultName: 'PIZZETA CALABRESA', defaultCat: 'pizzetas', defaultPrice: 530 },
-    { keywords: ['cuatro quesos', '4 quesos'], defaultName: 'PIZZETA 4 QUESOS', defaultCat: 'pizzetas', defaultPrice: 580 },
-    { keywords: ['pizzeta comun', 'pizeta comun'], defaultName: 'PIZZETA COMÚN', defaultCat: 'pizzetas', defaultPrice: 380 },
-    { keywords: ['pizzeta muzza', 'pizeta muzza', 'pizzeta'], defaultName: 'PIZZETA MUZZARELLA', defaultCat: 'pizzetas', defaultPrice: 480 },
-    { keywords: ['fugazzeta', 'fugazeta', 'figazza con muzza', 'figazza con queso'], defaultName: 'FIGAZZA CON MUZZARELLA', defaultCat: 'figazza', defaultPrice: 390 },
-    { keywords: ['figazza comun', 'figaza'], defaultName: 'FIGAZZA COMÚN', defaultCat: 'figazza', defaultPrice: 290 },
-    { keywords: ['faina con queso', 'faena con queso', 'fayna con queso'], defaultName: 'FAINÁ CON QUESO', defaultCat: 'fainas', defaultPrice: 160 },
-    { keywords: ['faina', 'fainas', 'faena', 'faenas', 'fayna'], defaultName: 'FAINÁ COMÚN', defaultCat: 'fainas', defaultPrice: 130 },
-    { keywords: ['coca cola', 'coca', 'refresco', 'gaseosa', 'pepsi', 'sprite', 'fanta'], defaultName: 'REFRESCO 1.5 L', defaultCat: 'bebidas', defaultPrice: 160 },
-    { keywords: ['cerveza', 'pilsen', 'patricia', 'stella', 'birra'], defaultName: 'CERVEZA PATRICIA 1L', defaultCat: 'bebidas', defaultPrice: 210 },
-    { keywords: ['sandwich caliente', 'sanduich caliente', 'tostado'], defaultName: 'SÁNDWICH CALIENTE CON MUZZARELLA', defaultCat: 'sandwiches', defaultPrice: 400 },
-    { keywords: ['postre', 'chaja', 'flan', 'tiramisu'], defaultName: 'PROMO 2 PIZZETAS + POSTRE CHAJÁ', defaultCat: 'promos', defaultPrice: 1050 },
-  ];
+  // 8. Size / Variant Disambiguation Rules
+  const wants15L = normalized.includes('1 5') || normalized.includes('1.5') || normalized.includes('litro y medio') || normalized.includes('1 y medio') || normalized.includes('grande');
+  const wants600ML = normalized.includes('600') || normalized.includes('chico') || normalized.includes('chica') || normalized.includes('individual') || normalized.includes('personal');
+  const wants1L = (normalized.includes('1 l') || normalized.includes('1 litro') || normalized.includes('de litro') || normalized.includes('litro')) && !wants15L;
 
-  // Try matching against real menuItems list first
+  const wantsHalfMetro = normalized.includes('medio metro') || normalized.includes('1/2 metro') || normalized.includes('media pizza') || normalized.includes('media metro');
+  const wantsFullMetro = (normalized.includes('un metro') || normalized.includes('1 metro') || normalized.includes('metro')) && !wantsHalfMetro;
+  const wantsPizzeta = normalized.includes('pizzeta') || normalized.includes('pizeta');
+  const wantsPorcion = normalized.includes('porcion') || normalized.includes('porciones');
+  const wantsFainaQueso = normalized.includes('faina con queso') || normalized.includes('faena con queso') || normalized.includes('fayna con queso');
+  const wantsFainaComun = (normalized.includes('faina') || normalized.includes('faena') || normalized.includes('fayna')) && !wantsFainaQueso;
+
+  // 9. Score each MenuItem to pick EXACT matches instead of multiple broad matches
   if (Array.isArray(menuItems) && menuItems.length > 0) {
+    const scoredItems: { item: MenuItem; score: number; qty: number }[] = [];
+
     menuItems.forEach(item => {
       if (!item || !item.nombre) return;
       const itemNorm = normalizeSpanish(item.nombre);
-      const isExact = normalized.includes(itemNorm);
+      let score = 0;
+
+      // BEVERAGE DISAMBIGUATION
+      if (item.categoria === 'bebidas' || itemNorm.includes('refresco') || itemNorm.includes('coca') || itemNorm.includes('agua') || itemNorm.includes('cerveza')) {
+        const isRefresco = normalized.includes('refresco') || normalized.includes('coca') || normalized.includes('gaseosa') || normalized.includes('pepsi') || normalized.includes('sprite') || normalized.includes('fanta');
+        const isAgua = normalized.includes('agua') || normalized.includes('salus');
+        const isCerveza = normalized.includes('cerveza') || normalized.includes('patricia') || normalized.includes('pilsen') || normalized.includes('stella') || normalized.includes('birra');
+
+        if (isRefresco && itemNorm.includes('refresco')) {
+          if (wants15L && itemNorm.includes('1.5')) score += 100;
+          else if (wants600ML && itemNorm.includes('600')) score += 100;
+          else if (!wants15L && !wants600ML && itemNorm.includes('1.5')) score += 80; // default to 1.5L if unspecified
+        } else if (isAgua && itemNorm.includes('agua')) {
+          if (wants15L && itemNorm.includes('1.5')) score += 100;
+          else if (wants600ML && itemNorm.includes('600')) score += 100;
+          else if (!wants15L && !wants600ML && itemNorm.includes('1.5')) score += 80;
+        } else if (isCerveza && (itemNorm.includes('cerveza') || itemNorm.includes('patricia'))) {
+          score += 100;
+        }
+      }
       
-      // Also match by partial significant tokens
-      const tokens = itemNorm.split(' ').filter(t => t.length > 3 && !['pizza', 'pizzeta', 'metro', 'porcion'].includes(t));
-      const hasSignificantToken = tokens.length > 0 && tokens.every(t => normalized.includes(t));
+      // PIZZA / PIZZETA / FAINA DISAMBIGUATION
+      else if (item.categoria === 'pizzas' || item.categoria === 'pizzetas' || item.categoria === 'fainas' || item.categoria === 'figazza') {
+        const isMuzza = normalized.includes('muzza') || normalized.includes('musa') || normalized.includes('muza') || normalized.includes('mozzarella');
+        const isNapo = normalized.includes('napolitana') || normalized.includes('napo');
+        const isCalabresa = normalized.includes('calabresa') || normalized.includes('calabreza');
+        const is4Quesos = normalized.includes('cuatro quesos') || normalized.includes('4 quesos');
+        const isFigazza = normalized.includes('figazza') || normalized.includes('fugazzeta') || normalized.includes('fugazeta');
 
-      if (isExact || hasSignificantToken) {
+        // FAINA
+        if (wantsFainaQueso && itemNorm.includes('faina con queso')) score += 100;
+        else if (wantsFainaComun && itemNorm.includes('faina comun')) score += 100;
+
+        // PIZZA 1 METRO
+        else if (wantsFullMetro && isMuzza && itemNorm.includes('1 metro pizza muzzarella')) score += 100;
+        else if (wantsHalfMetro && isMuzza && itemNorm.includes('1/2 metro pizza muzzarella')) score += 100;
+        else if (wantsPorcion && isMuzza && itemNorm.includes('(porcion) muzzarella')) score += 100;
+
+        // PIZZETAS
+        else if (wantsPizzeta) {
+          if (isNapo && itemNorm.includes('napolitana')) score += 100;
+          else if (isCalabresa && itemNorm.includes('calabresa')) score += 100;
+          else if (is4Quesos && itemNorm.includes('4 quesos')) score += 100;
+          else if (isMuzza && itemNorm.includes('pizzeta muzzarella')) score += 100;
+          else if (itemNorm.includes('pizzeta comun')) score += 70;
+        }
+
+        // FIGAZZA
+        else if (isFigazza) {
+          if (isMuzza && itemNorm.includes('figazza con muzzarella')) score += 100;
+          else if (itemNorm.includes('figazza comun')) score += 90;
+        }
+
+        // Direct item name fallback
+        else if (normalized.includes(itemNorm) && itemNorm.length > 5) {
+          score += 60;
+        }
+      }
+
+      // SANDWICHES
+      else if (item.categoria === 'sandwiches') {
+        if (normalized.includes('sandwich') || normalized.includes('sanduich') || normalized.includes('caliente')) {
+          if (normalized.includes('muzza') || normalized.includes('queso')) {
+            if (itemNorm.includes('muzzarella')) score += 100;
+          } else {
+            if (itemNorm.includes('sandwich caliente')) score += 80;
+          }
+        }
+      }
+
+      if (score >= 60) {
         // Detect quantity
-        const regex = new RegExp(`(\\d+|un|una|dos|tres|cuatro|cinco|seis)\\s*(?:de\\s*)?${itemNorm.slice(0, 10)}`, 'i');
+        const regex = new RegExp(`(\\d+|un|una|dos|tres|cuatro|cinco|seis)\\s*(?:de\\s*)?`, 'i');
         const m = normalized.match(regex);
         let cant = 1;
         if (m && m[1]) {
@@ -233,100 +291,84 @@ export function parseOrderLocally(
           cant = SPANISH_NUMBERS[rawNum] || parseInt(rawNum, 10) || 1;
         }
 
-        const isPizza = itemNorm.includes('pizza') || itemNorm.includes('pizzeta') || itemNorm.includes('metro') || itemNorm.includes('muzza') || itemNorm.includes('musa');
-        const gustosForThis = isPizza ? [...foundGlobalGustos] : [];
-        const gustosTotal = gustosForThis.reduce((s, g) => s + (g.precio || 30), 0);
-        const itemPrice = (item.precio && item.precio >= 50 ? item.precio : 1250) + gustosTotal;
-
-        if (!cart.some(c => c.productoId === item.id)) {
-          cart.push({
-            id: item.id || `cart-${Date.now()}-${Math.random()}`,
-            productoId: item.id || '',
-            nombre: item.nombre,
-            precio: itemPrice,
-            precioUnitario: itemPrice,
-            cantidad: cant,
-            categoria: item.categoria || 'pizzas',
-            gustos: gustosForThis,
-            notas: gustosForThis.length > 0 ? `+ ${gustosForThis.map(g => `${g.nombre} (+$${g.precio || 30})`).join(', ')}` : '',
-          });
-        }
+        scoredItems.push({ item, score, qty: cant });
       }
+    });
+
+    // Sort by score descending and pick only top matched distinct items
+    scoredItems.sort((a, b) => b.score - a.score);
+
+    // Filter to avoid adding overlapping items of same category if not requested
+    const selectedItemIds = new Set<string | number>();
+    scoredItems.forEach(({ item, qty }) => {
+      // If we already selected a beverage in this single turn, don't add another beverage unless explicitly multi-item
+      if (item.categoria === 'bebidas' && Array.from(selectedItemIds).some(id => menuItems.find(m => m.id === id)?.categoria === 'bebidas')) {
+        return;
+      }
+      // If we already selected a pizza in this single turn, don't add another pizza
+      if ((item.categoria === 'pizzas' || item.categoria === 'pizzetas') && Array.from(selectedItemIds).some(id => ['pizzas', 'pizzetas'].includes(menuItems.find(m => m.id === id)?.categoria || ''))) {
+        return;
+      }
+
+      selectedItemIds.add(item.id);
+
+      const isPizza = item.categoria === 'pizzas' || item.categoria === 'pizzetas';
+      const gustosForThis = isPizza ? [...foundGlobalGustos] : [];
+      const gustosTotal = gustosForThis.reduce((s, g) => s + (g.precio || 30), 0);
+      const itemPrice = (item.precio && item.precio >= 50 ? item.precio : 1250) + gustosTotal;
+
+      cart.push({
+        id: item.id || `cart-${Date.now()}-${Math.random()}`,
+        productoId: item.id || '',
+        nombre: item.nombre,
+        precio: itemPrice,
+        precioUnitario: itemPrice,
+        cantidad: qty,
+        categoria: item.categoria || 'pizzas',
+        gustos: gustosForThis,
+        notas: gustosForThis.length > 0 ? `+ ${gustosForThis.map(g => `${g.nombre} (+$${g.precio || 30})`).join(', ')}` : '',
+      });
     });
   }
 
-  // If menuItems didn't match, check aliases
+  // Fallback if no item scored:
   if (cart.length === 0) {
-    productAliases.forEach(alias => {
-      const matchKey = alias.keywords.find(k => normalized.includes(k));
-      if (matchKey) {
-        // Find existing item in menu or use alias
-        const existing = menuItems.find(m => normalizeSpanish(m.nombre).includes(normalizeSpanish(alias.defaultName))) || {
-          id: `alias-${alias.defaultName.toLowerCase().replace(/\s+/g, '-')}`,
-          nombre: alias.defaultName,
-          precio: alias.defaultPrice,
-          categoria: alias.defaultCat,
-        };
-
-        // Detect quantity
-        const regex = new RegExp(`(\\d+|un|una|dos|tres|cuatro|cinco|seis)\\s*(?:de\\s*)?${matchKey}`, 'i');
-        const m = normalized.match(regex);
-        let cant = 1;
-        if (m && m[1]) {
-          const rawNum = m[1].toLowerCase().trim();
-          cant = SPANISH_NUMBERS[rawNum] || parseInt(rawNum, 10) || 1;
-        }
-
-        const isPizza = alias.defaultCat === 'pizzas' || alias.defaultCat === 'pizzetas' || alias.defaultName.toLowerCase().includes('muzza');
-        const gustosForThis = isPizza ? [...foundGlobalGustos] : [];
-        const gustosTotal = gustosForThis.reduce((s, g) => s + (g.precio || 30), 0);
-        const itemPrice = (existing.precio && existing.precio >= 50 ? existing.precio : alias.defaultPrice) + gustosTotal;
-
-        if (!cart.some(c => c.nombre === existing.nombre)) {
-          cart.push({
-            id: existing.id || `cart-${Date.now()}`,
-            productoId: existing.id || '',
-            nombre: existing.nombre,
-            precio: itemPrice,
-            precioUnitario: itemPrice,
-            cantidad: cant,
-            categoria: existing.categoria || alias.defaultCat,
-            gustos: gustosForThis,
-            notas: gustosForThis.length > 0 ? `+ ${gustosForThis.map(g => `${g.nombre} (+$${g.precio || 30})`).join(', ')}` : '',
-          });
-        }
-      }
-    });
-  }
-
-  // Fallback if user said pizza or something general
-  if (cart.length === 0 && (normalized.includes('pizza') || normalized.includes('muzza') || normalized.includes('musa') || normalized.includes('quiero pedir'))) {
-    const muzzaProduct = menuItems.find(m => normalizeSpanish(m.nombre).includes('muzza')) || {
-      id: 'p5',
-      nombre: '1 METRO PIZZA MUZZARELLA',
-      precio: 1250,
-      categoria: 'pizzas',
-    };
-
-    const gustosTotal = foundGlobalGustos.reduce((s, g) => s + (g.precio || 30), 0);
-    const realPrice = (muzzaProduct.precio && muzzaProduct.precio >= 50 ? muzzaProduct.precio : 1250) + gustosTotal;
-
-    cart.push({
-      id: `cart-${Date.now()}`,
-      productoId: muzzaProduct.id,
-      nombre: muzzaProduct.nombre,
-      precio: realPrice,
-      precioUnitario: realPrice,
-      cantidad: 1,
-      categoria: 'pizzas',
-      gustos: foundGlobalGustos,
-      notas: foundGlobalGustos.length > 0 ? `+ ${foundGlobalGustos.map(g => `${g.nombre} (+$${g.precio || 30})`).join(', ')}` : '',
-    });
+    if (wantsFainaQueso) {
+      cart.push({ id: 'f2', productoId: 'f2', nombre: 'FAINÁ CON QUESO', precio: 160, precioUnitario: 160, cantidad: 1, categoria: 'fainas' });
+    } else if (wantsFainaComun) {
+      cart.push({ id: 'f1', productoId: 'f1', nombre: 'FAINÁ COMÚN', precio: 130, precioUnitario: 130, cantidad: 1, categoria: 'fainas' });
+    } else if (normalized.includes('refresco') || normalized.includes('coca')) {
+      const is600 = wants600ML;
+      cart.push({
+        id: is600 ? 'b2' : 'b1',
+        productoId: is600 ? 'b2' : 'b1',
+        nombre: is600 ? 'REFRESCO 600 ML' : 'REFRESCO 1.5 L',
+        precio: is600 ? 95 : 160,
+        precioUnitario: is600 ? 95 : 160,
+        cantidad: 1,
+        categoria: 'bebidas'
+      });
+    } else if (normalized.includes('cerveza') || normalized.includes('patricia')) {
+      cart.push({ id: 'b5', productoId: 'b5', nombre: 'CERVEZA PATRICIA 1L', precio: 210, precioUnitario: 210, cantidad: 1, categoria: 'bebidas' });
+    } else if (normalized.includes('muzza') || normalized.includes('musa') || normalized.includes('pizza') || wantsFullMetro) {
+      const gustosTotal = foundGlobalGustos.reduce((s, g) => s + (g.precio || 30), 0);
+      cart.push({
+        id: 'p5',
+        productoId: 'p5',
+        nombre: '1 METRO PIZZA MUZZARELLA',
+        precio: 1250 + gustosTotal,
+        precioUnitario: 1250 + gustosTotal,
+        cantidad: 1,
+        categoria: 'pizzas',
+        gustos: foundGlobalGustos,
+        notas: foundGlobalGustos.length > 0 ? `+ ${foundGlobalGustos.map(g => `${g.nombre} (+$${g.precio || 30})`).join(', ')}` : '',
+      });
+    }
   }
 
   const totalCalculado = cart.reduce((a, b) => a + (b.precioUnitario || b.precio || 0) * (b.cantidad || 1), 0);
   const totalCantidad = cart.reduce((a, b) => a + (b.cantidad || 1), 0);
-  const resumen = `Comanda de ${totalCantidad} productos para ${pago.tipo.toUpperCase()}${cliente.nombre ? ` (${cliente.nombre})` : ''}. Total: $${totalCalculado}`;
+  const resumen = `Comanda de ${totalCantidad} productos. Total: $${totalCalculado}`;
 
   return {
     cart,
@@ -340,7 +382,7 @@ export function parseOrderLocally(
 }
 
 /**
- * Gemini AI Cloud Fallback Parser (Ultra Fast 0-latency simulation/fetch)
+ * Gemini AI Cloud Fallback Parser
  */
 export async function parseOrderWithAI(
   text: string,

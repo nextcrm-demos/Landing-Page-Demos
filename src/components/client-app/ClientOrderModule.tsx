@@ -475,8 +475,34 @@ export function ClientOrderModule({
       )}
 
       {/* MAIN LEFT COLUMN: MENU BROWSER (8 COLUMNS) */}
-      <div className="flex-1 p-4 sm:p-6 overflow-y-auto custom-scrollbar space-y-5 min-w-0">
+      <div className="flex-1 p-4 sm:p-6 overflow-y-auto custom-scrollbar space-y-4 min-w-0">
         
+        {/* CONTACT & SCHEDULE STRIP */}
+        <div className="bg-[#0a0f1c] border border-white/10 rounded-2xl p-2.5 px-3.5 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className="flex items-center gap-3 text-slate-300">
+            <span className="flex items-center gap-1 text-emerald-400 font-bold text-[11px]">
+              <Clock size={13} className="text-emerald-400" /> Lun a Vie: 09:00 - 17:00 hs
+            </span>
+            <span className="hidden sm:inline-flex items-center gap-1 text-cyan-300 text-[11px] font-mono">
+              <Phone size={13} className="text-cyan-400" /> 098 356 320
+            </span>
+            <span className="hidden md:inline-flex items-center gap-1 text-purple-300 text-[11px]">
+              <Mail size={13} className="text-purple-400" /> jpz1207uy@gmail.com
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <a
+              href="https://api.whatsapp.com/send?phone=59898356320&text=Hola%20JPZ,%20quisiera%20hacer%20un%20pedido%20por%20WhatsApp."
+              target="_blank"
+              rel="noreferrer"
+              className="px-2.5 py-1 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white rounded-lg border border-emerald-500/30 text-[10px] font-bold transition-all flex items-center gap-1"
+            >
+              <MessageSquare size={11} /> WhatsApp
+            </a>
+          </div>
+        </div>
+
         {/* TOP SEARCH & CATEGORIES BAR */}
         <div className="space-y-3">
           <div className="relative">

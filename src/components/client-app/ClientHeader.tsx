@@ -68,17 +68,20 @@ export function ClientHeader({
       <div className="bg-gradient-to-r from-blue-950/40 via-purple-950/30 to-indigo-950/40 text-blue-300 text-[10px] px-3 py-1 flex flex-wrap items-center justify-between gap-1.5 font-mono">
         <div className="flex items-center gap-2.5 mx-auto sm:mx-0">
           <span className="flex items-center gap-1 bg-emerald-500/20 text-emerald-400 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30 text-[9px]">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> ABIERTO • HORNO ENCENDIDO
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> ABIERTO • PEDIDOS ONLINE
           </span>
           <span className="hidden sm:inline-flex items-center gap-1 text-slate-300">
-            <Clock size={11} className="text-purple-400" /> Horarios: 19:30 - 01:00 hs
+            <Clock size={11} className="text-purple-400" /> Lun a Vie 09:00 - 17:00 hs
           </span>
-          <span className="hidden md:inline-flex items-center gap-1 text-slate-300">
-            <MapPin size={11} className="text-cyan-400" /> Envíos a Domicilio y Retiro
+          <span className="hidden md:inline-flex items-center gap-1 text-cyan-300">
+            <Phone size={11} className="text-cyan-400" /> Tel/WhatsApp: 098 356 320
           </span>
         </div>
-        <div className="flex items-center gap-2 mx-auto sm:mx-0 text-[10px] text-slate-400">
-          <span>Demora promedio: <strong className="text-cyan-300 font-bold">25-35 min</strong></span>
+        <div className="flex items-center gap-2.5 mx-auto sm:mx-0 text-[10px] text-slate-300">
+          <span className="hidden lg:inline-flex items-center gap-1 text-purple-300">
+            <Mail size={11} className="text-purple-400" /> jpz1207uy@gmail.com
+          </span>
+          <span>Demora: <strong className="text-cyan-300 font-bold">25-35 min</strong></span>
         </div>
       </div>
 

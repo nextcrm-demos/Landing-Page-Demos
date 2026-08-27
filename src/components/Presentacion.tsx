@@ -889,7 +889,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
-                      <span><strong>Impresión Térmica:</strong> Impresora no incluida en el hardware.</span>
+                      <span><strong>Impresión Térmica:</strong> Impresora no incluida.</span>
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
@@ -897,7 +897,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
-                      <span><strong>Caja y Clientes:</strong> Arqueo diario de turno.</span>
+                      <span><strong>Reporte Básico de Caja:</strong> Metros de pizza vendidos, desglose de pagos y ticket impreso.</span>
                     </li>
                     <li className="flex items-center gap-1.5 text-emerald-300 font-medium">
                       <ShieldCheck size={13} className="text-emerald-400 shrink-0" />

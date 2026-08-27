@@ -29,7 +29,7 @@ export function SoporteModule() {
         'Impresión Térmica (impresora no incluida en hardware)',
         'Carga Inicial de Menú (por única vez)',
         'Base de Datos de Clientes y Direcciones',
-        'Arqueo de Caja y Cierre de Turno',
+        'Reporte Básico de Caja (Metros de pizza vendidos, desglose e impresión térmica)',
         'Garantía Compra Única: 3 Meses incluidos',
       ],
       whatsappText: 'Hola JPZ, quiero solicitar acceso/activación para el Módulo 1 (Plan Básico) de NextCRM ($1.490 UYU/mes ó $190 USD compra definitiva).',

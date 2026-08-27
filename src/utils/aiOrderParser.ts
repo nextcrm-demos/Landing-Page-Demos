@@ -194,17 +194,18 @@ export function parseOrderLocally(
 
   // 8. Product Detection with Smart Keyword Aliases
   const productAliases = [
-    { keywords: ['metro', 'muzza', 'mozzarella', 'muzzarela', 'pizza comun'], defaultName: '1 Metro Pizza Muzzarella', defaultCat: 'Pizzas', defaultPrice: 850 },
-    { keywords: ['napolitana', 'napo'], defaultName: 'Pizza Napolitana', defaultCat: 'Pizzas', defaultPrice: 520 },
-    { keywords: ['calabresa', 'calabreza'], defaultName: 'Pizzeta Calabresa', defaultCat: 'Pizzetas', defaultPrice: 530 },
-    { keywords: ['cuatro quesos', '4 quesos'], defaultName: 'Pizzeta 4 Quesos', defaultCat: 'Pizzetas', defaultPrice: 560 },
-    { keywords: ['fugazzeta', 'fugazeta', 'figazza'], defaultName: 'Pizza Fugazzeta', defaultCat: 'Pizzas', defaultPrice: 480 },
-    { keywords: ['faina con queso'], defaultName: 'Fainá con Queso', defaultCat: 'Fainás', defaultPrice: 120 },
-    { keywords: ['faina', 'fainas', 'fainas'], defaultName: 'Porción de Fainá', defaultCat: 'Fainás', defaultPrice: 90 },
-    { keywords: ['coca cola', 'coca', 'refresco', 'gaseosa'], defaultName: 'Coca Cola 1.5L', defaultCat: 'Bebidas', defaultPrice: 160 },
-    { keywords: ['cerveza', 'pilsen', 'patricia', 'stella'], defaultName: 'Cerveza 1L', defaultCat: 'Bebidas', defaultPrice: 190 },
-    { keywords: ['chivito'], defaultName: 'Chivito Completo', defaultCat: 'Sándwiches', defaultPrice: 580 },
-    { keywords: ['postre', 'flan', 'tiramisu'], defaultName: 'Postre de la Casa', defaultCat: 'Postres', defaultPrice: 180 },
+    { keywords: ['1 metro', 'un metro', 'metro', 'muzza', 'musa', 'mozzarella', 'muzzarela'], defaultName: '1 METRO PIZZA MUZZARELLA', defaultCat: 'Pizzas', defaultPrice: 1250 },
+    { keywords: ['medio metro', '1/2 metro', 'media pizza'], defaultName: '1/2 METRO PIZZA MUZZARELLA', defaultCat: 'Pizzas', defaultPrice: 680 },
+    { keywords: ['napolitana', 'napo'], defaultName: 'PIZZETA NAPOLITANA', defaultCat: 'Pizzetas', defaultPrice: 550 },
+    { keywords: ['calabresa', 'calabreza'], defaultName: 'PIZZETA CALABRESA', defaultCat: 'Pizzetas', defaultPrice: 530 },
+    { keywords: ['cuatro quesos', '4 quesos'], defaultName: 'PIZZETA 4 QUESOS', defaultCat: 'Pizzetas', defaultPrice: 580 },
+    { keywords: ['fugazzeta', 'fugazeta', 'figazza'], defaultName: 'FIGAZZA CON MUZZARELLA', defaultCat: 'figazza', defaultPrice: 390 },
+    { keywords: ['faina con queso'], defaultName: 'FAINÁ CON QUESO', defaultCat: 'fainas', defaultPrice: 160 },
+    { keywords: ['faina', 'fainas'], defaultName: 'FAINÁ COMÚN', defaultCat: 'fainas', defaultPrice: 130 },
+    { keywords: ['coca cola', 'coca', 'refresco', 'gaseosa'], defaultName: 'REFRESCO 1.5 L', defaultCat: 'bebidas', defaultPrice: 160 },
+    { keywords: ['cerveza', 'pilsen', 'patricia', 'stella'], defaultName: 'CERVEZA PATRICIA 1L', defaultCat: 'bebidas', defaultPrice: 210 },
+    { keywords: ['sandwich', 'sanduich', 'caliente'], defaultName: 'SÁNDWICH CALIENTE CON MUZZARELLA', defaultCat: 'sandwiches', defaultPrice: 400 },
+    { keywords: ['postre', 'chaja', 'flan'], defaultName: 'PROMO 2 PIZZETAS + POSTRE CHAJÁ', defaultCat: 'promos', defaultPrice: 1050 },
   ];
 
   // Try matching against real menuItems list first
@@ -228,10 +229,10 @@ export function parseOrderLocally(
           cant = SPANISH_NUMBERS[rawNum] || parseInt(rawNum, 10) || 1;
         }
 
-        const isPizza = itemNorm.includes('pizza') || itemNorm.includes('pizzeta') || itemNorm.includes('metro') || itemNorm.includes('muzza');
+        const isPizza = itemNorm.includes('pizza') || itemNorm.includes('pizzeta') || itemNorm.includes('metro') || itemNorm.includes('muzza') || itemNorm.includes('musa');
         const gustosForThis = isPizza ? [...foundGlobalGustos] : [];
         const gustosTotal = gustosForThis.reduce((s, g) => s + (g.precio || 30), 0);
-        const itemPrice = (item.precio || 0) + gustosTotal;
+        const itemPrice = (item.precio && item.precio > 10 ? item.precio : 1250) + gustosTotal;
 
         if (!cart.some(c => c.productoId === item.id)) {
           cart.push({

@@ -126,12 +126,9 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
       const result = await verifyDemoAccess(demoAuthInput, demoPasswordInput);
       if (result.allowed) {
         setDemoAuthSuccess(result.message);
-        setVerifiedAccountData(result.account || {
-          clienteNombre: 'Cliente Demo',
-          negocioNombre: 'Pizzería Gourmet',
-          duracionHoras: 24,
-          plan: result.account?.plan || 'plan_full'
-        });
+        setShowDemoAccessModal(false);
+        onStartDemo(targetLaunchMode);
+        return;
       } else {
         setDemoAuthError(result.message);
       }

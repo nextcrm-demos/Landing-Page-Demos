@@ -117,7 +117,7 @@ export function ClientAppContainer({
   const activeOrdersCount = orders.filter(o => o.estado !== 'entregado' && o.estado !== 'finalizado').length;
 
   return (
-    <div className="w-full h-full flex flex-col bg-[#040814] overflow-hidden select-none">
+    <div className="w-full h-screen min-h-screen flex flex-col bg-[#040814] overflow-hidden select-none">
       
       {/* CLIENT HEADER */}
       <ClientHeader

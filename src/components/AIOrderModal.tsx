@@ -89,7 +89,7 @@ export function AIOrderModal({
     }
 
     const timer = setTimeout(() => {
-      const localParsed = parseOrderLocally(transcript, menuItems, clients);
+      const localParsed = parseOrderLocally(transcript, menuItems, gustosAdicionales, clients);
       setDetectedResult(localParsed);
       
       // If client detected, pre-fill if not set
@@ -134,9 +134,12 @@ export function AIOrderModal({
       };
 
       recognition.onresult = (event: any) => {
+        if (!event || !event.results) return;
         let currentText = '';
         for (let i = 0; i < event.results.length; i++) {
-          currentText += event.results[i][0].transcript + ' ';
+          if (event.results[i] && event.results[i][0] && event.results[i][0].transcript) {
+            currentText += event.results[i][0].transcript + ' ';
+          }
         }
         setTranscript(currentText.trim());
       };

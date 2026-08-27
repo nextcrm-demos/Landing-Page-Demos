@@ -454,8 +454,23 @@ export default function App() {
     saveStock(updatedStock);
     saveAppState({ orderCounter: nextCounter });
 
-    // Auto-save new client into Agenda de Clientes if not already present
-    if (currentOrderClient.nombre.trim()) {
+    // Auto-save new client into Agenda de Clientes if not already present (Regido por teléfono)
+    if (currentOrderClient.telefono && currentOrderClient.telefono.trim()) {
+      const cleanPhone = currentOrderClient.telefono.replace(/\D/g, '');
+      const existingClient = clientsDB.find(
+        c => (c.telefono && c.telefono.replace(/\D/g, '') === cleanPhone) ||
+             (c.nombre && c.nombre.toLowerCase().trim() === currentOrderClient.nombre.toLowerCase().trim())
+      );
+      if (!existingClient) {
+        const newClient: Client = {
+          id: Date.now(),
+          nombre: (currentOrderClient.nombre || 'Cliente').toUpperCase().trim(),
+          telefono: currentOrderClient.telefono.trim(),
+          direccion: currentOrderClient.direccion || ''
+        };
+        saveClient(newClient);
+      }
+    } else if (currentOrderClient.nombre && currentOrderClient.nombre.trim()) {
       const existingClient = clientsDB.find(
         c => c.nombre.toLowerCase().trim() === currentOrderClient.nombre.toLowerCase().trim()
       );
@@ -858,6 +873,7 @@ export default function App() {
             setAiModalMode(mode);
             setIsAIModalOpen(true);
           }}
+          clients={clientsDB}
         />
       )}
 

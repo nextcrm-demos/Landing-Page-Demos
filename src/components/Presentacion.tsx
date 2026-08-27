@@ -854,7 +854,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
            </div>
            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black">Tu inversión garantizada.</h2>
            <p className="text-slate-400 text-xs mt-0.5">
-             Elige el módulo ideal para tu pizzería y desbloquea nuevas funciones cuando lo necesites.
+             Elige el módulo ideal para tu pizzería. <strong>Cada módulo se configura a la medida de tu local</strong> (precios personalizados para gustos de pizzas, ingredientes, categorías y formas de cobro).
            </p>
          </div>
          

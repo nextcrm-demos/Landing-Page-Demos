@@ -554,9 +554,6 @@ export function ClientOrderModule({
                         ${item.precio}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">
-                      {item.descripcion || 'Especialidad de la casa elaborada con ingredientes frescos.'}
-                    </p>
                   </div>
 
                   <div className="pt-3 mt-3 border-t border-white/5 flex items-center justify-between">

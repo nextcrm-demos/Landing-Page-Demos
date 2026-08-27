@@ -117,21 +117,31 @@ export const printTicket = (orderToPrint: Order | null, triggerAlert?: (msg: str
          <span>$${orderToPrint.total}</span>
       </div>
       
-      ${isCard && !isClientCopy ? `
-      <div style="border: 3px dashed #000; padding: 10px; text-align: center; margin: 15px 0; border-radius: 4px;">
-         <h2 style="margin: 0; font-size: 20px; font-weight: 900; text-transform: uppercase;">¡ENVIAR POS!</h2>
-         <p style="margin: 5px 0 0 0; font-size: 14px; font-weight: bold;">Pago con ${orderToPrint.pago.metodo}</p>
+      ${(isCard && orderToPrint.pago.tipo === 'envio') || (isCard && !isClientCopy) ? `
+      <div style="border: 3px solid #000; padding: 8px; text-align: center; margin: 10px 0; background: #000; color: #fff; border-radius: 4px;">
+         <h2 style="margin: 0; font-size: 18px; font-weight: 900; text-transform: uppercase;">⚠️ ¡ENVIAR POS INALÁMBRICO!</h2>
+         <p style="margin: 4px 0 0 0; font-size: 13px; font-weight: bold;">Pago con ${orderToPrint.pago.metodo.toUpperCase()} (Llevar POS al repartidor)</p>
       </div>
       ` : ''}
       
       ${orderToPrint.pago.notas ? `
-      <div style="border: 2px solid #000; padding: 8px; margin: 10px 0; border-radius: 4px;">
-         <p style="margin: 0; font-size: 12px; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 4px;">NOTAS DEL PEDIDO:</p>
-         <p style="margin: 0; font-size: 14px; font-weight: bold; text-transform: uppercase;">${orderToPrint.pago.notas}</p>
+      <div style="border: 2px solid #000; padding: 8px; margin: 10px 0; border-radius: 4px; background: #f9f9f9;">
+         <p style="margin: 0; font-size: 11px; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid #000; padding-bottom: 3px; margin-bottom: 3px;">NOTAS DEL PEDIDO:</p>
+         <p style="margin: 0; font-size: 13px; font-weight: bold; text-transform: uppercase; color: #000;">${orderToPrint.pago.notas}</p>
       </div>
       ` : ''}
 
-      <div style="text-align: center; margin-top: 20px;">
+      ${isClientCopy ? `
+      <div style="border-top: 1px dashed #000; margin-top: 15px; padding-top: 8px; text-align: center; font-size: 11px;">
+         <p style="margin: 2px 0; font-weight: 900; text-transform: uppercase;">📱 Nuestras Redes & Contacto:</p>
+         <p style="margin: 2px 0;">Instagram: <strong>@nextcrm.uy</strong></p>
+         <p style="margin: 2px 0;">WhatsApp: <strong>098 356 320</strong></p>
+         <p style="margin: 2px 0;">Email: <strong>jpz1207uy@gmail.com</strong></p>
+         <p style="margin: 2px 0; font-size: 10px; color: #444;">www.nextcrm.uy</p>
+      </div>
+      ` : ''}
+
+      <div style="text-align: center; margin-top: 15px;">
          <p style="font-size: 10px; font-weight: bold; margin: 0;">|| |||| || ||| || |||||| | |||</p>
          <p style="font-size: 12px; font-weight: bold; margin: 5px 0 0 0;">¡GRACIAS POR ELEGIRNOS!</p>
       </div>

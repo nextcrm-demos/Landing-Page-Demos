@@ -12,6 +12,7 @@ interface HeaderProps {
   isAdmin?: boolean;
   onOpenAdminPanel?: () => void;
   userPlan?: 'plan_basico' | 'plan_pro' | 'plan_vip' | 'plan_full';
+  onSwitchToClientApp?: () => void;
 }
 
 export function Header({
@@ -24,6 +25,7 @@ export function Header({
   isAdmin = false,
   onOpenAdminPanel,
   userPlan = 'plan_full',
+  onSwitchToClientApp,
 }: HeaderProps) {
   const tabs = [
     'Toma de Pedidos', 'WhatsApp', 'Módulo Web', 'Cocina', 'Mostrador', 'Mesas', 'Delivery', 
@@ -71,6 +73,16 @@ export function Header({
           >
             <Home size={12} />
             <span className="hidden lg:inline">Landing</span>
+          </button>
+        )}
+
+        {onSwitchToClientApp && (
+          <button
+            onClick={onSwitchToClientApp}
+            title="Probar Aplicación Web de Clientes"
+            className="flex items-center gap-1 px-2.5 py-1 bg-purple-600/20 hover:bg-purple-600/40 text-purple-300 hover:text-white rounded-lg text-[11px] font-bold transition-all border border-purple-500/40 shadow-sm cursor-pointer"
+          >
+            <span>📱 App Clientes</span>
           </button>
         )}
 

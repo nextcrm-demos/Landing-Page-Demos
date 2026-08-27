@@ -26,6 +26,7 @@ import { AdminDemoPanelModal } from './components/AdminDemoPanelModal';
 import { ExpiredDemoLockScreen } from './components/ExpiredDemoLockScreen';
 import { WhatsAppInboxModule } from './components/WhatsAppInboxModule';
 import { WebClientAppModule } from './components/WebClientAppModule';
+import { ClientAppContainer } from './components/client-app/ClientAppContainer';
 import { ModuleLockScreen } from './components/ModuleLockScreen';
 import { ParsedOrderResult } from './utils/aiOrderParser';
 
@@ -128,6 +129,12 @@ export default function App() {
   const [userPlan, setUserPlan] = useState<'plan_basico' | 'plan_pro' | 'plan_vip' | 'plan_full'>(() => {
     const saved = localStorage.getItem('nextcrm_user_plan');
     return (saved as any) || 'plan_full';
+  });
+
+  const [appMode, setAppMode] = useState<'crm' | 'client_app'>(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('mode') === 'client' || params.get('app') === 'client') return 'client_app';
+    return 'crm';
   });
 
   const handlePlanUpgrade = (newPlan: 'plan_pro' | 'plan_vip' | 'plan_full') => {
@@ -655,7 +662,18 @@ export default function App() {
   };
 
   if (showPresentation) {
-      return <Presentacion onStartDemo={() => setShowPresentation(false)} />;
+    return (
+      <Presentacion
+        onStartDemo={(mode) => {
+          if (mode === 'client_app') {
+            setAppMode('client_app');
+          } else {
+            setAppMode('crm');
+          }
+          setShowPresentation(false);
+        }}
+      />
+    );
   }
 
   if (isLocked) {
@@ -697,6 +715,23 @@ export default function App() {
     );
   }
 
+  if (appMode === 'client_app') {
+    return (
+      <ClientAppContainer
+        menuItems={menuItems}
+        orders={dailyOrders}
+        currentTime={currentTime}
+        onNewClientOrder={(newOrder) => {
+          setKitchenOrders(prev => [newOrder, ...prev]);
+          setDailyOrders(prev => [newOrder, ...prev]);
+          saveOrder(newOrder);
+        }}
+        onSwitchToCRM={() => setAppMode('crm')}
+        onGoToPresentation={() => setShowPresentation(true)}
+      />
+    );
+  }
+
   return (
     <div className="flex flex-col h-screen overflow-hidden font-sans bg-[#050505] text-white selection:bg-blue-500/30 relative select-none">
       {demoSession.isValid && (
@@ -711,6 +746,12 @@ export default function App() {
             </span>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => setAppMode('client_app')}
+              className="text-[11px] bg-purple-600/30 hover:bg-purple-600 text-purple-200 hover:text-white border border-purple-500/40 px-2.5 py-0.5 rounded-full transition-colors cursor-pointer flex items-center gap-1"
+            >
+              <span>📱 Vista App Clientes</span>
+            </button>
             {demoSession.isAdmin && (
               <button
                 onClick={() => setIsAdminPanelOpen(true)}
@@ -739,6 +780,7 @@ export default function App() {
         isAdmin={demoSession.isAdmin}
         onOpenAdminPanel={() => setIsAdminPanelOpen(true)}
         userPlan={userPlan}
+        onSwitchToClientApp={() => setAppMode('client_app')}
       />
 
       {activeTab === 'Toma de Pedidos' && (

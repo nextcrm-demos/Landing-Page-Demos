@@ -190,20 +190,27 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
           Centraliza mostrador, delivery, mesas, monitor KDS, stock, cierre de caja con desglose de tarjetas e impresión en ticketera preconfigurada.
         </p>
 
-        {/* BOTONES DELICADOS Y BIEN PROPORCIONADOS */}
-        <div className="flex flex-wrap items-center justify-center gap-3.5 z-10">
+        {/* BOTONES DIRECTOS PARA LAS DOS DEMOS */}
+        <div className="flex flex-wrap items-center justify-center gap-3 z-10">
           <button 
-            onClick={() => document.getElementById('seccion-voz-ia')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-blue-600 hover:bg-blue-500 text-white font-medium tracking-wide px-5 py-2.5 sm:px-6 sm:py-2.5 rounded-full flex items-center gap-2 transition-all shadow-lg hover:scale-105 cursor-pointer text-xs sm:text-sm"
+            onClick={() => onStartDemo('crm')}
+            className="bg-blue-600 hover:bg-blue-500 text-white font-bold tracking-wide px-5 py-3 rounded-2xl flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:scale-105 cursor-pointer text-xs sm:text-sm uppercase"
           >
-            <Mic size={15} /> Ver Pedidos por Voz <ArrowDown size={14} />
+            <Rocket size={16} /> Probar Demo CRM / POS
           </button>
 
           <button 
-            onClick={() => document.getElementById('seccion-pos')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-medium tracking-wide px-5 py-2.5 sm:px-6 sm:py-2.5 rounded-full flex items-center gap-2 border border-white/10 transition-all hover:scale-105 cursor-pointer text-xs sm:text-sm"
+            onClick={() => onStartDemo('client_app')}
+            className="bg-purple-600/30 hover:bg-purple-600 text-purple-200 hover:text-white font-bold tracking-wide px-5 py-3 rounded-2xl flex items-center gap-2 border border-purple-500/40 transition-all shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:scale-105 cursor-pointer text-xs sm:text-sm uppercase"
           >
-            Explorar Módulos
+            <Smartphone size={16} /> Probar Demo App Clientes
+          </button>
+
+          <button 
+            onClick={() => document.getElementById('seccion-voz-ia')?.scrollIntoView({ behavior: 'smooth' })}
+            className="bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-medium tracking-wide px-4 py-3 rounded-2xl flex items-center gap-1.5 border border-white/10 transition-all hover:scale-105 cursor-pointer text-xs sm:text-sm"
+          >
+            Explorar Módulos <ArrowDown size={13} />
           </button>
         </div>
         
@@ -1123,16 +1130,29 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowDemoAccessModal(false);
-                    onStartDemo();
-                  }}
-                  className="w-full bg-blue-600 hover:bg-blue-500 text-white font-extrabold py-3.5 px-4 rounded-xl text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
-                >
-                  <Rocket size={15} /> ¡Entendido, Ingresar al Sistema!
-                </button>
+                <div className="space-y-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowDemoAccessModal(false);
+                      onStartDemo('crm');
+                    }}
+                    className="w-full bg-blue-600 hover:bg-blue-500 text-white font-extrabold py-3.5 px-4 rounded-xl text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  >
+                    <Rocket size={15} /> Ingresar a Demo CRM / POS
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowDemoAccessModal(false);
+                      onStartDemo('client_app');
+                    }}
+                    className="w-full bg-purple-600/30 hover:bg-purple-600 text-purple-200 hover:text-white font-extrabold py-3 px-4 rounded-xl text-xs uppercase tracking-wider border border-purple-500/40 shadow flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  >
+                    <Smartphone size={15} /> Ingresar a Demo App Clientes
+                  </button>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleVerifyDemo} className="space-y-3 mb-3 text-left">

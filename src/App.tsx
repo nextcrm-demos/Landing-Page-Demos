@@ -4,7 +4,7 @@ import {
 } from './types';
 import { defaultMenuList, defaultClients, defaultHistorical, defaultMonthlyClosings } from './data/defaults';
 import { printTicket } from './utils/printHelpers';
-
+import { Zap } from 'lucide-react';
 
 import { Presentacion } from './components/Presentacion';
 import { Header } from './components/Header';

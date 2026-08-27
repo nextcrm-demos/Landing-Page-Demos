@@ -753,27 +753,57 @@ export default function App() {
   return (
     <div className="flex flex-col h-screen overflow-hidden font-sans bg-[#050505] text-white selection:bg-blue-500/30 relative select-none">
       {demoSession.isValid && (
-        <div className="bg-emerald-950/90 border-b border-emerald-500/30 text-emerald-300 text-xs py-1.5 px-4 flex items-center justify-between z-30 shrink-0">
+        <div className="bg-emerald-950/95 border-b border-emerald-500/30 text-emerald-300 text-xs py-1.5 px-3 sm:px-5 flex flex-wrap items-center justify-between gap-2 z-30 shrink-0 font-mono select-none">
+          
+          {/* LEFT: STATUS & TIME */}
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span className="font-semibold text-white">
-              {demoSession.isAdmin ? 'Modo Administrador Activo (Acceso Ilimitado)' : 'Sesión Demo Autorizada (24 Horas)'}
+            <span className="font-bold text-white text-xs">
+              {demoSession.isAdmin ? 'Admin Activo' : 'Sesión Demo (24h)'}
             </span>
-            <span className="text-emerald-400/80 hidden sm:inline">
-              | {demoSession.isAdmin ? 'Admin: JPZ207UI' : `Tiempo restante: ~${demoSession.remainingHours}h (${demoSession.clientName})`}
+            <span className="text-emerald-400/80 hidden xl:inline text-[11px]">
+              | {demoSession.isAdmin ? 'JPZ207UI' : `Restante: ~${demoSession.remainingHours}h (${demoSession.clientName})`}
             </span>
           </div>
+
+          {/* CENTER: SIMULAR PLAN EN EL HEADER VERDE */}
+          <div className="flex items-center bg-black/60 border border-emerald-500/40 rounded-full px-2.5 py-0.5 gap-1.5 shadow-sm">
+            <span className="text-emerald-300 font-bold text-[10px] uppercase flex items-center gap-1">
+              <Zap size={11} className="text-amber-400" /> Simular:
+            </span>
+            {[
+              { id: 'plan_basico', label: '1. Básico' },
+              { id: 'plan_pro', label: '2. Pro' },
+              { id: 'plan_vip', label: '3. VIP' },
+              { id: 'plan_full', label: '4. Full' },
+            ].map((p) => (
+              <button
+                key={p.id}
+                onClick={() => handlePlanUpgrade(p.id as any)}
+                className={`px-2 py-0.5 rounded-full text-[10px] font-bold transition-all cursor-pointer ${
+                  userPlan === p.id
+                    ? 'bg-emerald-400 text-black shadow font-black'
+                    : 'text-emerald-300/70 hover:text-white hover:bg-emerald-500/20'
+                }`}
+                title={`Probar ${p.label}`}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+
+          {/* RIGHT: VISTA APP CLIENTES, PANEL DEMOS, VOLVER AL INICIO */}
           <div className="flex items-center gap-2">
             <button
               onClick={() => setAppMode('client_app')}
-              className="text-[11px] bg-purple-600/30 hover:bg-purple-600 text-purple-200 hover:text-white border border-purple-500/40 px-2.5 py-0.5 rounded-full transition-colors cursor-pointer flex items-center gap-1"
+              className="text-[11px] bg-purple-600/30 hover:bg-purple-600 text-purple-200 hover:text-white border border-purple-500/40 px-2.5 py-0.5 rounded-full transition-colors cursor-pointer flex items-center gap-1 font-bold"
             >
               <span>📱 Vista App Clientes</span>
             </button>
             {demoSession.isAdmin && (
               <button
                 onClick={() => setIsAdminPanelOpen(true)}
-                className="text-[11px] bg-blue-600/30 hover:bg-blue-600 text-blue-200 hover:text-white border border-blue-500/40 px-2.5 py-0.5 rounded-full transition-colors cursor-pointer"
+                className="text-[11px] bg-blue-600/30 hover:bg-blue-600 text-blue-200 hover:text-white border border-blue-500/40 px-2.5 py-0.5 rounded-full transition-colors cursor-pointer font-bold"
               >
                 Panel Demos
               </button>

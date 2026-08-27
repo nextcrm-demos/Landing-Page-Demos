@@ -147,33 +147,8 @@ export function Header({
         })}
       </div>
 
-      {/* RIGHT CONTROLS: ADMIN PLAN SELECTOR & CERRAR TURNO */}
+      {/* RIGHT CONTROLS: CERRAR TURNO */}
       <div className="flex items-center gap-1.5 shrink-0">
-        {isAdmin && onChangePlan && (
-          <div className="hidden lg:flex items-center bg-black/60 border border-white/10 rounded-lg p-0.5 gap-0.5 text-[9px] font-mono shrink-0">
-            <span className="text-slate-400 px-1 font-bold text-[9px]">Simular:</span>
-            {[
-              { id: 'plan_basico', label: '1' },
-              { id: 'plan_pro', label: '2' },
-              { id: 'plan_vip', label: '3' },
-              { id: 'plan_full', label: '4' },
-            ].map((p) => (
-              <button
-                key={p.id}
-                onClick={() => onChangePlan(p.id as any)}
-                className={`px-1.5 py-0.5 rounded font-bold transition-all cursor-pointer ${
-                  userPlan === p.id
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white hover:bg-white/5'
-                }`}
-                title={`Simular Plan ${p.label}`}
-              >
-                P{p.label}
-              </button>
-            ))}
-          </div>
-        )}
-
         <button 
           onClick={onCerrarTurno} 
           className="px-2.5 py-1.5 bg-red-500/15 hover:bg-red-600 text-red-300 hover:text-white rounded-xl transition-all flex items-center gap-1 text-[10px] font-bold tracking-normal whitespace-nowrap border border-red-500/30 cursor-pointer shrink-0"

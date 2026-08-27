@@ -427,18 +427,18 @@ export function ReportesModule({
               <div className="flex items-center gap-3 flex-wrap w-full lg:w-auto justify-end">
                 <button
                   onClick={handleExportMonthlyCSV}
-                  className="px-3.5 py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl text-xs font-semibold border border-white/10 transition-colors cursor-pointer flex items-center gap-2"
-                  title="Exportar Reporte Mensual en CSV"
+                  className="px-3.5 py-2.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 rounded-xl text-xs font-bold border border-emerald-500/30 transition-colors cursor-pointer flex items-center gap-2 shadow-sm"
+                  title="Descargar Reporte Mensual en Excel / CSV"
                 >
-                  <Download size={15} /> Exportar CSV
+                  <Download size={15} /> Exportar Excel
                 </button>
 
                 <button
                   onClick={() => printMonthlyClosingStatement(activeMonthlyReport)}
-                  className="px-4 py-2.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 rounded-xl text-xs font-bold transition-colors cursor-pointer flex items-center gap-2"
-                  title="Imprimir Acta de Cierre Mensual"
+                  className="px-4 py-2.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 rounded-xl text-xs font-bold transition-colors cursor-pointer flex items-center gap-2 shadow-sm"
+                  title="Descargar en PDF o Imprimir Acta de Cierre Mensual"
                 >
-                  <Printer size={15} /> Imprimir Acta Oficial
+                  <Printer size={15} /> Exportar PDF / Acta
                 </button>
 
                 {/* BOTÓN DE CIERRE GENERAL DE MES */}

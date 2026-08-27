@@ -952,7 +952,7 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-blue-400 shrink-0" />
-                      <span><strong>Control de Stock:</strong> Insumos críticos.</span>
+                      <span><strong>Control de Stock:</strong> Insumos y exportación Excel/PDF.</span>
                     </li>
                     <li className="flex items-center gap-1.5 text-emerald-300 font-medium">
                       <ShieldCheck size={13} className="text-emerald-400 shrink-0" />
@@ -1003,11 +1003,11 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
-                      <span><strong>Integración con tu Proveedor:</strong> Facturando.uy, Sicfe, Uruware o el que uses.</span>
+                      <span><strong>Integración con tu Proveedor:</strong> Facturando, Sicfe, Uruware, etc.</span>
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
-                      <span><strong>Reportes Avanzados:</strong> Cierres mensuales.</span>
+                      <span><strong>Reportes Avanzados:</strong> Cierres en Excel y PDF.</span>
                     </li>
                     <li className="flex items-center gap-1.5 text-emerald-300 font-medium">
                       <ShieldCheck size={13} className="text-emerald-400 shrink-0" />
@@ -1054,11 +1054,15 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                  <ul className="space-y-1.5 text-[11px] text-slate-200">
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-purple-400 shrink-0" />
-                      <span><strong>TODO el CRM Full + Facturación DGI.</strong></span>
+                      <span><strong>TODO el CRM Full + IA Cloud Incluida.</strong></span>
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-purple-400 shrink-0" />
                       <span><strong>Tu Propia App Web:</strong> Pedidos desde celular.</span>
+                    </li>
+                    <li className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="text-purple-400 shrink-0" />
+                      <span><strong>Exportación Total a Excel y PDF:</strong> Stock y Ventas.</span>
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-purple-400 shrink-0" />

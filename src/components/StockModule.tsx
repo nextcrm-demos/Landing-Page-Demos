@@ -174,18 +174,18 @@ export function StockModule({ menuItems, stock, setStock, thresholds }: StockMod
                 const count = currentStockMap[String(m.id)] ?? 0;
                 return [m.nombre, m.categoria, m.precio, count, count === 0 ? 'Agotado' : count <= 10 ? 'Bajo' : 'Normal'];
               }), 'inventario_stock_pizzeria.csv')} 
-              className="p-2.5 bg-white/5 text-slate-300 rounded-xl hover:bg-white/10 border border-white/10 transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-semibold" 
-              title="Exportar CSV"
+              className="px-3.5 py-2 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 rounded-xl border border-emerald-500/30 transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-bold shadow-sm" 
+              title="Descargar Planilla Excel / CSV"
             >
-              <Download size={15} /> CSV
+              <Download size={14} /> Exportar Excel
             </button>
 
             <button 
               onClick={() => printTableReport('Inventario de Stock de Pizzería', ['Producto', 'Categoría', 'Precio', 'Stock'], menuItems.map(m => [m.nombre, m.categoria, `$${m.precio}`, `${currentStockMap[String(m.id)] ?? 0}`]))} 
-              className="p-2.5 bg-white/5 text-slate-300 rounded-xl hover:bg-white/10 border border-white/10 transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-semibold" 
-              title="Imprimir Inventario"
+              className="px-3.5 py-2 bg-white/5 hover:bg-white/10 text-slate-200 rounded-xl border border-white/10 transition-colors cursor-pointer flex items-center gap-1.5 text-xs font-semibold shadow-sm" 
+              title="Descargar en PDF o Imprimir Inventario"
             >
-              Imprimir
+              <Download size={14} /> Exportar PDF
             </button>
           </div>
         </div>

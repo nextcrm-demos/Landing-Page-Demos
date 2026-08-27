@@ -74,7 +74,7 @@ export function SoporteModule() {
       features: [
         'Todo lo incluido en el Plan Pro',
         'Facturación Electrónica DGI en Tiempo Real',
-        'Partner Oficial DGI: Facturando.uy Homologado',
+        'Permite Integración con tu Proveedor de Facturación',
         'Emisión de e-Tickets (101) y e-Facturas (111)',
         'Firma digital CAE y envío automático',
         'Auditoría y Acta de Cierre General de Mes',

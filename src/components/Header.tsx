@@ -31,7 +31,6 @@ export function Header({
   pendingMostradorCount = 0,
   pendingMesasCount = 0,
   onGoToPresentation,
-  onSwitchToClientApp,
   isAdmin = false,
   onOpenAdminPanel,
   userPlan = 'plan_full',
@@ -79,7 +78,7 @@ export function Header({
   };
 
   return (
-    <header className="bg-[#070b16]/95 backdrop-blur-xl text-slate-300 font-medium flex items-center px-3 sm:px-5 h-14 shrink-0 z-20 relative w-full justify-between gap-2 select-none shadow-lg">
+    <header className="bg-[#070b16]/95 backdrop-blur-xl text-slate-300 font-medium flex items-center px-2.5 sm:px-4 h-14 shrink-0 z-20 relative w-full justify-between gap-2 select-none shadow-lg">
       
       {/* BRAND & QUICK ACTIONS (LEFT SIDE COMPACT) */}
       <div className="flex items-center gap-2 shrink-0">
@@ -94,21 +93,10 @@ export function Header({
           <button
             onClick={onGoToPresentation}
             title="Volver a la landing page"
-            className="flex items-center gap-1 px-2.5 py-1 bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white rounded-xl text-[11px] transition-all cursor-pointer"
+            className="flex items-center gap-1 px-2 py-1 bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white rounded-lg text-[10px] transition-all cursor-pointer"
           >
-            <Home size={12} />
-            <span className="hidden xl:inline">Landing</span>
-          </button>
-        )}
-
-        {onSwitchToClientApp && (
-          <button
-            onClick={onSwitchToClientApp}
-            title="Probar Aplicación Web de Clientes"
-            className="flex items-center gap-1.5 px-3 py-1 bg-purple-600/25 hover:bg-purple-600 text-purple-200 hover:text-white rounded-xl text-[11px] font-bold transition-all border border-purple-500/40 shadow-sm cursor-pointer"
-          >
-            <Smartphone size={12} className="text-purple-300" />
-            <span className="hidden lg:inline">App Clientes</span>
+            <Home size={11} />
+            <span className="hidden sm:inline">Landing</span>
           </button>
         )}
 
@@ -116,42 +104,16 @@ export function Header({
           <button
             onClick={onOpenAdminPanel}
             title="Panel de Control de Clientes & Demos (Admin)"
-            className="flex items-center gap-1 px-2.5 py-1 bg-blue-600/20 hover:bg-blue-600/40 text-blue-300 hover:text-white rounded-xl text-[11px] font-bold transition-all border border-blue-500/40 cursor-pointer"
+            className="flex items-center gap-1 px-2 py-1 bg-blue-600/20 hover:bg-blue-600/40 text-blue-300 hover:text-white rounded-lg text-[10px] font-bold transition-all border border-blue-500/40 cursor-pointer"
           >
-            <ShieldCheck size={12} className="text-blue-400" />
-            <span className="hidden 2xl:inline">Admin</span>
+            <ShieldCheck size={11} className="text-blue-400" />
+            <span className="hidden md:inline">Admin</span>
           </button>
-        )}
-
-        {/* COMPACT PLAN SIMULATOR PILLS */}
-        {onChangePlan && (
-          <div className="flex items-center bg-black/60 border border-white/10 rounded-xl p-0.5 gap-0.5 text-[10px] font-mono shrink-0">
-            <span className="text-slate-400 px-1.5 hidden 2xl:inline font-bold text-[9px]">Plan:</span>
-            {[
-              { id: 'plan_basico', label: '1. Básico' },
-              { id: 'plan_pro', label: '2. Pro' },
-              { id: 'plan_vip', label: '3. VIP' },
-              { id: 'plan_full', label: '4. Full' },
-            ].map((p) => (
-              <button
-                key={p.id}
-                onClick={() => onChangePlan(p.id as any)}
-                className={`px-2 py-0.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  userPlan === p.id
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white hover:bg-white/5'
-                }`}
-                title={`Simular ${p.label}`}
-              >
-                {p.label}
-              </button>
-            ))}
-          </div>
         )}
       </div>
       
-      {/* SCROLLABLE / FLEXIBLE TABS BAR */}
-      <div className="flex gap-1 h-full items-center flex-1 justify-end overflow-x-auto custom-scrollbar px-1 min-w-0">
+      {/* SCROLLABLE TABS BAR - STARTS FROM MOSTRADOR DIRECTLY */}
+      <div className="flex gap-1 h-full items-center flex-1 justify-start overflow-x-auto custom-scrollbar px-1 min-w-0">
         {tabs.map(tab => {
           const badgeCount = getPendingBadgeCount(tab);
           const locked = isTabLocked(tab);
@@ -183,14 +145,43 @@ export function Header({
             </button>
           );
         })}
-        
+      </div>
+
+      {/* RIGHT CONTROLS: ADMIN PLAN SELECTOR & CERRAR TURNO */}
+      <div className="flex items-center gap-1.5 shrink-0">
+        {isAdmin && onChangePlan && (
+          <div className="hidden lg:flex items-center bg-black/60 border border-white/10 rounded-lg p-0.5 gap-0.5 text-[9px] font-mono shrink-0">
+            <span className="text-slate-400 px-1 font-bold text-[9px]">Simular:</span>
+            {[
+              { id: 'plan_basico', label: '1' },
+              { id: 'plan_pro', label: '2' },
+              { id: 'plan_vip', label: '3' },
+              { id: 'plan_full', label: '4' },
+            ].map((p) => (
+              <button
+                key={p.id}
+                onClick={() => onChangePlan(p.id as any)}
+                className={`px-1.5 py-0.5 rounded font-bold transition-all cursor-pointer ${
+                  userPlan === p.id
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                }`}
+                title={`Simular Plan ${p.label}`}
+              >
+                P{p.label}
+              </button>
+            ))}
+          </div>
+        )}
+
         <button 
           onClick={onCerrarTurno} 
-          className="ml-1 px-3 py-1.5 bg-red-500/15 hover:bg-red-600 text-red-300 hover:text-white rounded-xl transition-all flex items-center gap-1.5 text-[10px] font-bold tracking-normal whitespace-nowrap border border-red-500/30 cursor-pointer shrink-0"
+          className="px-2.5 py-1.5 bg-red-500/15 hover:bg-red-600 text-red-300 hover:text-white rounded-xl transition-all flex items-center gap-1 text-[10px] font-bold tracking-normal whitespace-nowrap border border-red-500/30 cursor-pointer shrink-0"
         >
            <LogOut size={11}/> <span className="hidden sm:inline">Cerrar Turno</span>
         </button>
       </div>
+
     </header>
   );
 }

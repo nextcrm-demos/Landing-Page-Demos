@@ -196,34 +196,40 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(59,130,246,0.2),rgba(147,51,234,0.15),transparent_75%)] pointer-events-none"></div>
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff04_1px,transparent_1px),linear-gradient(to_bottom,#ffffff04_1px,transparent_1px)] bg-[size:4.5rem_4.5rem] pointer-events-none opacity-60"></div>
 
-        {/* LOGO EMBLEMA ISOMÉTRICO 3D NEXTCRM */}
-        <div className="relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center mb-5 shrink-0 group z-10">
-          <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/40 via-cyan-400/20 to-purple-600/40 rounded-full blur-xl pointer-events-none group-hover:scale-125 transition-transform duration-700"></div>
-          <div className="w-13 h-13 sm:w-15 sm:h-15 bg-gradient-to-br from-[#121c38] to-[#080d1a] border border-blue-500/40 rounded-2xl flex items-center justify-center shadow-[0_15px_35px_rgba(59,130,246,0.35)] rotate-6 group-hover:rotate-0 transition-transform duration-500 relative">
-            <div className="w-9 h-9 sm:w-11 sm:h-11 bg-gradient-to-br from-purple-950/60 to-blue-950/80 border border-purple-500/40 rounded-xl flex items-center justify-center shadow-inner -rotate-3 group-hover:rotate-0 transition-transform duration-500">
-              <Layers size={20} className="text-cyan-300 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+        {/* LOGO EMBLEMA ISOMÉTRICO 3D ORIGINAL NEXTCRM (IMPECABLE Y AMPLIO) */}
+        <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center mb-3 shrink-0 [perspective:1200px] group z-10">
+          <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/35 via-cyan-400/20 to-purple-600/35 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-700"></div>
+
+          {/* Isometric Layer 1 (Bottom Plate) */}
+          <div className="absolute bottom-2 w-18 h-18 sm:w-22 sm:h-22 bg-gradient-to-br from-[#182344] via-[#0d162d] to-[#060a15] border-[2px] border-blue-500/50 rounded-2xl flex items-center justify-center z-10 [transform:rotateX(60deg)_rotateZ(45deg)] shadow-[0_20px_50px_rgba(59,130,246,0.45)]">
+            <div className="[transform:rotateZ(-45deg)_rotateX(-60deg)]">
+              <Zap size={20} className="text-blue-400 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]" />
             </div>
-            <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-gradient-to-tr from-purple-600 to-indigo-500 rounded-full border border-purple-300 flex items-center justify-center shadow-md">
-              <Sparkles size={8} className="text-white" />
+          </div>
+
+          {/* Isometric Layer 2 (Top Floating Plate) */}
+          <div className="absolute top-2 w-18 h-18 sm:w-22 sm:h-22 bg-gradient-to-br from-purple-950/40 via-[#0b1020]/90 to-[#040711] border-[2px] border-cyan-400/60 rounded-2xl flex items-center justify-center z-20 [transform:rotateX(60deg)_rotateZ(45deg)] shadow-[0_10px_25px_rgba(0,0,0,0.8)] group-hover:-translate-y-1.5 transition-transform duration-500">
+            <div className="[transform:rotateZ(-45deg)_rotateX(-60deg)]">
+              <Layers size={26} className="text-cyan-300 drop-shadow-[0_0_12px_rgba(34,211,238,0.9)]" />
             </div>
           </div>
         </div>
 
         {/* BADGE ELEGANTE CON TRACKING ESPACIOSO */}
-        <div className="inline-flex items-center gap-2 border border-purple-500/30 text-purple-300 text-[10px] sm:text-[11px] font-mono tracking-[0.25em] uppercase px-4 py-1.5 rounded-full mb-6 bg-purple-500/10 backdrop-blur-md shadow-sm z-10">
+        <div className="inline-flex items-center gap-2 border border-purple-500/30 text-purple-300 text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase px-4 py-1 rounded-full mb-4 bg-purple-500/10 backdrop-blur-md shadow-sm z-10">
           <Sparkles size={11} className="text-cyan-300" /> Software Gastronómico Premium • Pedidos por Voz con IA
         </div>
 
-        {/* TÍTULO PRINCIPAL ESPACIOSO Y ELEGANTE */}
-        <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-center mb-6 tracking-tight md:tracking-normal leading-[1.15] max-w-5xl text-white z-10">
+        {/* TÍTULO PRINCIPAL GRANDE E IMPACTANTE */}
+        <h1 className="text-5xl sm:text-7xl md:text-8xl font-black text-center mb-4 tracking-tight leading-[1.05] max-w-5xl text-white z-10">
           El caos tiene<br/>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-purple-400">
             los días contados.
           </span>
         </h1>
 
-        {/* BAJADA CON ESPACIADO ELEGANTE */}
-        <p className="font-light tracking-[0.08em] sm:tracking-[0.12em] text-slate-300 text-xs sm:text-sm md:text-base text-center max-w-3xl mb-9 leading-relaxed uppercase z-10">
+        {/* BAJADA REFINADA Y CHICA EN MINÚSCULAS */}
+        <p className="font-normal text-slate-300 text-xs sm:text-sm text-center max-w-xl mb-7 leading-relaxed z-10">
           Centraliza mostrador, delivery, mesas, monitor KDS de cocina, stock, arqueo de caja con desglose de tarjetas e impresión térmica preconfigurada.
         </p>
 

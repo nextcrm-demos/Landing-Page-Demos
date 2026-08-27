@@ -47,6 +47,8 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
 
   const totalDemoPrice = demoVoiceItems.reduce((sum, item) => sum + item.price * item.qty, 0);
 
+  const [selectedModuleForDemo, setSelectedModuleForDemo] = useState('plan_full');
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim() || !email.includes('@')) {
@@ -56,6 +58,13 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
     setError('');
     setIsSubmitting(true);
 
+    const moduleLabel = 
+      selectedModuleForDemo === 'plan_basico' ? 'Módulo 1: Plan Básico' :
+      selectedModuleForDemo === 'plan_pro' ? 'Módulo 2: Plan Pro (KDS & Voz IA)' :
+      selectedModuleForDemo === 'plan_vip' ? 'Módulo 3: Plan VIP DGI' :
+      selectedModuleForDemo === 'amedida' ? 'Software a Medida / Otro Rubro' :
+      'Módulo 4: Plan Full Omnicanal (CRM + App Clientes)';
+
     try {
       await saveDemoRequest({
         nombre: 'Acceso Demo',
@@ -63,13 +72,14 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
         negocio: negocio.trim() || 'Pizzería Demo',
         timestamp: Date.now(),
         status: 'aprobado',
-        modoAcceso: 'correo'
+        modoAcceso: 'correo',
+        plan: selectedModuleForDemo as any
       });
       setIsSubmitting(false);
       setSubmitted(true);
       setDemoAuthInput(email.trim());
       const msg = encodeURIComponent(
-        `Hola JPZ / NextCrm, solicito habilitación de usuario y contraseña para la demo de 24hs de NextCrm Pizzería.\n\n• Correo/Usuario: ${email.trim()}\n• Pizzería/Negocio: ${negocio.trim() || 'No especificado'}`
+        `Hola JPZ / NextCRM, solicito habilitación de usuario y contraseña para la demo de 24hs.\n\n• Módulo Solicitado: ${moduleLabel}\n• Correo/Usuario: ${email.trim()}\n• Pizzería/Negocio: ${negocio.trim() || 'No especificado'}`
       );
       window.open(`https://api.whatsapp.com/send?phone=59898356320&text=${msg}`, '_blank');
     } catch (err) {
@@ -1373,6 +1383,23 @@ export function Presentacion({ onStartDemo }: PresentacionProps) {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-3 text-center">
+                  <div>
+                    <label className="block text-xs font-semibold uppercase text-slate-400 mb-1 flex items-center justify-center gap-1 text-center">
+                      <Sparkles size={13} className="text-blue-400" /> Módulo a Probar:
+                    </label>
+                    <select
+                      value={selectedModuleForDemo}
+                      onChange={(e) => setSelectedModuleForDemo(e.target.value)}
+                      className="w-full bg-black border border-white/15 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 transition-colors"
+                    >
+                      <option value="plan_full">Módulo 4: Full Omnicanal (CRM + App Clientes)</option>
+                      <option value="plan_vip">Módulo 3: VIP Facturación DGI Oficial</option>
+                      <option value="plan_pro">Módulo 2: Plan Pro (KDS Cocina & Voz IA)</option>
+                      <option value="plan_basico">Módulo 1: Plan Básico (POS Mostrador & Delivery)</option>
+                      <option value="amedida">⭐ Software a Medida / Otro Rubro Comercial</option>
+                    </select>
+                  </div>
+
                   <div>
                     <label className="block text-xs font-semibold uppercase text-slate-400 mb-1 flex items-center justify-center gap-1 text-center">
                       <Mail size={13} className="text-blue-400" /> Correo Electrónico <span className="text-red-400">*</span>

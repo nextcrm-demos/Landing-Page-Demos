@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { 
   Info, BookOpen, Download, Users, MessageSquare, ShieldCheck, Key, 
   FileText, CheckCircle2, DollarSign, Building, Cpu, Sparkles, Mic, 
-  Headphones, HelpCircle, Check, CreditCard, Smartphone, Globe, ArrowRight, Zap, Star, Clock, AlertTriangle, ShieldAlert
+  Headphones, HelpCircle, Check, CreditCard, Smartphone, Globe, ArrowRight, Zap, Star, Clock, 
+  AlertTriangle, ShieldAlert, Layers, ShoppingBag, Truck, Utensils, Database, BarChart3, Wrench, Settings
 } from 'lucide-react';
 
 export function SoporteModule() {
-  const [activeTab, setActiveTab] = useState<'planes' | 'garantia' | 'manual' | 'contacto'>('planes');
-  const [copiedPlan, setCopiedPlan] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'planes' | 'contenido' | 'garantia' | 'amedida' | 'manual'>('planes');
 
   const plans = [
     {
@@ -32,7 +32,7 @@ export function SoporteModule() {
         'Arqueo de Caja y Cierre de Turno',
         'Garantía Compra Única: 3 Meses incluidos',
       ],
-      whatsappText: 'Hola JPZ, quisiera consultar por el Plan Básico de NextCRM ($1.490 UYU/mes ó $190 USD compra definitiva).',
+      whatsappText: 'Hola JPZ, quiero solicitar acceso/activación para el Módulo 1 (Plan Básico) de NextCRM ($1.490 UYU/mes ó $190 USD compra definitiva).',
     },
     {
       id: 'plan_pro',
@@ -56,7 +56,7 @@ export function SoporteModule() {
         'Reportes de Ventas y Productos Estrella',
         'Garantía Compra Única: 6 Meses incluidos',
       ],
-      whatsappText: 'Hola JPZ, quisiera consultar por el Plan Pro con KDS y Voz IA de NextCRM ($2.490 UYU/mes ó $290 USD compra definitiva).',
+      whatsappText: 'Hola JPZ, quiero solicitar acceso/activación para el Módulo 2 (Plan Pro con KDS y Voz IA) de NextCRM ($2.490 UYU/mes ó $290 USD compra definitiva).',
     },
     {
       id: 'plan_vip',
@@ -80,7 +80,7 @@ export function SoporteModule() {
         'Auditoría y Acta de Cierre General de Mes',
         'Garantía Compra Única: 6 Meses incluidos',
       ],
-      whatsappText: 'Hola JPZ, quisiera consultar por el Plan VIP con Facturación DGI de NextCRM ($3.490 UYU/mes ó $390 USD compra definitiva).',
+      whatsappText: 'Hola JPZ, quiero solicitar acceso/activación para el Módulo 3 (Plan VIP con Facturación DGI) de NextCRM ($3.490 UYU/mes ó $390 USD compra definitiva).',
     },
     {
       id: 'plan_full',
@@ -104,7 +104,7 @@ export function SoporteModule() {
         'Carga y actualización de menú bonificada por NextCRM',
         'Garantía Compra Única: 12 Meses (1 Año) de Servidor y Soporte VIP',
       ],
-      whatsappText: 'Hola JPZ, quisiera consultar por el Plan Full Omnicanal con Web App Clientes de NextCRM ($4.490 UYU/mes ó $490 USD compra definitiva).',
+      whatsappText: 'Hola JPZ, quiero solicitar acceso/activación para el Módulo 4 (Plan Full Omnicanal con App Clientes) de NextCRM ($4.490 UYU/mes ó $490 USD compra definitiva).',
     },
   ];
 
@@ -173,14 +173,14 @@ export function SoporteModule() {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="bg-blue-600/20 text-blue-400 border border-blue-500/40 text-[10px] font-mono px-2.5 py-0.5 rounded-full font-bold uppercase">
-                Centro de Atención & Licenciamiento
+                Centro Integral de Atención & Licencias
               </span>
             </div>
             <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-              Soporte, Garantía & Módulos Comerciales
+              Soporte, Módulos & Software a Medida
             </h1>
             <p className="text-xs text-slate-400 mt-1">
-              Consulta las coberturas de garantía, tiempo de vigencia, soporte técnico post-venta y solicita cambios de plan.
+              Consulta el contenido detallado del CRM, pólizas de garantía, solicita activación de módulos o cotiza desarrollo personalizado.
             </p>
           </div>
 
@@ -191,7 +191,7 @@ export function SoporteModule() {
               className="bg-white/10 hover:bg-white/20 text-slate-200 hover:text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border border-white/10 cursor-pointer shadow-sm"
             >
               <Download size={14} className="text-blue-400" />
-              <span>Manual de Usuario</span>
+              <span>Manual PDF</span>
             </button>
 
             <a
@@ -201,24 +201,26 @@ export function SoporteModule() {
               className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-lg cursor-pointer"
             >
               <MessageSquare size={14} />
-              <span>Soporte WhatsApp (098 356 320)</span>
+              <span>WhatsApp Directo (098 356 320)</span>
             </a>
           </div>
         </div>
 
         {/* TABS NAVIGATION */}
-        <div className="flex gap-2 mt-4 border-b border-white/5 pb-2">
+        <div className="flex flex-wrap gap-2 mt-4 border-b border-white/5 pb-2">
           {[
             { id: 'planes', label: '1. Planes y Módulos', icon: DollarSign },
-            { id: 'garantia', label: '2. Garantía y Compra Definitiva', icon: ShieldCheck },
-            { id: 'manual', label: '3. Guía de Operaciones', icon: BookOpen },
+            { id: 'contenido', label: '2. Contenido del CRM', icon: Layers },
+            { id: 'garantia', label: '3. Garantía y Compra Única', icon: ShieldCheck },
+            { id: 'amedida', label: '4. Software a Medida / Otros Rubros', icon: Wrench },
+            { id: 'manual', label: '5. Manual de Operaciones', icon: BookOpen },
           ].map((tab) => {
             const Icon = tab.icon;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                   activeTab === tab.id
                     ? 'bg-blue-600 text-white shadow-md'
                     : 'text-slate-400 hover:text-white hover:bg-white/5'
@@ -301,7 +303,7 @@ export function SoporteModule() {
                     }`}
                   >
                     <MessageSquare size={14} />
-                    <span>Pedir / Cotizar por WhatsApp</span>
+                    <span>Pedir Acceso a este Módulo</span>
                   </a>
                 </div>
               ))}
@@ -336,7 +338,117 @@ export function SoporteModule() {
           </div>
         )}
 
-        {/* TAB 2: POLÍTICAS DE GARANTÍA Y COMPRA DEFINITIVA */}
+        {/* TAB 2: CONTENIDO DEL CRM & MÓDULOS */}
+        {activeTab === 'contenido' && (
+          <div className="space-y-6 animate-in fade-in duration-200">
+            <div className="bg-[#0a0f1c] border border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl space-y-6">
+              
+              <div>
+                <span className="text-xs font-mono font-bold text-blue-400 uppercase bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">
+                  Arquitectura Integral del Software
+                </span>
+                <h3 className="text-2xl font-black text-white mt-2">
+                  Estructura y Contenido Completo de NextCRM
+                </h3>
+                <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                  NextCRM está compuesto por <strong>2 Ecosistemas Principales</strong> sincronizados en tiempo real mediante base de datos en la nube.
+                </p>
+              </div>
+
+              {/* 2 MAIN ECOSYSTEMS */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                
+                {/* ECOSYSTEM 1: CRM GESTIÓN */}
+                <div className="bg-[#0e1629] border border-blue-500/40 rounded-3xl p-6 space-y-4">
+                  <div className="flex items-center gap-3 pb-3 border-b border-white/10">
+                    <div className="w-10 h-10 rounded-2xl bg-blue-600/30 text-blue-400 flex items-center justify-center border border-blue-500/40">
+                      <Cpu size={22} />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-mono text-blue-300 font-bold uppercase">Ecosistema 1</span>
+                      <h4 className="font-black text-lg text-white">CRM de Gestión & Operaciones</h4>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Panel interno de trabajo para el cajero, telefonista, mozos, cocineros y dueños del negocio.
+                  </p>
+
+                  <div className="space-y-2.5 text-xs text-slate-300">
+                    <div className="p-2.5 bg-black/40 rounded-xl border border-white/5">
+                      <strong className="text-white block">1. Punto de Venta POS Touch:</strong>
+                      Mostrador (Take Away), Delivery y Mesas en Salón con cálculo de vuelto y selección de gustos.
+                    </div>
+                    <div className="p-2.5 bg-black/40 rounded-xl border border-white/5">
+                      <strong className="text-white block">2. Monitor KDS de Cocina:</strong>
+                      Pantalla táctil para el chef dividida en 4 estados (Nuevos, En Preparación, Listos y Demorados).
+                    </div>
+                    <div className="p-2.5 bg-black/40 rounded-xl border border-white/5">
+                      <strong className="text-white block">3. Pedido por Voz con IA Paso a Paso:</strong>
+                      El operador dicta ítem por ítem, la IA reconoce el producto y lo acumula en la comanda.
+                    </div>
+                    <div className="p-2.5 bg-black/40 rounded-xl border border-white/5">
+                      <strong className="text-white block">4. Bandeja de Entrada WhatsApp:</strong>
+                      Recepción y atención de pedidos directamente desde el CRM.
+                    </div>
+                    <div className="p-2.5 bg-black/40 rounded-xl border border-white/5">
+                      <strong className="text-white block">5. Control de Stock & Caja:</strong>
+                      Arqueo ciego por turno, desglose de cobros con tarjeta y control de insumos críticos.
+                    </div>
+                    <div className="p-2.5 bg-black/40 rounded-xl border border-white/5">
+                      <strong className="text-white block">6. Facturación DGI Homologada:</strong>
+                      Emisión de e-Tickets con CAE y código QR fiscal oficial mediante Facturando.uy.
+                    </div>
+                  </div>
+                </div>
+
+                {/* ECOSYSTEM 2: APP CLIENTES */}
+                <div className="bg-[#140b24] border border-purple-500/40 rounded-3xl p-6 space-y-4">
+                  <div className="flex items-center gap-3 pb-3 border-b border-white/10">
+                    <div className="w-10 h-10 rounded-2xl bg-purple-600/30 text-purple-400 flex items-center justify-center border border-purple-500/40">
+                      <Smartphone size={22} />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-mono text-purple-300 font-bold uppercase">Ecosistema 2</span>
+                      <h4 className="font-black text-lg text-white">App Web de Clientes & Menú QR</h4>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Portal web para que tus comensales ordenen desde su propio celular sin pagar comisiones a plataformas externas.
+                  </p>
+
+                  <div className="space-y-2.5 text-xs text-slate-300">
+                    <div className="p-2.5 bg-black/40 rounded-xl border border-white/5">
+                      <strong className="text-white block">1. Menú Digital Interactivo:</strong>
+                      Catálogo con categorías, fotos, selector de gustos exclusivos para pizzas y promociones.
+                    </div>
+                    <div className="p-2.5 bg-black/40 rounded-xl border border-white/5">
+                      <strong className="text-white block">2. Geolocalización GPS Satelital:</strong>
+                      El cliente toca 'GPS' y el sistema detecta su calle, número de puerta y barrio de forma automática.
+                    </div>
+                    <div className="p-2.5 bg-black/40 rounded-xl border border-white/5">
+                      <strong className="text-white block">3. Seguimiento en Tiempo Real:</strong>
+                      El comensal ve el estado exacto: 'Recibido', 'En el Horno', 'Empaquetado' y 'En Camino'.
+                    </div>
+                    <div className="p-2.5 bg-black/40 rounded-xl border border-white/5">
+                      <strong className="text-white block">4. Menú QR para Mesas en Salón:</strong>
+                      El cliente escanea el código QR de su mesa y la comanda viaja directo a la cocina.
+                    </div>
+                    <div className="p-2.5 bg-black/40 rounded-xl border border-white/5">
+                      <strong className="text-white block">5. 0% Comisiones a Terceros:</strong>
+                      Todo el valor de cada venta ingresa íntegro a tu comercio sin intermediarios.
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: POLÍTICAS DE GARANTÍA Y COMPRA DEFINITIVA */}
         {activeTab === 'garantia' && (
           <div className="space-y-6 animate-in fade-in duration-200">
             <div className="bg-[#0a0f1c] border border-blue-500/30 rounded-3xl p-6 md:p-8 shadow-2xl space-y-6">
@@ -487,7 +599,67 @@ export function SoporteModule() {
           </div>
         )}
 
-        {/* TAB 3: GUIA DE OPERACIONES */}
+        {/* TAB 4: SOFTWARE A MEDIDA Y OTROS RUBROS */}
+        {activeTab === 'amedida' && (
+          <div className="space-y-6 animate-in fade-in duration-200">
+            <div className="bg-gradient-to-b from-blue-950/30 via-[#0a0f1c] to-black border border-blue-500/40 rounded-3xl p-6 md:p-8 shadow-2xl space-y-6">
+              
+              <div>
+                <span className="text-xs font-mono font-bold text-cyan-400 uppercase bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-500/20">
+                  Desarrollo de Software Personalizado
+                </span>
+                <h3 className="text-2xl font-black text-white mt-2">
+                  ¿Necesitas un Software a Medida o para otro Rubro?
+                </h3>
+                <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                  NextCRM es una plataforma modular y flexible. Si tu negocio requiere funciones exclusivas, flujos especiales o pertenece a otro sector comercial, desarrollamos la solución exacta a tu medida.
+                </p>
+              </div>
+
+              {/* RUBROS ADAPTABLES */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                {[
+                  { title: '🍔 Hamburgueserías & Lomiterías', desc: 'Combos personalizados, aderezos dinámicos y comandas directas a plancha/freidora.' },
+                  { title: '🍣 Sushi & Comida Asiática', desc: 'Control de piezas, combinados especiales, salsas y tiempos estrictos de elaboración.' },
+                  { title: '☕ Cafeterías & Panaderías', desc: 'Venta rápida por mostrador, combos de desayuno/merienda y control de mermas.' },
+                  { title: '📦 Distribuidoras & Mayoristas', desc: 'Listas de precios diferenciales por cliente, cuentas corrientes y control de stock masivo.' },
+                  { title: '🛒 Comercios Minoristas (Retail)', desc: 'Lectura de código de barras, facturación rápida y control de inventario por código.' },
+                  { title: '⚙️ Funciones Exclusivas a Medida', desc: 'Integración con balanzas electrónicas, pasarelas de pago, APIs externas o apps móviles personalizadas.' },
+                ].map((item, i) => (
+                  <div key={i} className="bg-[#0e1629] border border-white/10 rounded-2xl p-4 space-y-1.5">
+                    <h4 className="font-bold text-sm text-white">{item.title}</h4>
+                    <p className="text-[11px] text-slate-300 leading-relaxed">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA BOX */}
+              <div className="bg-black/60 border border-blue-500/30 rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
+                  <h4 className="font-black text-base text-white uppercase tracking-wide">
+                    Solicita tu Cotización para Software a Medida
+                  </h4>
+                  <p className="text-xs text-slate-300 mt-0.5">
+                    Cuéntanos qué necesita tu negocio y te armamos una propuesta técnica y económica personalizada.
+                  </p>
+                </div>
+
+                <a
+                  href="https://api.whatsapp.com/send?phone=59898356320&text=Hola%20JPZ,%20quisiera%20solicitar%20una%20cotizaci%C3%B3n%20para%20un%20software%20a%20medida%20o%20adaptaci%C3%B3n%20a%20otro%20rubro."
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-blue-600 hover:bg-blue-500 text-white font-extrabold px-6 py-3.5 rounded-xl text-xs uppercase tracking-wider shadow-lg flex items-center gap-2 transition-all shrink-0 cursor-pointer"
+                >
+                  <MessageSquare size={16} />
+                  <span>Cotizar Proyecto por WhatsApp</span>
+                </a>
+              </div>
+
+            </div>
+          </div>
+        )}
+
+        {/* TAB 5: GUIA DE OPERACIONES */}
         {activeTab === 'manual' && (
           <div className="bg-[#0a0f1c] border border-white/10 rounded-3xl p-6 md:p-8 space-y-6 animate-in fade-in duration-200">
             <div className="flex items-center justify-between pb-4 border-b border-white/10">
